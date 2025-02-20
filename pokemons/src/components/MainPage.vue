@@ -45,6 +45,7 @@ const getPokemons = async function () {
 
     // pokemonsObjects.forEach(async (pokemon) => {
     //   const obj = formDataPokemon(pokemon);
+    //   arr.push(obj);
     //   allPokemonsData.push(obj);
     // });
   } catch (e) {
