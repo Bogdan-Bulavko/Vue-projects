@@ -6,6 +6,7 @@ defineProps({
   changeSorting: Function,
   searchProduct: Function,
   onFavoriteProducts: Function,
+  onAddProductsInBasket: Function,
 })
 </script>
 
@@ -35,7 +36,11 @@ defineProps({
         </div>
       </div>
     </div>
-    <CardList :items="products" :onFavoriteProducts="onFavoriteProducts" />
+    <CardList
+      :items="products"
+      :onFavoriteProducts="onFavoriteProducts"
+      :onAddProductsInBasket="onAddProductsInBasket"
+    />
   </section>
 </template>
 

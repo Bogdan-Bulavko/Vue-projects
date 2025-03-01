@@ -2,9 +2,9 @@
 import CardProduct from './CardProduct.vue'
 
 defineProps({
-  openBookmarks: Boolean,
   items: Object,
   onFavoriteProducts: Function,
+  onAddProductsInBasket: Function,
 })
 </script>
 
@@ -19,7 +19,9 @@ defineProps({
         :title="item.title"
         :price="item.price"
         :onFavoriteProducts="onFavoriteProducts"
+        :onAddProductsInBasket="onAddProductsInBasket"
         :isFavorite="item.isFavorite"
+        :isAdded="item.isAdded"
       />
     </template>
   </div>

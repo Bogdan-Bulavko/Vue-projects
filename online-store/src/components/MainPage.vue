@@ -11,6 +11,7 @@ import axios from 'axios'
 const state = reactive({
   products: [],
   dataFavorite: JSON.parse(localStorage.getItem('favorite')),
+  dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
 })
 
 const sorting = reactive({ products: [] })
@@ -23,10 +24,11 @@ onMounted(async () => {
     const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
 
     state.products = await data.map((product) => {
-      if (state.dataFavorite.includes(product.id)) {
-        return { ...product, isAdded: false, isFavorite: true }
+      return {
+        ...product,
+        isAdded: state.dataProductsInBasket.includes(product.id),
+        isFavorite: state.dataFavorite.includes(product.id),
       }
-      return { ...product, isAdded: false, isFavorite: false }
     })
 
     sorting.products = state.products
@@ -34,6 +36,18 @@ onMounted(async () => {
     console.log(err)
   }
 })
+
+const handleSearchProduct = (e) => {
+  if (e.target.value === '') {
+    sorting.products = state.products
+  }
+  sorting.products = state.products.filter((product) => {
+    const regex = new RegExp(e.target.value, 'i')
+    if (regex.test(product.title)) {
+      return product
+    }
+  })
+}
 
 if (state.dataFavorite === null) {
   state.dataFavorite = []
@@ -89,16 +103,32 @@ const handleFavoriteProducts = (e) => {
   }
 }
 
-const handleSearchProduct = (e) => {
-  if (e.target.value === '') {
-    sorting.products = state.products
-  }
-  sorting.products = state.products.filter((product) => {
-    const regex = new RegExp(e.target.value, 'i')
-    if (regex.test(product.title)) {
-      return product
+if (state.dataProductsInBasket === null) {
+  state.dataProductsInBasket = []
+}
+
+const handleAddProductsInBasket = (e) => {
+  const id = Number(e.target.parentElement.id)
+
+  state.products.find((product) => {
+    if (product.id === id) {
+      product.isAdded = !product.isAdded
     }
   })
+
+  sorting.products = state.products
+
+  if (state.dataProductsInBasket.includes(id)) {
+    state.dataProductsInBasket = state.dataProductsInBasket.filter((product) => {
+      if (product !== id) {
+        return product
+      }
+    })
+    localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+  } else {
+    state.dataProductsInBasket = [...state.dataProductsInBasket, id]
+    localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+  }
 }
 
 const onClickOpenBasket = () => {
@@ -115,7 +145,7 @@ const closeBookMarks = () => {
 </script>
 
 <template>
-  <Drawer v-if="openBasket" @closeBasket="onClickOpenBasket" />
+  <Drawer v-if="openBasket" @closeBasket="onClickOpenBasket" :products="state.products" />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
       @openBasket="onClickOpenBasket"
@@ -124,15 +154,17 @@ const closeBookMarks = () => {
     />
     <Bookmarks
       v-if="openBookmarks"
-      :products="sorting.products"
+      :products="state.products"
       :openBookmarks="openBookmarks"
       :onFavoriteProducts="handleFavoriteProducts"
+      :onAddProductsInBasket="handleAddProductsInBasket"
     />
     <template v-else>
       <Slider />
       <AllProducts
         :products="sorting.products"
         :onFavoriteProducts="handleFavoriteProducts"
+        :onAddProductsInBasket="handleAddProductsInBasket"
         :changeSorting="handleChangeSorting"
         :searchProduct="handleSearchProduct"
       />

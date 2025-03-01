@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-  products: Array,
+  products: Object,
 })
 
 import CardProductBasket from './CardProductBasket.vue'
@@ -8,14 +8,16 @@ import CardProductBasket from './CardProductBasket.vue'
 
 <template>
   <div class="overflow-auto">
-    <CardProductBasket
-      v-for="product in products"
-      :key="product.id"
-      :id="product.id"
-      :imageUrl="product.imageUrl"
-      :title="product.title"
-      :price="product.price"
-    />
+    <template v-for="product in products">
+      <CardProductBasket
+        v-if="product.isAdded"
+        :key="product.id"
+        :id="product.id"
+        :imageUrl="product.imageUrl"
+        :title="product.title"
+        :price="product.price"
+      />
+    </template>
   </div>
 </template>
 
