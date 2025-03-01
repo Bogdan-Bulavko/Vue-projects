@@ -10,6 +10,8 @@ import axios from 'axios'
 
 const state = reactive({ products: [] })
 
+const sorting = reactive({ products: [] })
+
 onMounted(async () => {
   try {
     const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
@@ -17,6 +19,8 @@ onMounted(async () => {
     state.products = await data.map((product) => {
       return { ...product, isAdded: false, isFavorite: false }
     })
+
+    sorting.products = state.products
   } catch (err) {
     console.log(err)
   }
@@ -32,7 +36,7 @@ onMounted(async () => {
 const handleChangeSorting = (e) => {
   switch (e.target.options[e.target.selectedIndex].id) {
     case 'name':
-      state.products.sort((a, b) => {
+      sorting.products = state.products.sort((a, b) => {
         if (a.title < b.title) {
           return -1
         }
@@ -43,12 +47,12 @@ const handleChangeSorting = (e) => {
       })
       break
     case 'cheap':
-      state.products.sort((a, b) => {
+      sorting.products = state.products.sort((a, b) => {
         return a.price - b.price
       })
       break
     case 'dear':
-      state.products.sort((a, b) => {
+      sorting.products = state.products.sort((a, b) => {
         return b.price - a.price
       })
       break
@@ -64,7 +68,7 @@ const handleFavoriteProducts = (e) => {
     }
   })
   // sorting.products = state.products
-  // console.log(state.products, serchedProducts.value)
+
   // if (dataFavorite.value === null) {
   //   dataFavorite.value = []
   // }
@@ -82,16 +86,15 @@ const handleFavoriteProducts = (e) => {
 }
 
 const handleSearchProduct = (e) => {
-  // console.log(sorting)
-  // if (e.target.value === '') {
-  //   sorting = props.products
-  // }
-  // sorting = props.products.filter((product) => {
-  //   const regex = new RegExp(e.target.value, 'i')
-  //   if (regex.test(product.title)) {
-  //     return product
-  //   }
-  // })
+  if (e.target.value === '') {
+    sorting.products = state.products
+  }
+  sorting.products = state.products.filter((product) => {
+    const regex = new RegExp(e.target.value, 'i')
+    if (regex.test(product.title)) {
+      return product
+    }
+  })
 }
 
 const openBasket = ref(false)
@@ -122,7 +125,7 @@ const closeBookMarks = () => {
     <template v-else>
       <Slider />
       <AllProducts
-        :products="state.products"
+        :products="sorting.products"
         :onFavoriteProducts="handleFavoriteProducts"
         :changeSorting="handleChangeSorting"
         :searchProduct="handleSearchProduct"
