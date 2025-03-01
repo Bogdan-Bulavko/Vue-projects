@@ -12,9 +12,9 @@
     <ul class="flex items-center gap-2.5">
       <li class="flex items-center gap-2.5 cursor-pointer" @click="$emit('openBasket')">
         <img src="/cart.svg" alt="Cart" />
-        <b class="text-gray-500 hover:text-black">1205 pуб.</b>
+        <b class="text-gray-500 hover:text-black">Корзина</b>
       </li>
-      <li class="flex items-center gap-2.5 cursor-pointer" @click="$emit('clicOpenBookMarks')">
+      <li class="flex items-center gap-2.5 cursor-pointer" @click="$emit('clickOpenBookMarks')">
         <img src="/heart.svg" alt="Heart" />
         <b class="text-gray-500 hover:text-black">Закладки</b>
       </li>

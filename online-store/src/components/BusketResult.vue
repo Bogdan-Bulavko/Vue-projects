@@ -1,5 +1,5 @@
 <script setup>
-defineProps({ result: Number, tax: Number })
+defineProps({ result: Number, tax: Number, taxPercentage: Number })
 </script>
 
 <template>
@@ -10,9 +10,9 @@ defineProps({ result: Number, tax: Number })
       <b>{{ result }} ₽</b>
     </div>
     <div class="flex gap-2">
-      <span class="text-[16px]">Налог {{ tax }}%:</span>
+      <span class="text-[16px]">Налог {{ taxPercentage }}%:</span>
       <div class="flex-1 border-b border-dashed border-[#DFDFDF]"></div>
-      <b>{{ Math.floor((result / 100) * tax) }} ₽</b>
+      <b>{{ tax }} ₽</b>
     </div>
     <button class="mt-7 max-w-full w-full inline-block rounded-3xl py-4 bg-[#A5D364] text-white">
       Оформить заказ

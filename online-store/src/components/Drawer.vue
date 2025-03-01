@@ -1,13 +1,14 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, provide } from 'vue'
+
+import getProduct from '@/servis/getData'
 
 import BusketCardList from './BusketCardList.vue'
 import BusketResult from './BusketResult.vue'
-import axios from 'axios'
 
 const dataIndexProductsInBasket = ref(JSON.parse(localStorage.getItem('productsInBasket')))
 const dataProducts = ref([])
-const totalResult = ref(0)
+const totalPrice = ref(0)
 const taxPercentage = 5
 
 if (dataIndexProductsInBasket.value === null) {
@@ -16,24 +17,46 @@ if (dataIndexProductsInBasket.value === null) {
   dataIndexProductsInBasket.value = JSON.parse(localStorage.getItem('productsInBasket'))
 }
 
-const getProductForBasket = async (id) => {
-  const { data } = await axios.get(`https://34643c0fb49ad60b.mokky.dev/items/${id}`)
-  return data
-}
-
 onMounted(async () => {
   try {
     const data = await Promise.all(
       dataIndexProductsInBasket.value.map(async (index) => {
-        return await getProductForBasket(index)
+        return await getProduct(index)
       }),
     )
     dataProducts.value = data
-    totalResult.value = dataProducts.value.reduce((acc, item) => acc + item.price, 0)
+    totalPrice.value = dataProducts.value.reduce((acc, item) => acc + item.price, 0)
+    localStorage.setItem('totalPrice', totalPrice.value)
   } catch (err) {
     console.log(err)
   }
 })
+
+const taxСalculation = computed(() => {
+  return Math.floor((totalPrice.value / 100) * taxPercentage)
+})
+
+const deleteCard = (e) => {
+  const id = Number(e.target.parentElement.id)
+  dataProducts.value = dataProducts.value.filter((product) => {
+    if (product.id === id) {
+      totalPrice.value = totalPrice.value - product.price
+      localStorage.setItem('totalPrice', totalPrice.value)
+    }
+
+    dataIndexProductsInBasket.value = dataIndexProductsInBasket.value.filter((index) => {
+      if (dataIndexProductsInBasket.value.length === 1) {
+        return
+      }
+      return index !== id
+    })
+
+    localStorage.setItem('productsInBasket', JSON.stringify(dataIndexProductsInBasket.value))
+    return product.id !== id
+  })
+}
+
+provide('eventHandler', deleteCard)
 </script>
 
 <template>
@@ -45,7 +68,7 @@ onMounted(async () => {
     <h3 class="text-3xl font-bold mb-9">Корзина</h3>
     <div class="h-[100%] flex flex-col justify-between pb-9">
       <BusketCardList :products="dataProducts" />
-      <BusketResult :result="totalResult" :tax="taxPercentage" />
+      <BusketResult :result="totalPrice" :tax="taxСalculation" :taxPercentage="taxPercentage" />
     </div>
   </div>
 </template>

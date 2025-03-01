@@ -1,63 +1,13 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
-
+//
 import CardList from './CardList.vue'
 
-const products = ref([])
-
-const serchedProducts = ref([])
-
-onMounted(async () => {
-  try {
-    const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
-    products.value = data
-    serchedProducts.value = data
-  } catch (err) {
-    console.log(err)
-  }
+defineProps({
+  products: Array,
+  changeSorting: Function,
+  searchProduct: Function,
+  onFavoriteProducts: Function,
 })
-
-const changeSorting = (e) => {
-  switch (e.target.options[e.target.selectedIndex].id) {
-    case 'name':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
-        if (a.title < b.title) {
-          return -1
-        }
-        if (a.title > b.title) {
-          return 1
-        }
-        return 0
-      })
-      break
-    case 'cheap':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
-        return a.price - b.price
-      })
-      break
-    case 'dear':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
-        return b.price - a.price
-      })
-      break
-    default:
-      serchedProducts.value = products.value
-  }
-}
-
-const searchProduct = (e) => {
-  if (e.target.value === '') {
-    serchedProducts.value = products.value
-  }
-
-  serchedProducts.value = products.value.filter((product) => {
-    const regex = new RegExp(e.target.value, 'i')
-    if (regex.test(product.title)) {
-      return product
-    }
-  })
-}
 </script>
 
 <template>
@@ -68,7 +18,6 @@ const searchProduct = (e) => {
         <select
           class="py-2 px-3 border border-gray-300 rounded-md outline-none"
           @change="changeSorting"
-          value=""
         >
           <option value="" disabled selected hidden>Отсортировать</option>
           <option id="name">По названию</option>
@@ -87,7 +36,7 @@ const searchProduct = (e) => {
         </div>
       </div>
     </div>
-    <CardList :items="serchedProducts" />
+    <CardList :items="products" :onFavoriteProducts="onFavoriteProducts" />
   </section>
 </template>
 

@@ -6,6 +6,7 @@ defineProps({
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
+  onFavoriteProducts: Function,
 })
 </script>
 
@@ -18,14 +19,9 @@ defineProps({
       class="absolute left-9 block"
       :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
       alt="button like"
-      @click="$emit('favorite', $event)"
+      @click="onFavoriteProducts"
     />
-    <img
-      class="block w-[133px] h-[112px] mb-4"
-      :src="imageUrl"
-      alt="image sneakers"
-      @click="$emit('showCard', $event)"
-    />
+    <img class="block w-[133px] h-[112px] mb-4" :src="imageUrl" alt="image sneakers" />
     <p class="leading-[17px] mb-4">{{ title }}</p>
 
     <div>

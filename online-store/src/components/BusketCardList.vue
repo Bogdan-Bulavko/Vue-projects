@@ -11,6 +11,7 @@ import CardProductBasket from './CardProductBasket.vue'
     <CardProductBasket
       v-for="product in products"
       :key="product.id"
+      :id="product.id"
       :imageUrl="product.imageUrl"
       :title="product.title"
       :price="product.price"
