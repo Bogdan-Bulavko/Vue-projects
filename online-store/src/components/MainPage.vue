@@ -1,36 +1,38 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 
-import axios from 'axios'
-
 import AllProducts from './AllProducts.vue'
 import Drawer from './Drawer.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
+import axios from 'axios'
 
-const state = reactive({ products: {} })
-
-const serchedProducts = ref([])
+const state = reactive({ products: [] })
 
 onMounted(async () => {
   try {
     const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
 
-    state.products = data.map((product) => {
+    state.products = await data.map((product) => {
       return { ...product, isAdded: false, isFavorite: false }
     })
-
-    serchedProducts.value = state.products
   } catch (err) {
     console.log(err)
   }
 })
 
+// const dataFavorite = ref(JSON.parse(localStorage.getItem('favorite')))
+
+// if (dataFavorite.value === null) {
+//   dataFavorite.value = []
+
+// }
+
 const handleChangeSorting = (e) => {
   switch (e.target.options[e.target.selectedIndex].id) {
     case 'name':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
+      state.products.sort((a, b) => {
         if (a.title < b.title) {
           return -1
         }
@@ -41,44 +43,23 @@ const handleChangeSorting = (e) => {
       })
       break
     case 'cheap':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
+      state.products.sort((a, b) => {
         return a.price - b.price
       })
       break
     case 'dear':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
+      state.products.sort((a, b) => {
         return b.price - a.price
       })
       break
-    default:
-      serchedProducts.value = state.products
   }
 }
-
-const handleSearchProduct = (e) => {
-  if (e.target.value === '') {
-    serchedProducts.value = state.products
-  }
-
-  serchedProducts.value = state.products.filter((product) => {
-    const regex = new RegExp(e.target.value, 'i')
-    if (regex.test(product.title)) {
-      return product
-    }
-  })
-}
-
-// const dataFavorite = ref(JSON.parse(localStorage.getItem('favorite')))
-
-// if (dataFavorite.value === null) {
-//   dataFavorite.value = []
-// }
 
 const handleFavoriteProducts = (e) => {
   const index = Number(e.target.parentElement.id) - 1
 
-  // state.products[index].isFavorite = !state.products[index].isFavorite
-  // serchedProducts.value = state.products
+  state.products[index].isFavorite = !state.products[index].isFavorite
+  // sorting.products = state.products
   // console.log(state.products, serchedProducts.value)
   // if (dataFavorite.value === null) {
   //   dataFavorite.value = []
@@ -124,10 +105,9 @@ const closeBookMarks = () => {
     <template v-else>
       <Slider />
       <AllProducts
-        :products="serchedProducts"
-        :changeSorting="handleChangeSorting"
-        :searchProduct="handleSearchProduct"
+        :products="state.products"
         :onFavoriteProducts="handleFavoriteProducts"
+        :changeSorting="handleChangeSorting"
       />
     </template>
   </div>
