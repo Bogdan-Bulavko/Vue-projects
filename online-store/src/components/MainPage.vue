@@ -8,15 +8,24 @@ import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
 import axios from 'axios'
 
-const state = reactive({ products: [] })
+const state = reactive({
+  products: [],
+  dataFavorite: JSON.parse(localStorage.getItem('favorite')),
+})
 
 const sorting = reactive({ products: [] })
+
+const openBasket = ref(false)
+const openBookmarks = ref(false)
 
 onMounted(async () => {
   try {
     const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
 
     state.products = await data.map((product) => {
+      if (state.dataFavorite.includes(product.id)) {
+        return { ...product, isAdded: false, isFavorite: true }
+      }
       return { ...product, isAdded: false, isFavorite: false }
     })
 
@@ -26,12 +35,9 @@ onMounted(async () => {
   }
 })
 
-// const dataFavorite = ref(JSON.parse(localStorage.getItem('favorite')))
-
-// if (dataFavorite.value === null) {
-//   dataFavorite.value = []
-
-// }
+if (state.dataFavorite === null) {
+  state.dataFavorite = []
+}
 
 const handleChangeSorting = (e) => {
   switch (e.target.options[e.target.selectedIndex].id) {
@@ -67,22 +73,20 @@ const handleFavoriteProducts = (e) => {
       product.isFavorite = !product.isFavorite
     }
   })
-  // sorting.products = state.products
 
-  // if (dataFavorite.value === null) {
-  //   dataFavorite.value = []
-  // }
-  // if (dataFavorite.value.includes(id)) {
-  //   dataFavorite.value = dataFavorite.value.filter((product) => {
-  //     if (product !== id) {
-  //       return product
-  //     }
-  //   })
-  //   localStorage.setItem('favorite', JSON.stringify(dataFavorite.value))
-  // } else {
-  //   dataFavorite.value = [...dataFavorite.value, id]
-  //   localStorage.setItem('favorite', JSON.stringify(dataFavorite.value))
-  // }
+  sorting.products = state.products
+
+  if (state.dataFavorite.includes(id)) {
+    state.dataFavorite = state.dataFavorite.filter((product) => {
+      if (product !== id) {
+        return product
+      }
+    })
+    localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+  } else {
+    state.dataFavorite = [...state.dataFavorite, id]
+    localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+  }
 }
 
 const handleSearchProduct = (e) => {
@@ -96,9 +100,6 @@ const handleSearchProduct = (e) => {
     }
   })
 }
-
-const openBasket = ref(false)
-const openBookmarks = ref(false)
 
 const onClickOpenBasket = () => {
   openBasket.value = !openBasket.value
@@ -121,7 +122,12 @@ const closeBookMarks = () => {
       @clickOpenBookMarks="openBookMarks"
       @clickCloseBookMarks="closeBookMarks"
     />
-    <Bookmarks v-if="openBookmarks" />
+    <Bookmarks
+      v-if="openBookmarks"
+      :products="sorting.products"
+      :openBookmarks="openBookmarks"
+      :onFavoriteProducts="handleFavoriteProducts"
+    />
     <template v-else>
       <Slider />
       <AllProducts

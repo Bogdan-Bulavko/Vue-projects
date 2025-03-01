@@ -4,6 +4,7 @@
 import CardProduct from './CardProduct.vue'
 
 defineProps({
+  openBookmarks: Boolean,
   items: Object,
   onFavoriteProducts: Function,
 })
