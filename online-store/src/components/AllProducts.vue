@@ -1,33 +1,12 @@
 <script setup>
-import { reactive, watch } from 'vue'
 import CardList from './CardList.vue'
 
-const props = defineProps({
+defineProps({
   products: Object,
   changeSorting: Function,
+  searchProduct: Function,
   onFavoriteProducts: Function,
 })
-
-watch(props.products, () => {
-  const sorting = reactive({ products: [] })
-
-  return sorting
-})
-
-// sorting.products = props.products
-
-const handleSearchProduct = (e) => {
-  // console.log(sorting)
-  // if (e.target.value === '') {
-  //   sorting = props.products
-  // }
-  // sorting = props.products.filter((product) => {
-  //   const regex = new RegExp(e.target.value, 'i')
-  //   if (regex.test(product.title)) {
-  //     return product
-  //   }
-  // })
-}
 </script>
 
 <template>
@@ -51,7 +30,7 @@ const handleSearchProduct = (e) => {
             class="border border-gray-300 rounded-md py-2 pl-12 pr-4 outline-none focus:border-gray-400"
             type="text"
             placeholder="Поиск..."
-            @input="handleSearchProduct"
+            @input="searchProduct"
           />
         </div>
       </div>

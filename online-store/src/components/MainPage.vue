@@ -56,9 +56,13 @@ const handleChangeSorting = (e) => {
 }
 
 const handleFavoriteProducts = (e) => {
-  const index = Number(e.target.parentElement.id) - 1
+  const id = Number(e.target.parentElement.id)
 
-  state.products[index].isFavorite = !state.products[index].isFavorite
+  state.products.find((product) => {
+    if (product.id === id) {
+      product.isFavorite = !product.isFavorite
+    }
+  })
   // sorting.products = state.products
   // console.log(state.products, serchedProducts.value)
   // if (dataFavorite.value === null) {
@@ -75,6 +79,19 @@ const handleFavoriteProducts = (e) => {
   //   dataFavorite.value = [...dataFavorite.value, id]
   //   localStorage.setItem('favorite', JSON.stringify(dataFavorite.value))
   // }
+}
+
+const handleSearchProduct = (e) => {
+  // console.log(sorting)
+  // if (e.target.value === '') {
+  //   sorting = props.products
+  // }
+  // sorting = props.products.filter((product) => {
+  //   const regex = new RegExp(e.target.value, 'i')
+  //   if (regex.test(product.title)) {
+  //     return product
+  //   }
+  // })
 }
 
 const openBasket = ref(false)
@@ -108,6 +125,7 @@ const closeBookMarks = () => {
         :products="state.products"
         :onFavoriteProducts="handleFavoriteProducts"
         :changeSorting="handleChangeSorting"
+        :searchProduct="handleSearchProduct"
       />
     </template>
   </div>
