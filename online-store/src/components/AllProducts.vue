@@ -1,9 +1,8 @@
 <script setup>
-//
 import CardList from './CardList.vue'
 
 defineProps({
-  products: Array,
+  products: Object,
   changeSorting: Function,
   searchProduct: Function,
   onFavoriteProducts: Function,

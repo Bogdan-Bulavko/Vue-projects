@@ -4,7 +4,7 @@
 import CardProduct from './CardProduct.vue'
 
 defineProps({
-  items: Array,
+  items: Object,
   onFavoriteProducts: Function,
 })
 
