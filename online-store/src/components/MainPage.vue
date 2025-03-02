@@ -108,7 +108,7 @@ if (state.dataProductsInBasket === null) {
   state.dataProductsInBasket = []
 }
 
-const handleAddProductsInBasket = (e) => {
+const handleProductsInBasket = (e) => {
   const id = Number(e.target.parentElement.id)
 
   state.products.find((product) => {
@@ -132,6 +132,22 @@ const handleAddProductsInBasket = (e) => {
   }
 }
 
+const priceCalculation = computed(() => {
+  return state.products.reduce((acc, product) => {
+    if (product.isAdded) {
+      acc += product.price
+      localStorage.setItem('totalPrice', acc)
+      return acc
+    }
+    localStorage.setItem('totalPrice', acc)
+    return acc
+  }, 0)
+})
+
+const taxСalculation = computed(() => {
+  return Math.floor((priceCalculation.value / 100) * state.taxPercentage)
+})
+
 const onClickOpenBasket = () => {
   openBasket.value = !openBasket.value
 }
@@ -143,20 +159,6 @@ const openBookMarks = () => {
 const closeBookMarks = () => {
   openBookmarks.value = false
 }
-
-const priceCalculation = computed(() => {
-  return state.products.reduce((acc, product) => {
-    if (product.isAdded) {
-      acc += product.price
-      return acc
-    }
-    return acc
-  }, 0)
-})
-
-const taxСalculation = computed(() => {
-  return Math.floor((priceCalculation.value / 100) * state.taxPercentage)
-})
 </script>
 
 <template>
@@ -167,26 +169,28 @@ const taxСalculation = computed(() => {
     :totalPtice="priceCalculation"
     :taxСalculation="taxСalculation"
     :taxPercentage="state.taxPercentage"
+    :onDeleteCard="handleProductsInBasket"
   />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
       @openBasket="onClickOpenBasket"
       @clickOpenBookMarks="openBookMarks"
       @clickCloseBookMarks="closeBookMarks"
+      :totalPtice="priceCalculation"
     />
     <Bookmarks
       v-if="openBookmarks"
       :products="state.products"
       :openBookmarks="openBookmarks"
       :onFavoriteProducts="handleFavoriteProducts"
-      :onAddProductsInBasket="handleAddProductsInBasket"
+      :onAddProductsInBasket="handleProductsInBasket"
     />
     <template v-else>
       <Slider />
       <AllProducts
         :products="sorting.products"
         :onFavoriteProducts="handleFavoriteProducts"
-        :onAddProductsInBasket="handleAddProductsInBasket"
+        :onAddProductsInBasket="handleProductsInBasket"
         :changeSorting="handleChangeSorting"
         :searchProduct="handleSearchProduct"
       />
