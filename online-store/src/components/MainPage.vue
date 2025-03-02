@@ -1,36 +1,63 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-
-import axios from 'axios'
+import { ref, reactive, computed, onMounted } from 'vue'
 
 import AllProducts from './AllProducts.vue'
 import Drawer from './Drawer.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
+import axios from 'axios'
 
-const state = reactive({ products: {} })
+const state = reactive({
+  products: [],
+  dataFavorite: JSON.parse(localStorage.getItem('favorite')),
+  dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
+  taxPercentage: 5,
+})
 
-const serchedProducts = ref([])
+const sorting = reactive({ products: [] })
+
+const openBasket = ref(false)
+const openBookmarks = ref(false)
 
 onMounted(async () => {
   try {
     const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
 
-    state.products = data.map((product) => {
-      return { ...product, isAdded: false, isFavorite: false }
+    state.products = await data.map((product) => {
+      return {
+        ...product,
+        isAdded: state.dataProductsInBasket.includes(product.id),
+        isFavorite: state.dataFavorite.includes(product.id),
+      }
     })
 
-    serchedProducts.value = state.products
+    sorting.products = state.products
   } catch (err) {
     console.log(err)
   }
 })
 
+const handleSearchProduct = (e) => {
+  if (e.target.value === '') {
+    sorting.products = state.products
+  }
+  sorting.products = state.products.filter((product) => {
+    const regex = new RegExp(e.target.value, 'i')
+    if (regex.test(product.title)) {
+      return product
+    }
+  })
+}
+
+if (state.dataFavorite === null) {
+  state.dataFavorite = []
+}
+
 const handleChangeSorting = (e) => {
   switch (e.target.options[e.target.selectedIndex].id) {
     case 'name':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
+      sorting.products = state.products.sort((a, b) => {
         if (a.title < b.title) {
           return -1
         }
@@ -41,63 +68,85 @@ const handleChangeSorting = (e) => {
       })
       break
     case 'cheap':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
+      sorting.products = state.products.sort((a, b) => {
         return a.price - b.price
       })
       break
     case 'dear':
-      serchedProducts.value = serchedProducts.value.sort((a, b) => {
+      sorting.products = state.products.sort((a, b) => {
         return b.price - a.price
       })
       break
-    default:
-      serchedProducts.value = state.products
   }
 }
-
-const handleSearchProduct = (e) => {
-  if (e.target.value === '') {
-    serchedProducts.value = state.products
-  }
-
-  serchedProducts.value = state.products.filter((product) => {
-    const regex = new RegExp(e.target.value, 'i')
-    if (regex.test(product.title)) {
-      return product
-    }
-  })
-}
-
-// const dataFavorite = ref(JSON.parse(localStorage.getItem('favorite')))
-
-// if (dataFavorite.value === null) {
-//   dataFavorite.value = []
-// }
 
 const handleFavoriteProducts = (e) => {
-  const index = Number(e.target.parentElement.id) - 1
+  const id = Number(e.target.parentElement.id)
 
-  // state.products[index].isFavorite = !state.products[index].isFavorite
-  // serchedProducts.value = state.products
-  // console.log(state.products, serchedProducts.value)
-  // if (dataFavorite.value === null) {
-  //   dataFavorite.value = []
-  // }
-  // if (dataFavorite.value.includes(id)) {
-  //   dataFavorite.value = dataFavorite.value.filter((product) => {
-  //     if (product !== id) {
-  //       return product
-  //     }
-  //   })
-  //   localStorage.setItem('favorite', JSON.stringify(dataFavorite.value))
-  // } else {
-  //   dataFavorite.value = [...dataFavorite.value, id]
-  //   localStorage.setItem('favorite', JSON.stringify(dataFavorite.value))
-  // }
+  state.products.find((product) => {
+    if (product.id === id) {
+      product.isFavorite = !product.isFavorite
+    }
+  })
+
+  sorting.products = state.products
+
+  if (state.dataFavorite.includes(id)) {
+    state.dataFavorite = state.dataFavorite.filter((product) => {
+      if (product !== id) {
+        return product
+      }
+    })
+    localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+  } else {
+    state.dataFavorite = [...state.dataFavorite, id]
+    localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+  }
 }
 
-const openBasket = ref(false)
-const openBookmarks = ref(false)
+if (state.dataProductsInBasket === null) {
+  state.dataProductsInBasket = []
+}
+
+const handleProductsInBasket = (e) => {
+  const id = Number(e.target.parentElement.id)
+
+  state.products.find((product) => {
+    if (product.id === id) {
+      product.isAdded = !product.isAdded
+    }
+  })
+
+  sorting.products = state.products
+
+  if (state.dataProductsInBasket.includes(id)) {
+    state.dataProductsInBasket = state.dataProductsInBasket.filter((product) => {
+      if (product !== id) {
+        return product
+      }
+    })
+    localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+  } else {
+    state.dataProductsInBasket = [...state.dataProductsInBasket, id]
+    localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+  }
+}
+
+const priceCalculation = computed(() => {
+  return state.products.reduce((acc, product) => {
+    if (product.isAdded) {
+      acc += product.price
+      localStorage.setItem('totalPrice', acc)
+      return acc
+    }
+    localStorage.setItem('totalPrice', acc)
+    return acc
+  }, 0)
+})
+
+const taxСalculation = computed(() => {
+  return Math.floor((priceCalculation.value / 100) * state.taxPercentage)
+})
 
 const onClickOpenBasket = () => {
   openBasket.value = !openBasket.value
@@ -113,21 +162,37 @@ const closeBookMarks = () => {
 </script>
 
 <template>
-  <Drawer v-if="openBasket" @closeBasket="onClickOpenBasket" />
+  <Drawer
+    v-if="openBasket"
+    @closeBasket="onClickOpenBasket"
+    :products="state.products"
+    :totalPtice="priceCalculation"
+    :taxСalculation="taxСalculation"
+    :taxPercentage="state.taxPercentage"
+    :onDeleteCard="handleProductsInBasket"
+  />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
       @openBasket="onClickOpenBasket"
       @clickOpenBookMarks="openBookMarks"
       @clickCloseBookMarks="closeBookMarks"
+      :totalPtice="priceCalculation"
     />
-    <Bookmarks v-if="openBookmarks" />
+    <Bookmarks
+      v-if="openBookmarks"
+      :products="state.products"
+      :openBookmarks="openBookmarks"
+      :onFavoriteProducts="handleFavoriteProducts"
+      :onAddProductsInBasket="handleProductsInBasket"
+    />
     <template v-else>
       <Slider />
       <AllProducts
-        :products="serchedProducts"
+        :products="sorting.products"
+        :onFavoriteProducts="handleFavoriteProducts"
+        :onAddProductsInBasket="handleProductsInBasket"
         :changeSorting="handleChangeSorting"
         :searchProduct="handleSearchProduct"
-        :onFavoriteProducts="handleFavoriteProducts"
       />
     </template>
   </div>

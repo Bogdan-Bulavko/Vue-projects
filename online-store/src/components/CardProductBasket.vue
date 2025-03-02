@@ -1,19 +1,11 @@
 <script setup>
-import { inject } from 'vue'
 defineProps({
   id: Number,
   imageUrl: String,
   title: String,
   price: Number,
+  deleteCard: Function,
 })
-
-const eventHandler = inject('eventHandler')
-
-const deleteCard = (e) => {
-  if (eventHandler) {
-    eventHandler(e)
-  }
-}
 </script>
 
 <template>

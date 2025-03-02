@@ -1,5 +1,9 @@
 <script setup>
-defineProps({ result: Number, tax: Number, taxPercentage: Number })
+defineProps({
+  result: Number,
+  tax: Number,
+  taxPercentage: Number,
+})
 </script>
 
 <template>

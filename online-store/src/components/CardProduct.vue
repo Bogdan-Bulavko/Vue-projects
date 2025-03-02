@@ -7,6 +7,7 @@ defineProps({
   isFavorite: Boolean,
   isAdded: Boolean,
   onFavoriteProducts: Function,
+  onAddProductsInBasket: Function,
 })
 </script>
 
@@ -31,8 +32,8 @@ defineProps({
     <img
       class="absolute bottom-9 right-9 block"
       :src="isAdded ? '/checked.svg' : '/plus.svg'"
-      alt="Added Product"
-      @click="$emit('addInBasket', $event)"
+      alt="Add Product"
+      @click="onAddProductsInBasket"
     />
   </article>
 </template>

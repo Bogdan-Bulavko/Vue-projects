@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+defineProps({
+  totalPtice: Number,
+})
+</script>
 
 <template>
   <header class="flex justify-between border-b border-slate-300 pb-12">
@@ -12,7 +16,7 @@
     <ul class="flex items-center gap-2.5">
       <li class="flex items-center gap-2.5 cursor-pointer" @click="$emit('openBasket')">
         <img src="/cart.svg" alt="Cart" />
-        <b class="text-gray-500 hover:text-black">Корзина</b>
+        <b class="text-gray-500 hover:text-black">{{ totalPtice }} руб.</b>
       </li>
       <li class="flex items-center gap-2.5 cursor-pointer" @click="$emit('clickOpenBookMarks')">
         <img src="/heart.svg" alt="Heart" />
