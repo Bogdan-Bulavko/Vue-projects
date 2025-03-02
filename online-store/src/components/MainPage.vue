@@ -19,6 +19,8 @@ const sorting = reactive({ products: [] })
 
 const openBasket = ref(false)
 const openBookmarks = ref(false)
+const emptyBookMarks = ref(false)
+const emptyBasket = ref(false)
 
 onMounted(async () => {
   try {
@@ -80,6 +82,12 @@ const handleChangeSorting = (e) => {
   }
 }
 
+if (!state.dataFavorite.length) {
+  emptyBookMarks.value = true
+} else {
+  emptyBookMarks.value = false
+}
+
 const handleFavoriteProducts = (e) => {
   const id = Number(e.target.parentElement.id)
 
@@ -102,10 +110,22 @@ const handleFavoriteProducts = (e) => {
     state.dataFavorite = [...state.dataFavorite, id]
     localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
   }
+
+  if (!state.dataFavorite.length) {
+    emptyBookMarks.value = true
+  } else {
+    emptyBookMarks.value = false
+  }
 }
 
 if (state.dataProductsInBasket === null) {
   state.dataProductsInBasket = []
+}
+
+if (!state.dataProductsInBasket.length) {
+  emptyBasket.value = true
+} else {
+  emptyBasket.value = false
 }
 
 const handleProductsInBasket = (e) => {
@@ -129,6 +149,12 @@ const handleProductsInBasket = (e) => {
   } else {
     state.dataProductsInBasket = [...state.dataProductsInBasket, id]
     localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+  }
+
+  if (!state.dataProductsInBasket.length) {
+    emptyBasket.value = true
+  } else {
+    emptyBasket.value = false
   }
 }
 
@@ -167,6 +193,7 @@ const closeBookMarks = () => {
     @closeBasket="onClickOpenBasket"
     :products="state.products"
     :totalPtice="priceCalculation"
+    :emptyBasket="emptyBasket"
     :taxСalculation="taxСalculation"
     :taxPercentage="state.taxPercentage"
     :onDeleteCard="handleProductsInBasket"
@@ -181,9 +208,11 @@ const closeBookMarks = () => {
     <Bookmarks
       v-if="openBookmarks"
       :products="state.products"
+      :emptyBookMarks="emptyBookMarks"
       :openBookmarks="openBookmarks"
       :onFavoriteProducts="handleFavoriteProducts"
       :onAddProductsInBasket="handleProductsInBasket"
+      :onCloseBookMarks="closeBookMarks"
     />
     <template v-else>
       <Slider />
