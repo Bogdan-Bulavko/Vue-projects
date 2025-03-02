@@ -1,17 +1,14 @@
 <script setup>
-import { ref, computed, provide } from 'vue'
+import { provide } from 'vue'
 
 import BusketCardList from './BusketCardList.vue'
 import BusketResult from './BusketResult.vue'
 
 defineProps({
   products: Object,
-})
-const totalPrice = ref(0)
-const taxPercentage = 5
-
-const taxСalculation = computed(() => {
-  return Math.floor((totalPrice.value / 100) * taxPercentage)
+  taxСalculation: Number,
+  taxPercentage: Number,
+  totalPtice: Number,
 })
 
 const deleteCard = (e) => {
@@ -44,7 +41,7 @@ provide('eventHandler', deleteCard)
     <h3 class="text-3xl font-bold mb-9">Корзина</h3>
     <div class="h-[100%] flex flex-col justify-between pb-9">
       <BusketCardList :products="products" />
-      <BusketResult :result="totalPrice" :tax="taxСalculation" :taxPercentage="taxPercentage" />
+      <BusketResult :result="totalPtice" :tax="taxСalculation" :taxPercentage="taxPercentage" />
     </div>
   </div>
 </template>

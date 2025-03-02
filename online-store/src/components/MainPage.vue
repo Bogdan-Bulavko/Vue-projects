@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 
 import AllProducts from './AllProducts.vue'
 import Drawer from './Drawer.vue'
@@ -12,6 +12,7 @@ const state = reactive({
   products: [],
   dataFavorite: JSON.parse(localStorage.getItem('favorite')),
   dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
+  taxPercentage: 5,
 })
 
 const sorting = reactive({ products: [] })
@@ -142,10 +143,31 @@ const openBookMarks = () => {
 const closeBookMarks = () => {
   openBookmarks.value = false
 }
+
+const priceCalculation = computed(() => {
+  return state.products.reduce((acc, product) => {
+    if (product.isAdded) {
+      acc += product.price
+      return acc
+    }
+    return acc
+  }, 0)
+})
+
+const taxСalculation = computed(() => {
+  return Math.floor((priceCalculation.value / 100) * state.taxPercentage)
+})
 </script>
 
 <template>
-  <Drawer v-if="openBasket" @closeBasket="onClickOpenBasket" :products="state.products" />
+  <Drawer
+    v-if="openBasket"
+    @closeBasket="onClickOpenBasket"
+    :products="state.products"
+    :totalPtice="priceCalculation"
+    :taxСalculation="taxСalculation"
+    :taxPercentage="state.taxPercentage"
+  />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
       @openBasket="onClickOpenBasket"
