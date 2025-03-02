@@ -1,6 +1,4 @@
 <script setup>
-// import { provide } from 'vue'
-
 import BusketCardList from './BusketCardList.vue'
 import BusketResult from './BusketResult.vue'
 
@@ -11,8 +9,6 @@ defineProps({
   totalPtice: Number,
   onDeleteCard: Function,
 })
-
-// provide('eventHandler', deleteCard)
 </script>
 
 <template>
