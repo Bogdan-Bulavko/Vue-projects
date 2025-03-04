@@ -10,12 +10,11 @@ import axios from 'axios'
 
 const state = reactive({
   products: [],
+  sortingProducts: [],
   dataFavorite: JSON.parse(localStorage.getItem('favorite')),
   dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
   taxPercentage: 5,
 })
-
-const sorting = reactive({ products: [] })
 
 const openBasket = ref(false)
 const openBookmarks = ref(false)
@@ -32,7 +31,7 @@ onMounted(async () => {
       }
     })
 
-    sorting.products = state.products
+    state.sortingProducts = state.products
   } catch (err) {
     console.log(err)
   }
@@ -40,9 +39,9 @@ onMounted(async () => {
 
 const handleSearchProduct = (e) => {
   if (e.target.value === '') {
-    sorting.products = state.products
+    state.sortingProducts = state.products
   }
-  sorting.products = state.products.filter((product) => {
+  state.sortingProducts = state.products.filter((product) => {
     const regex = new RegExp(e.target.value, 'i')
     if (regex.test(product.title)) {
       return product
@@ -57,7 +56,7 @@ if (state.dataFavorite === null) {
 const handleChangeSorting = (e) => {
   switch (e.target.options[e.target.selectedIndex].id) {
     case 'name':
-      sorting.products = state.products.sort((a, b) => {
+      state.sortingProducts = state.products.sort((a, b) => {
         if (a.title < b.title) {
           return -1
         }
@@ -68,12 +67,12 @@ const handleChangeSorting = (e) => {
       })
       break
     case 'cheap':
-      sorting.products = state.products.sort((a, b) => {
+      state.sortingProducts = state.products.sort((a, b) => {
         return a.price - b.price
       })
       break
     case 'dear':
-      sorting.products = state.products.sort((a, b) => {
+      state.sortingProducts = state.products.sort((a, b) => {
         return b.price - a.price
       })
       break
@@ -89,7 +88,7 @@ const handleFavoriteProducts = (e) => {
     }
   })
 
-  sorting.products = state.products
+  state.sortingProducts = state.products
 
   if (state.dataFavorite.includes(id)) {
     state.dataFavorite = state.dataFavorite.filter((product) => {
@@ -117,7 +116,7 @@ const handleProductsInBasket = (e) => {
     }
   })
 
-  sorting.products = state.products
+  state.sortingProducts = state.products
 
   if (state.dataProductsInBasket.includes(id)) {
     state.dataProductsInBasket = state.dataProductsInBasket.filter((product) => {
@@ -188,7 +187,7 @@ const closeBookMarks = () => {
     <template v-else>
       <Slider />
       <AllProducts
-        :products="sorting.products"
+        :products="state.sortingProducts"
         :onFavoriteProducts="handleFavoriteProducts"
         :onAddProductsInBasket="handleProductsInBasket"
         :changeSorting="handleChangeSorting"
