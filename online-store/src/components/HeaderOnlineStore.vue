@@ -2,11 +2,13 @@
 defineProps({
   totalPtice: Number,
 })
+
+const emit = defineEmits(['openBasket', 'clickOpenBookMarks', 'clickCloseBookMark'])
 </script>
 
 <template>
   <header class="flex justify-between border-b border-slate-300 pb-12">
-    <div class="flex items-center cursor-pointer" @click="$emit('clickCloseBookMarks')">
+    <div class="flex items-center cursor-pointer" @click="emit('clickCloseBookMarks')">
       <div class="mr-4"><img src="/logo.png" alt="Logo" class="w-[40px]" /></div>
       <div>
         <h2 class="text-xl font-bold uppercase">Vue Online Store</h2>
@@ -14,11 +16,11 @@ defineProps({
       </div>
     </div>
     <ul class="flex items-center gap-2.5">
-      <li class="flex items-center gap-2.5 cursor-pointer" @click="$emit('openBasket')">
+      <li class="flex items-center gap-2.5 cursor-pointer" @click="emit('openBasket')">
         <img src="/cart.svg" alt="Cart" />
         <b class="text-gray-500 hover:text-black">{{ totalPtice }} руб.</b>
       </li>
-      <li class="flex items-center gap-2.5 cursor-pointer" @click="$emit('clickOpenBookMarks')">
+      <li class="flex items-center gap-2.5 cursor-pointer" @click="emit('clickOpenBookMarks')">
         <img src="/heart.svg" alt="Heart" />
         <b class="text-gray-500 hover:text-black">Закладки</b>
       </li>
