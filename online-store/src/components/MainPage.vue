@@ -80,7 +80,6 @@ const handleChangeSorting = (e) => {
       })
       break
   }
-  console.log('сортированные: ', state.sortingProducts, 'не сортированные: ', state.products)
 }
 
 if (!state.dataFavorite.length) {
@@ -89,14 +88,10 @@ if (!state.dataFavorite.length) {
   notEmptyBookMarks.value = false
 }
 
-const onFavoriteProducts = (e) => {
-  const id = Number(e.target.parentElement.id)
+const onFavoriteProducts = (product) => {
+  const id = product.id
 
-  state.products.find((product) => {
-    if (product.id === id) {
-      product.isFavorite = !product.isFavorite
-    }
-  })
+  product.isFavorite = !product.isFavorite
 
   state.sortingProducts = state.products
 
@@ -118,8 +113,6 @@ const onFavoriteProducts = (e) => {
   } else {
     notEmptyBookMarks.value = false
   }
-
-  console.log('сортированные: ', state.sortingProducts, 'не сортированные: ', state.products)
 }
 
 if (state.dataProductsInBasket === null) {
@@ -132,14 +125,10 @@ if (!state.dataProductsInBasket.length) {
   notEmptyBasket.value = false
 }
 
-const onProductsInBasket = (e) => {
-  const id = Number(e.target.parentElement.id)
+const onProductsInBasket = (product) => {
+  const id = product.id
 
-  state.products.find((product) => {
-    if (product.id === id) {
-      product.isAdded = !product.isAdded
-    }
-  })
+  product.isAdded = !product.isAdded
 
   state.sortingProducts = state.products
 
@@ -161,7 +150,6 @@ const onProductsInBasket = (e) => {
   } else {
     notEmptyBasket.value = false
   }
-  console.log('сортированные: ', state.sortingProducts, 'не сортированные: ', state.products)
 }
 
 const priceCalculation = computed(() => {

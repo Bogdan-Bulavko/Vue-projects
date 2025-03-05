@@ -2,7 +2,8 @@
 import { inject } from 'vue'
 import CardProduct from './CardProduct.vue'
 
-const { state } = inject('onProductsInBasket')
+const { state, onProductsInBasket } = inject('onProductsInBasket')
+const onFavoriteProducts = inject('onFavoriteProducts')
 </script>
 
 <template>
@@ -17,6 +18,8 @@ const { state } = inject('onProductsInBasket')
         :price="product.price"
         :isFavorite="product.isFavorite"
         :isAdded="product.isAdded"
+        :onProductsInBasket="() => onProductsInBasket(product)"
+        :onFavoriteProducts="() => onFavoriteProducts(product)"
       />
     </template>
   </div>

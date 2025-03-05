@@ -1,6 +1,4 @@
 <script setup>
-import { inject } from 'vue'
-
 defineProps({
   id: Number,
   imageUrl: String,
@@ -8,10 +6,9 @@ defineProps({
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
+  onProductsInBasket: Function,
+  onFavoriteProducts: Function,
 })
-
-const onFavoriteProducts = inject('onFavoriteProducts')
-const { onProductsInBasket } = inject('onProductsInBasket')
 </script>
 
 <template>

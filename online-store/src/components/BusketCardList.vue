@@ -2,7 +2,7 @@
 import { inject } from 'vue'
 import CardProductBasket from './CardProductBasket.vue'
 
-const { state } = inject('onProductsInBasket')
+const { state, onProductsInBasket } = inject('onProductsInBasket')
 </script>
 
 <template>
@@ -15,6 +15,7 @@ const { state } = inject('onProductsInBasket')
         :imageUrl="product.imageUrl"
         :title="product.title"
         :price="product.price"
+        :onDeleteCard="() => onProductsInBasket(product)"
       />
     </template>
   </div>
