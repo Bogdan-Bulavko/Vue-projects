@@ -4,14 +4,15 @@ import BusketResult from './BusketResult.vue'
 
 defineProps({
   notEmptyBasket: Boolean,
-  handleCloseBasket: Function,
 })
+
+const emit = defineEmits(['handleCloseBasket'])
 </script>
 
 <template>
   <div
     class="fixed top-0 left-0 z-10 h-full w-full bg-black opacity-50"
-    @click="handleCloseBasket"
+    @click="emit('handleCloseBasket')"
   ></div>
   <div class="fixed top-0 right-0 z-20 bg-white w-[385px] h-full p-9">
     <div v-if="notEmptyBasket" class="h-full flex flex-col items-center justify-center">
@@ -21,7 +22,7 @@ defineProps({
         Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.
       </p>
       <button
-        @click="handleCloseBasket"
+        @click="emit('handleCloseBasket')"
         class="w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white"
       >
         Вернуться назад
