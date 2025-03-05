@@ -1,14 +1,11 @@
 <script setup>
-import { inject } from 'vue'
-
 defineProps({
   id: Number,
   imageUrl: String,
   title: String,
   price: Number,
+  onDeleteCard: Function,
 })
-
-const onDeleteCard = inject('onDeleteCard')
 </script>
 
 <template>
