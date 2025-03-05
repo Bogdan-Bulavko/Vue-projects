@@ -5,8 +5,6 @@ import BusketResult from './BusketResult.vue'
 defineProps({
   products: Object,
   emptyBasket: Boolean,
-  taxСalculation: Number,
-  totalPtice: Number,
   handleCloseBasket: Function,
 })
 </script>
@@ -34,7 +32,7 @@ defineProps({
       <h3 class="text-3xl font-bold mb-9">Корзина</h3>
       <div class="h-[100%] flex flex-col justify-between pb-9">
         <BusketCardList :products="products" />
-        <BusketResult :result="totalPtice" :tax="taxСalculation" />
+        <BusketResult />
       </div>
     </template>
   </div>

@@ -184,10 +184,14 @@ const onOpenBookMarks = () => {
 const onCloseBookMarks = () => {
   openBookmarks.value = false
 }
-
+// provider for CardProduct and CardProductBasket
 provide('onFavoriteProducts', onFavoriteProducts)
 provide('onProductsInBasket', onProductsInBasket)
+
+// provider for BusketResult
 provide('taxPercentage', state.taxPercentage)
+provide('priceCalculation', priceCalculation)
+provide('taxСalculation', taxСalculation)
 </script>
 
 <template>
@@ -195,9 +199,7 @@ provide('taxPercentage', state.taxPercentage)
     v-if="openBasket"
     :handleCloseBasket="onClickOpenBasket"
     :products="state.products"
-    :totalPtice="priceCalculation"
     :emptyBasket="emptyBasket"
-    :taxСalculation="taxСalculation"
   />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
