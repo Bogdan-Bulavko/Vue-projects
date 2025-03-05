@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, provide } from 'vue'
 
 import AllProducts from './AllProducts.vue'
 import Drawer from './Drawer.vue'
@@ -87,7 +87,7 @@ if (!state.dataFavorite.length) {
   emptyBookMarks.value = false
 }
 
-const handleFavoriteProducts = (e) => {
+const onFavoriteProducts = (e) => {
   const id = Number(e.target.parentElement.id)
 
   state.products.find((product) => {
@@ -127,7 +127,7 @@ if (!state.dataProductsInBasket.length) {
   emptyBasket.value = false
 }
 
-const handleProductsInBasket = (e) => {
+const onProductsInBasket = (e) => {
   const id = Number(e.target.parentElement.id)
 
   state.products.find((product) => {
@@ -177,31 +177,33 @@ const onClickOpenBasket = () => {
   openBasket.value = !openBasket.value
 }
 
-const openBookMarks = () => {
+const onOpenBookMarks = () => {
   openBookmarks.value = true
 }
 
-const closeBookMarks = () => {
+const onCloseBookMarks = () => {
   openBookmarks.value = false
 }
+
+provide('onFavoriteProducts', onFavoriteProducts)
+provide('onProductsInBasket', onProductsInBasket)
+provide('taxPercentage', state.taxPercentage)
 </script>
 
 <template>
   <Drawer
     v-if="openBasket"
-    @closeBasket="onClickOpenBasket"
+    :handleCloseBasket="onClickOpenBasket"
     :products="state.products"
     :totalPtice="priceCalculation"
     :emptyBasket="emptyBasket"
     :taxСalculation="taxСalculation"
-    :taxPercentage="state.taxPercentage"
-    :onDeleteCard="handleProductsInBasket"
   />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
-      @openBasket="onClickOpenBasket"
-      @clickOpenBookMarks="openBookMarks"
-      @clickCloseBookMarks="closeBookMarks"
+      :handleOpenBasket="onClickOpenBasket"
+      :handleClickOpenBookMarks="onOpenBookMarks"
+      :handleClickCloseBookMarks="onCloseBookMarks"
       :totalPtice="priceCalculation"
     />
     <Bookmarks
@@ -209,16 +211,12 @@ const closeBookMarks = () => {
       :products="state.products"
       :emptyBookMarks="emptyBookMarks"
       :openBookmarks="openBookmarks"
-      :onFavoriteProducts="handleFavoriteProducts"
-      :onAddProductsInBasket="handleProductsInBasket"
-      :onCloseBookMarks="closeBookMarks"
+      :handleClickCloseBookMarks="onCloseBookMarks"
     />
     <template v-else>
       <Slider />
       <AllProducts
         :products="state.sortingProducts"
-        :onFavoriteProducts="handleFavoriteProducts"
-        :onAddProductsInBasket="handleProductsInBasket"
         :changeSorting="handleChangeSorting"
         :searchProduct="handleSearchProduct"
       />

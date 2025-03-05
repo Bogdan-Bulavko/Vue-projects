@@ -1,4 +1,6 @@
 <script setup>
+import { inject } from 'vue'
+
 defineProps({
   id: Number,
   imageUrl: String,
@@ -6,9 +8,10 @@ defineProps({
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
-  onFavoriteProducts: Function,
-  onAddProductsInBasket: Function,
 })
+
+const onFavoriteProducts = inject('onFavoriteProducts')
+const onProductsInBasket = inject('onProductsInBasket')
 </script>
 
 <template>
@@ -33,7 +36,7 @@ defineProps({
       class="absolute bottom-9 right-9 block"
       :src="isAdded ? '/checked.svg' : '/plus.svg'"
       alt="Add Product"
-      @click="onAddProductsInBasket"
+      @click="onProductsInBasket"
     />
   </article>
 </template>

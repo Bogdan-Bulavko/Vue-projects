@@ -3,8 +3,6 @@ import CardProduct from './CardProduct.vue'
 
 defineProps({
   items: Object,
-  onFavoriteProducts: Function,
-  onAddProductsInBasket: Function,
 })
 </script>
 
@@ -18,8 +16,6 @@ defineProps({
         :imageUrl="item.imageUrl"
         :title="item.title"
         :price="item.price"
-        :onFavoriteProducts="onFavoriteProducts"
-        :onAddProductsInBasket="onAddProductsInBasket"
         :isFavorite="item.isFavorite"
         :isAdded="item.isAdded"
       />

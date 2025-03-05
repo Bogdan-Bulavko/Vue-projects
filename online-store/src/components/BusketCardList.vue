@@ -1,7 +1,6 @@
 <script setup>
 defineProps({
   products: Object,
-  deleteCard: Function,
 })
 
 import CardProductBasket from './CardProductBasket.vue'
@@ -17,7 +16,6 @@ import CardProductBasket from './CardProductBasket.vue'
         :imageUrl="product.imageUrl"
         :title="product.title"
         :price="product.price"
-        :deleteCard="deleteCard"
       />
     </template>
   </div>

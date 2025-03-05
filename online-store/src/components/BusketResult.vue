@@ -1,9 +1,12 @@
 <script setup>
+import { inject } from 'vue'
+
 defineProps({
   result: Number,
   tax: Number,
-  taxPercentage: Number,
 })
+
+const taxPercentage = inject('taxPercentage')
 </script>
 
 <template>
