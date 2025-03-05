@@ -2,7 +2,6 @@
 import BookMarksCardList from './BookMarksCardList.vue'
 
 defineProps({
-  products: Object,
   emptyBookMarks: Boolean,
   handleClickCloseBookMarks: Function,
 })
@@ -23,7 +22,7 @@ defineProps({
     </div>
     <template v-else>
       <h2 class="mb-5 text-4xl font-bold">Закладки</h2>
-      <BookMarksCardList :items="products" />
+      <BookMarksCardList />
     </template>
   </section>
 </template>

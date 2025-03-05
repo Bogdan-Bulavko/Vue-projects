@@ -1,15 +1,14 @@
 <script setup>
+import { inject } from 'vue'
 import CardProduct from './CardProduct.vue'
 
-defineProps({
-  items: Object,
-})
+const { state } = inject('onProductsInBasket')
 </script>
 
 <template>
   <div class="grid grid-cols-4 justify-between gap-11">
     <CardProduct
-      v-for="item in items"
+      v-for="item in state.sortingProducts"
       :key="item.id"
       :id="item.id"
       :imageUrl="item.imageUrl"

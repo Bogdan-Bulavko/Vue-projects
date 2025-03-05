@@ -2,7 +2,6 @@
 import CardList from './CardList.vue'
 
 defineProps({
-  products: Object,
   changeSorting: Function,
   searchProduct: Function,
 })
@@ -34,7 +33,7 @@ defineProps({
         </div>
       </div>
     </div>
-    <CardList :items="products" />
+    <CardList />
   </section>
 </template>
 

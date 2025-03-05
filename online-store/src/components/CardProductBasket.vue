@@ -8,7 +8,7 @@ defineProps({
   price: Number,
 })
 
-const onDeleteCard = inject('onProductsInBasket')
+const onDeleteCard = inject('onDeleteCard')
 </script>
 
 <template>

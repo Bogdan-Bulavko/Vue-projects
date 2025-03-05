@@ -184,23 +184,21 @@ const onOpenBookMarks = () => {
 const onCloseBookMarks = () => {
   openBookmarks.value = false
 }
-// provider for CardProduct and CardProductBasket
+// provider for CardProduct, CardProductBasket, CardList,
 provide('onFavoriteProducts', onFavoriteProducts)
-provide('onProductsInBasket', onProductsInBasket)
+provide('onProductsInBasket', { onProductsInBasket, state })
 
 // provider for BusketResult
 provide('taxPercentage', state.taxPercentage)
 provide('priceCalculation', priceCalculation)
 provide('taxСalculation', taxСalculation)
+
+// provider for BusketCardList
+provide('onDeleteCard', onProductsInBasket)
 </script>
 
 <template>
-  <Drawer
-    v-if="openBasket"
-    :handleCloseBasket="onClickOpenBasket"
-    :products="state.products"
-    :emptyBasket="emptyBasket"
-  />
+  <Drawer v-if="openBasket" :handleCloseBasket="onClickOpenBasket" :emptyBasket="emptyBasket" />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
       :handleOpenBasket="onClickOpenBasket"
@@ -210,18 +208,13 @@ provide('taxСalculation', taxСalculation)
     />
     <Bookmarks
       v-if="openBookmarks"
-      :products="state.products"
       :emptyBookMarks="emptyBookMarks"
       :openBookmarks="openBookmarks"
       :handleClickCloseBookMarks="onCloseBookMarks"
     />
     <template v-else>
       <Slider />
-      <AllProducts
-        :products="state.sortingProducts"
-        :changeSorting="handleChangeSorting"
-        :searchProduct="handleSearchProduct"
-      />
+      <AllProducts :changeSorting="handleChangeSorting" :searchProduct="handleSearchProduct" />
     </template>
   </div>
 </template>

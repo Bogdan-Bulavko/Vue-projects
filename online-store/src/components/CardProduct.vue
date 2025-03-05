@@ -11,7 +11,7 @@ defineProps({
 })
 
 const onFavoriteProducts = inject('onFavoriteProducts')
-const onProductsInBasket = inject('onProductsInBasket')
+const { onProductsInBasket } = inject('onProductsInBasket')
 </script>
 
 <template>
