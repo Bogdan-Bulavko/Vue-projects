@@ -2,11 +2,8 @@
 import CardList from './CardList.vue'
 
 defineProps({
-  products: Object,
   changeSorting: Function,
   searchProduct: Function,
-  onFavoriteProducts: Function,
-  onAddProductsInBasket: Function,
 })
 </script>
 
@@ -36,11 +33,7 @@ defineProps({
         </div>
       </div>
     </div>
-    <CardList
-      :items="products"
-      :onFavoriteProducts="onFavoriteProducts"
-      :onAddProductsInBasket="onAddProductsInBasket"
-    />
+    <CardList />
   </section>
 </template>
 

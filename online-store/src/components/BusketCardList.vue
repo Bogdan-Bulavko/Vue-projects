@@ -1,15 +1,13 @@
 <script setup>
-defineProps({
-  products: Object,
-  deleteCard: Function,
-})
-
+import { inject } from 'vue'
 import CardProductBasket from './CardProductBasket.vue'
+
+const { state } = inject('onProductsInBasket')
 </script>
 
 <template>
   <div class="overflow-auto">
-    <template v-for="product in products">
+    <template v-for="product in state.products">
       <CardProductBasket
         v-if="product.isAdded"
         :key="product.id"
@@ -17,7 +15,6 @@ import CardProductBasket from './CardProductBasket.vue'
         :imageUrl="product.imageUrl"
         :title="product.title"
         :price="product.price"
-        :deleteCard="deleteCard"
       />
     </template>
   </div>

@@ -1,11 +1,14 @@
 <script setup>
+import { inject } from 'vue'
+
 defineProps({
   id: Number,
   imageUrl: String,
   title: String,
   price: Number,
-  deleteCard: Function,
 })
+
+const onDeleteCard = inject('onDeleteCard')
 </script>
 
 <template>
@@ -18,7 +21,7 @@ defineProps({
       <p class="w-40">{{ title }}</p>
       <b>{{ price }}</b>
     </div>
-    <img class="self-end" src="/public/close.svg" alt="Delete Product" @click="deleteCard" />
+    <img class="self-end" src="/public/close.svg" alt="Delete Product" @click="onDeleteCard" />
   </div>
 </template>
 
