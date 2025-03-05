@@ -2,14 +2,14 @@
 import BookMarksCardList from './BookMarksCardList.vue'
 
 defineProps({
-  emptyBookMarks: Boolean,
+  notEmptyBookMarks: Boolean,
   handleClickCloseBookMarks: Function,
 })
 </script>
 
 <template>
   <section class="mt-5">
-    <div v-if="emptyBookMarks" class="h-full flex flex-col items-center">
+    <div v-if="notEmptyBookMarks" class="h-full flex flex-col items-center">
       <img class="inline w-[70px] mb-8" src="/public/emoji-1.png" />
       <h2 class="text-3xl font-semibold mb-3">Закладок нет :(</h2>
       <p class="text-gray-400 mb-19">Вы ничего не добавляли в закладки</p>

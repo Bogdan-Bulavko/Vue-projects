@@ -18,8 +18,8 @@ const state = reactive({
 
 const openBasket = ref(false)
 const openBookmarks = ref(false)
-const emptyBookMarks = ref(false)
-const emptyBasket = ref(false)
+const notEmptyBookMarks = ref(false)
+const notEmptyBasket = ref(false)
 
 onMounted(async () => {
   try {
@@ -43,6 +43,7 @@ const handleSearchProduct = (e) => {
   if (e.target.value === '') {
     state.sortingProducts = state.products
   }
+
   state.sortingProducts = state.products.filter((product) => {
     const regex = new RegExp(e.target.value, 'i')
     if (regex.test(product.title)) {
@@ -58,7 +59,7 @@ if (state.dataFavorite === null) {
 const handleChangeSorting = (e) => {
   switch (e.target.options[e.target.selectedIndex].id) {
     case 'name':
-      state.sortingProducts = state.products.sort((a, b) => {
+      state.sortingProducts.sort((a, b) => {
         if (a.title < b.title) {
           return -1
         }
@@ -69,22 +70,23 @@ const handleChangeSorting = (e) => {
       })
       break
     case 'cheap':
-      state.sortingProducts = state.products.sort((a, b) => {
+      state.sortingProducts.sort((a, b) => {
         return a.price - b.price
       })
       break
     case 'dear':
-      state.sortingProducts = state.products.sort((a, b) => {
+      state.sortingProducts.sort((a, b) => {
         return b.price - a.price
       })
       break
   }
+  console.log('сортированные: ', state.sortingProducts, 'не сортированные: ', state.products)
 }
 
 if (!state.dataFavorite.length) {
-  emptyBookMarks.value = true
+  notEmptyBookMarks.value = true
 } else {
-  emptyBookMarks.value = false
+  notEmptyBookMarks.value = false
 }
 
 const onFavoriteProducts = (e) => {
@@ -104,6 +106,7 @@ const onFavoriteProducts = (e) => {
         return product
       }
     })
+
     localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
   } else {
     state.dataFavorite = [...state.dataFavorite, id]
@@ -111,10 +114,12 @@ const onFavoriteProducts = (e) => {
   }
 
   if (!state.dataFavorite.length) {
-    emptyBookMarks.value = true
+    notEmptyBookMarks.value = true
   } else {
-    emptyBookMarks.value = false
+    notEmptyBookMarks.value = false
   }
+
+  console.log('сортированные: ', state.sortingProducts, 'не сортированные: ', state.products)
 }
 
 if (state.dataProductsInBasket === null) {
@@ -122,9 +127,9 @@ if (state.dataProductsInBasket === null) {
 }
 
 if (!state.dataProductsInBasket.length) {
-  emptyBasket.value = true
+  notEmptyBasket.value = true
 } else {
-  emptyBasket.value = false
+  notEmptyBasket.value = false
 }
 
 const onProductsInBasket = (e) => {
@@ -144,6 +149,7 @@ const onProductsInBasket = (e) => {
         return product
       }
     })
+
     localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
   } else {
     state.dataProductsInBasket = [...state.dataProductsInBasket, id]
@@ -151,10 +157,11 @@ const onProductsInBasket = (e) => {
   }
 
   if (!state.dataProductsInBasket.length) {
-    emptyBasket.value = true
+    notEmptyBasket.value = true
   } else {
-    emptyBasket.value = false
+    notEmptyBasket.value = false
   }
+  console.log('сортированные: ', state.sortingProducts, 'не сортированные: ', state.products)
 }
 
 const priceCalculation = computed(() => {
@@ -164,6 +171,7 @@ const priceCalculation = computed(() => {
       localStorage.setItem('totalPrice', acc)
       return acc
     }
+
     localStorage.setItem('totalPrice', acc)
     return acc
   }, 0)
@@ -184,7 +192,7 @@ const onOpenBookMarks = () => {
 const onCloseBookMarks = () => {
   openBookmarks.value = false
 }
-// provider for CardProduct, CardProductBasket, CardList,
+// provider for CardProduct, CardProductBasket, CardList, BookMarksCardList
 provide('onFavoriteProducts', onFavoriteProducts)
 provide('onProductsInBasket', { onProductsInBasket, state })
 
@@ -193,12 +201,16 @@ provide('taxPercentage', state.taxPercentage)
 provide('priceCalculation', priceCalculation)
 provide('taxСalculation', taxСalculation)
 
-// provider for BusketCardList
+// provider for BusketCardProduct
 provide('onDeleteCard', onProductsInBasket)
 </script>
 
 <template>
-  <Drawer v-if="openBasket" :handleCloseBasket="onClickOpenBasket" :emptyBasket="emptyBasket" />
+  <Drawer
+    v-if="openBasket"
+    :handleCloseBasket="onClickOpenBasket"
+    :notEmptyBasket="notEmptyBasket"
+  />
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
       :handleOpenBasket="onClickOpenBasket"
@@ -208,13 +220,15 @@ provide('onDeleteCard', onProductsInBasket)
     />
     <Bookmarks
       v-if="openBookmarks"
-      :emptyBookMarks="emptyBookMarks"
-      :openBookmarks="openBookmarks"
+      :notEmptyBookMarks="notEmptyBookMarks"
       :handleClickCloseBookMarks="onCloseBookMarks"
     />
     <template v-else>
       <Slider />
-      <AllProducts :changeSorting="handleChangeSorting" :searchProduct="handleSearchProduct" />
+      <AllProducts
+        :handleChangeSorting="handleChangeSorting"
+        :handleSearchProduct="handleSearchProduct"
+      />
     </template>
   </div>
 </template>
