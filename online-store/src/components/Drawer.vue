@@ -3,7 +3,7 @@ import BusketCardList from './BusketCardList.vue'
 import BusketResult from './BusketResult.vue'
 
 defineProps({
-  emptyBasket: Boolean,
+  notEmptyBasket: Boolean,
   handleCloseBasket: Function,
 })
 </script>
@@ -14,7 +14,7 @@ defineProps({
     @click="handleCloseBasket"
   ></div>
   <div class="fixed top-0 right-0 z-20 bg-white w-[385px] h-full p-9">
-    <div v-if="emptyBasket" class="h-full flex flex-col items-center justify-center">
+    <div v-if="notEmptyBasket" class="h-full flex flex-col items-center justify-center">
       <img class="inline w-[70px] mb-8" src="/public/package-icon.png" />
       <h2 class="text-3xl font-semibold mb-3">Корзина пустая</h2>
       <p class="text-gray-400 mb-19 text-center">
