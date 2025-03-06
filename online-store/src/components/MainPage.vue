@@ -194,11 +194,14 @@ provide('onDeleteCard', onProductsInBasket)
 </script>
 
 <template>
-  <Drawer
-    v-if="openBasket"
-    @handleCloseBasket="onClickOpenBasket"
-    :notEmptyBasket="notEmptyBasket"
-  />
+  <Transition name="fade">
+    <Drawer
+      v-if="openBasket"
+      @handleCloseBasket="onClickOpenBasket"
+      :notEmptyBasket="notEmptyBasket"
+    />
+  </Transition>
+
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
       @handleOpenBasket="onClickOpenBasket"
@@ -218,4 +221,14 @@ provide('onDeleteCard', onProductsInBasket)
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

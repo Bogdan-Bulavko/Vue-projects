@@ -18,10 +18,10 @@ const emit = defineEmits(['handleChangeSorting', 'handleSearchProduct'])
           <option id="dear">По цене (дорогие)</option>
         </select>
 
-        <div class="relative">
-          <img class="absolute left-4 top-3" src="/search.svg" alt="search image" />
+        <div class="flex border pl-5 border-gray-300 rounded-md focus:border-gray-500">
+          <img class="" src="/search.svg" alt="search image" />
           <input
-            class="border border-gray-300 rounded-md py-2 pl-12 pr-4 outline-none focus:border-gray-400"
+            class="py-2 pl-5 pr-4 outline-none"
             type="text"
             placeholder="Поиск..."
             @input="(e) => emit('handleSearchProduct', e)"
