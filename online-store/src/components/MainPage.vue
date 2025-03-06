@@ -6,6 +6,8 @@ import Drawer from './Drawer.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
+import OpenProductCard from './OpenProductCard.vue'
+
 import axios from 'axios'
 
 const state = reactive({
@@ -13,11 +15,13 @@ const state = reactive({
   sortingProducts: [],
   dataFavorite: JSON.parse(localStorage.getItem('favorite')),
   dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
+  activeOpenCard: {},
   taxPercentage: 5,
 })
 
 const openBasket = ref(false)
 const openBookmarks = ref(false)
+const openCard = ref(false)
 const notEmptyBookMarks = ref(false)
 const notEmptyBasket = ref(false)
 
@@ -180,6 +184,15 @@ const onOpenBookMarks = () => {
 const onCloseBookMarks = () => {
   openBookmarks.value = false
 }
+
+const onClickCard = (product) => {
+  openCard.value = !openCard.value
+
+  if (openCard.value) {
+    state.activeOpenCard = product
+  }
+}
+
 // provider for CardProduct, CardProductBasket, CardList, BookMarksCardList
 provide('onFavoriteProducts', onFavoriteProducts)
 provide('onProductsInBasket', { onProductsInBasket, state })
@@ -191,6 +204,8 @@ provide('taxСalculation', taxСalculation)
 
 // provider for BusketCardProduct
 provide('onDeleteCard', onProductsInBasket)
+
+provide('onOpenCard', onClickCard)
 </script>
 
 <template>
@@ -202,7 +217,22 @@ provide('onDeleteCard', onProductsInBasket)
     />
   </Transition>
 
-  <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
+  <OpenProductCard
+    v-if="openCard"
+    @closeCard="onClickCard"
+    :id="state.activeOpenCard.id"
+    :imageUrl="state.activeOpenCard.imageUrl"
+    :title="state.activeOpenCard.title"
+    :price="state.activeOpenCard.price"
+    :isFavorite="state.activeOpenCard.isFavorite"
+    :isAdded="state.activeOpenCard.isAdded"
+    :onProductsInBasket="() => onProductsInBasket(state.activeOpenCard)"
+    :onFavoriteProducts="() => onFavoriteProducts(state.activeOpenCard)"
+  />
+
+  <div
+    class="w-[1080px] px-16 py-12 m-auto bg-white rounded-3xl shadow-xl h-[100vh] overflow-y-auto"
+  >
     <HeaderOnlineStore
       @handleOpenBasket="onClickOpenBasket"
       @handleClickOpenBookMarks="onOpenBookMarks"
@@ -230,5 +260,9 @@ provide('onDeleteCard', onProductsInBasket)
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0;
 }
 </style>
