@@ -4,7 +4,7 @@ defineProps({
   imageUrl: String,
   title: String,
   price: Number,
-  deleteCard: Function,
+  onDeleteCard: Function,
 })
 </script>
 
@@ -18,7 +18,7 @@ defineProps({
       <p class="w-40">{{ title }}</p>
       <b>{{ price }}</b>
     </div>
-    <img class="self-end" src="/public/close.svg" alt="Delete Product" @click="deleteCard" />
+    <img class="self-end" src="/public/close.svg" alt="Delete Product" @click="onDeleteCard" />
   </div>
 </template>
 

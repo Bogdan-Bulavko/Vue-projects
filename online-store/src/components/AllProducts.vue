@@ -1,13 +1,6 @@
 <script setup>
 import CardList from './CardList.vue'
-
-defineProps({
-  products: Object,
-  changeSorting: Function,
-  searchProduct: Function,
-  onFavoriteProducts: Function,
-  onAddProductsInBasket: Function,
-})
+const emit = defineEmits(['handleChangeSorting', 'handleSearchProduct'])
 </script>
 
 <template>
@@ -17,7 +10,7 @@ defineProps({
       <div class="flex gap-4">
         <select
           class="py-2 px-3 border border-gray-300 rounded-md outline-none"
-          @change="changeSorting"
+          @change="(e) => emit('handleChangeSorting', e)"
         >
           <option value="" disabled selected hidden>Отсортировать</option>
           <option id="name">По названию</option>
@@ -25,22 +18,18 @@ defineProps({
           <option id="dear">По цене (дорогие)</option>
         </select>
 
-        <div class="relative">
-          <img class="absolute left-4 top-3" src="/search.svg" alt="search image" />
+        <div class="flex border pl-5 border-gray-300 rounded-md focus:border-gray-500">
+          <img class="" src="/search.svg" alt="search image" />
           <input
-            class="border border-gray-300 rounded-md py-2 pl-12 pr-4 outline-none focus:border-gray-400"
+            class="py-2 pl-5 pr-4 outline-none"
             type="text"
             placeholder="Поиск..."
-            @input="searchProduct"
+            @input="(e) => emit('handleSearchProduct', e)"
           />
         </div>
       </div>
     </div>
-    <CardList
-      :items="products"
-      :onFavoriteProducts="onFavoriteProducts"
-      :onAddProductsInBasket="onAddProductsInBasket"
-    />
+    <CardList />
   </section>
 </template>
 

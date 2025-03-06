@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, provide } from 'vue'
 
 import AllProducts from './AllProducts.vue'
 import Drawer from './Drawer.vue'
@@ -10,15 +10,16 @@ import axios from 'axios'
 
 const state = reactive({
   products: [],
+  sortingProducts: [],
   dataFavorite: JSON.parse(localStorage.getItem('favorite')),
   dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
   taxPercentage: 5,
 })
 
-const sorting = reactive({ products: [] })
-
 const openBasket = ref(false)
 const openBookmarks = ref(false)
+const notEmptyBookMarks = ref(false)
+const notEmptyBasket = ref(false)
 
 onMounted(async () => {
   try {
@@ -32,17 +33,18 @@ onMounted(async () => {
       }
     })
 
-    sorting.products = state.products
+    state.sortingProducts = state.products
   } catch (err) {
     console.log(err)
   }
 })
 
-const handleSearchProduct = (e) => {
+const onSearchProduct = (e) => {
   if (e.target.value === '') {
-    sorting.products = state.products
+    state.sortingProducts = state.products
   }
-  sorting.products = state.products.filter((product) => {
+
+  state.sortingProducts = state.products.filter((product) => {
     const regex = new RegExp(e.target.value, 'i')
     if (regex.test(product.title)) {
       return product
@@ -54,10 +56,10 @@ if (state.dataFavorite === null) {
   state.dataFavorite = []
 }
 
-const handleChangeSorting = (e) => {
+const onChangeSorting = (e) => {
   switch (e.target.options[e.target.selectedIndex].id) {
     case 'name':
-      sorting.products = state.products.sort((a, b) => {
+      state.sortingProducts.sort((a, b) => {
         if (a.title < b.title) {
           return -1
         }
@@ -68,28 +70,30 @@ const handleChangeSorting = (e) => {
       })
       break
     case 'cheap':
-      sorting.products = state.products.sort((a, b) => {
+      state.sortingProducts.sort((a, b) => {
         return a.price - b.price
       })
       break
     case 'dear':
-      sorting.products = state.products.sort((a, b) => {
+      state.sortingProducts.sort((a, b) => {
         return b.price - a.price
       })
       break
   }
 }
 
-const handleFavoriteProducts = (e) => {
-  const id = Number(e.target.parentElement.id)
+if (!state.dataFavorite.length) {
+  notEmptyBookMarks.value = true
+} else {
+  notEmptyBookMarks.value = false
+}
 
-  state.products.find((product) => {
-    if (product.id === id) {
-      product.isFavorite = !product.isFavorite
-    }
-  })
+const onFavoriteProducts = (product) => {
+  const id = product.id
 
-  sorting.products = state.products
+  product.isFavorite = !product.isFavorite
+
+  state.sortingProducts = state.products
 
   if (state.dataFavorite.includes(id)) {
     state.dataFavorite = state.dataFavorite.filter((product) => {
@@ -97,10 +101,17 @@ const handleFavoriteProducts = (e) => {
         return product
       }
     })
+
     localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
   } else {
     state.dataFavorite = [...state.dataFavorite, id]
     localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+  }
+
+  if (!state.dataFavorite.length) {
+    notEmptyBookMarks.value = true
+  } else {
+    notEmptyBookMarks.value = false
   }
 }
 
@@ -108,16 +119,18 @@ if (state.dataProductsInBasket === null) {
   state.dataProductsInBasket = []
 }
 
-const handleProductsInBasket = (e) => {
-  const id = Number(e.target.parentElement.id)
+if (!state.dataProductsInBasket.length) {
+  notEmptyBasket.value = true
+} else {
+  notEmptyBasket.value = false
+}
 
-  state.products.find((product) => {
-    if (product.id === id) {
-      product.isAdded = !product.isAdded
-    }
-  })
+const onProductsInBasket = (product) => {
+  const id = product.id
 
-  sorting.products = state.products
+  product.isAdded = !product.isAdded
+
+  state.sortingProducts = state.products
 
   if (state.dataProductsInBasket.includes(id)) {
     state.dataProductsInBasket = state.dataProductsInBasket.filter((product) => {
@@ -125,10 +138,17 @@ const handleProductsInBasket = (e) => {
         return product
       }
     })
+
     localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
   } else {
     state.dataProductsInBasket = [...state.dataProductsInBasket, id]
     localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+  }
+
+  if (!state.dataProductsInBasket.length) {
+    notEmptyBasket.value = true
+  } else {
+    notEmptyBasket.value = false
   }
 }
 
@@ -139,6 +159,7 @@ const priceCalculation = computed(() => {
       localStorage.setItem('totalPrice', acc)
       return acc
     }
+
     localStorage.setItem('totalPrice', acc)
     return acc
   }, 0)
@@ -152,50 +173,62 @@ const onClickOpenBasket = () => {
   openBasket.value = !openBasket.value
 }
 
-const openBookMarks = () => {
+const onOpenBookMarks = () => {
   openBookmarks.value = true
 }
 
-const closeBookMarks = () => {
+const onCloseBookMarks = () => {
   openBookmarks.value = false
 }
+// provider for CardProduct, CardProductBasket, CardList, BookMarksCardList
+provide('onFavoriteProducts', onFavoriteProducts)
+provide('onProductsInBasket', { onProductsInBasket, state })
+
+// provider for BusketResult
+provide('taxPercentage', state.taxPercentage)
+provide('priceCalculation', priceCalculation)
+provide('taxСalculation', taxСalculation)
+
+// provider for BusketCardProduct
+provide('onDeleteCard', onProductsInBasket)
 </script>
 
 <template>
-  <Drawer
-    v-if="openBasket"
-    @closeBasket="onClickOpenBasket"
-    :products="state.products"
-    :totalPtice="priceCalculation"
-    :taxСalculation="taxСalculation"
-    :taxPercentage="state.taxPercentage"
-    :onDeleteCard="handleProductsInBasket"
-  />
+  <Transition name="fade">
+    <Drawer
+      v-if="openBasket"
+      @handleCloseBasket="onClickOpenBasket"
+      :notEmptyBasket="notEmptyBasket"
+    />
+  </Transition>
+
   <div class="w-[1080px] px-16 py-12 m-auto mt-12 bg-white rounded-3xl shadow-xl">
     <HeaderOnlineStore
-      @openBasket="onClickOpenBasket"
-      @clickOpenBookMarks="openBookMarks"
-      @clickCloseBookMarks="closeBookMarks"
+      @handleOpenBasket="onClickOpenBasket"
+      @handleClickOpenBookMarks="onOpenBookMarks"
+      @handleClickCloseBookMarks="onCloseBookMarks"
       :totalPtice="priceCalculation"
     />
     <Bookmarks
       v-if="openBookmarks"
-      :products="state.products"
-      :openBookmarks="openBookmarks"
-      :onFavoriteProducts="handleFavoriteProducts"
-      :onAddProductsInBasket="handleProductsInBasket"
+      :notEmptyBookMarks="notEmptyBookMarks"
+      @handleClickCloseBookMarks="onCloseBookMarks"
     />
     <template v-else>
       <Slider />
-      <AllProducts
-        :products="sorting.products"
-        :onFavoriteProducts="handleFavoriteProducts"
-        :onAddProductsInBasket="handleProductsInBasket"
-        :changeSorting="handleChangeSorting"
-        :searchProduct="handleSearchProduct"
-      />
+      <AllProducts @handleChangeSorting="onChangeSorting" @handleSearchProduct="onSearchProduct" />
     </template>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
