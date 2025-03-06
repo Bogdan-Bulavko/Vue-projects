@@ -10,12 +10,9 @@ const emit = defineEmits(['handleCloseBasket'])
 </script>
 
 <template>
-  <div>
-    <div
-      class="fixed top-0 left-0 z-10 h-full w-full bg-black opacity-50"
-      @click="emit('handleCloseBasket')"
-    ></div>
-    <div class="fixed top-0 right-0 z-20 bg-white w-[385px] h-full p-9">
+  <div class="fixed flex w-[100vw] h-[100vh]">
+    <div class="z-10 w-[80%] h-full bg-black opacity-50" @click="emit('handleCloseBasket')"></div>
+    <div class="z-20 w-[20%] h-full p-9 bg-white">
       <div v-if="notEmptyBasket" class="h-full flex flex-col items-center justify-center">
         <img class="inline w-[70px] mb-8" src="/public/package-icon.png" />
         <h2 class="text-3xl font-semibold mb-3">Корзина пустая</h2>
@@ -40,4 +37,14 @@ const emit = defineEmits(['handleCloseBasket'])
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f9f9fd;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #a5d364;
+}
+</style>

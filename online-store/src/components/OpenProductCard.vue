@@ -6,14 +6,18 @@ defineProps({
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
+  onProductsInBasket: Function,
+  onFavoriteProducts: Function,
 })
+
+const emit = defineEmits(['closeCard'])
 </script>
 
 <template>
   <section>
     <div
       class="fixed top-0 left-0 z-10 w-full h-full bg-black opacity-50"
-      @click="$emit('closeCard')"
+      @click="emit('closeCard')"
     ></div>
     <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
       <article
@@ -24,7 +28,7 @@ defineProps({
           class="absolute left-9 block w-14"
           :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
           alt="button like"
-          @click="$emit('favorite', $event)"
+          @click="onFavoriteProducts"
         />
         <img class="block w-full h-[224px] mb-4" :src="imageUrl" alt="image sneakers" />
         <p class="text-2xl mb-4">{{ title }}</p>
@@ -37,7 +41,7 @@ defineProps({
           class="absolute bottom-9 right-9 block"
           :src="isAdded ? '/checked.svg' : '/plus.svg'"
           alt="Added Product"
-          @click="$emit('addInBasket', $event)"
+          @click="onProductsInBasket"
         />
       </article>
     </div>
