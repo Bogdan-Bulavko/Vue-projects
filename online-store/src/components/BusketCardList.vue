@@ -2,6 +2,8 @@
 import { inject } from 'vue'
 import CardProductBasket from './CardProductBasket.vue'
 
+const onOpenCard = inject('onOpenCard')
+
 const { state, onProductsInBasket } = inject('onProductsInBasket')
 </script>
 
@@ -17,6 +19,7 @@ const { state, onProductsInBasket } = inject('onProductsInBasket')
           :title="product.title"
           :price="product.price"
           :onDeleteCard="() => onProductsInBasket(product)"
+          :onOpenCard="() => onOpenCard(product)"
         />
       </template>
     </TransitionGroup>

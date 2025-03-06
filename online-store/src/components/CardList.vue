@@ -2,6 +2,8 @@
 import { inject } from 'vue'
 import CardProduct from './CardProduct.vue'
 
+const onOpenCard = inject('onOpenCard')
+
 const { state, onProductsInBasket } = inject('onProductsInBasket')
 const onFavoriteProducts = inject('onFavoriteProducts')
 </script>
@@ -20,6 +22,7 @@ const onFavoriteProducts = inject('onFavoriteProducts')
         :isAdded="product.isAdded"
         :onProductsInBasket="() => onProductsInBasket(product)"
         :onFavoriteProducts="() => onFavoriteProducts(product)"
+        :onOpenCard="() => onOpenCard(product)"
       />
     </TransitionGroup>
   </ul>
