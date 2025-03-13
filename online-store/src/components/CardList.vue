@@ -12,6 +12,13 @@ import CardProduct from './CardProduct.vue'
 // const onFavoriteProducts = inject('onFavoriteProducts')
 
 const products = computed(() => store.state.sortingProducts)
+const addOrRemoveProductFromFavorites = (item) => {
+  store.commit('addOrRemoveProductFromFavorites', item)
+}
+
+const addOrRemoveProductFromBasket = (item) => {
+  store.commit('addOrRemoveProductFromBasket', item)
+}
 
 onMounted(() => {
   store.dispatch('getProducts')
@@ -30,8 +37,8 @@ onMounted(() => {
         :price="product.price"
         :isFavorite="product.isFavorite"
         :isAdded="product.isAdded"
-        :onProductsInBasket="() => onProductsInBasket(product)"
-        :onFavoriteProducts="() => onFavoriteProducts(product)"
+        :onProductsInBasket="() => addOrRemoveProductFromBasket(product)"
+        :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
         :onOpenCard="() => onOpenCard(product)"
       />
     </TransitionGroup>

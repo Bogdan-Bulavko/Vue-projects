@@ -25,19 +25,6 @@ import OpenProductCard from './OpenProductCard.vue'
 // const notEmptyBookMarks = ref(false)
 // const notEmptyBasket = ref(false)
 
-// const onSearchProduct = (e) => {
-//   if (e.target.value === '') {
-//     state.sortingProducts = state.products
-//   }
-
-//   state.sortingProducts = state.products.filter((product) => {
-//     const regex = new RegExp(e.target.value, 'i')
-//     if (regex.test(product.title)) {
-//       return product
-//     }
-//   })
-// }
-
 // if (state.dataFavorite === null) {
 //   state.dataFavorite = []
 // }
