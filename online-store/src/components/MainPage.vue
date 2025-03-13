@@ -25,24 +25,6 @@ import OpenProductCard from './OpenProductCard.vue'
 // const notEmptyBookMarks = ref(false)
 // const notEmptyBasket = ref(false)
 
-// onMounted(async () => {
-//   try {
-//     const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
-
-//     state.products = await data.map((product) => {
-//       return {
-//         ...product,
-//         isAdded: state.dataProductsInBasket.includes(product.id),
-//         isFavorite: state.dataFavorite.includes(product.id),
-//       }
-//     })
-
-//     state.sortingProducts = state.products
-//   } catch (err) {
-//     console.log(err)
-//   }
-// })
-
 // const onSearchProduct = (e) => {
 //   if (e.target.value === '') {
 //     state.sortingProducts = state.products

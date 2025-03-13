@@ -1,6 +1,11 @@
 <script setup>
+import store from '@/store/store'
 import CardList from './CardList.vue'
 const emit = defineEmits(['handleChangeSorting', 'handleSearchProduct'])
+
+const changeSorting = (e) => {
+  store.commit('sortProducts', e)
+}
 </script>
 
 <template>
@@ -10,7 +15,7 @@ const emit = defineEmits(['handleChangeSorting', 'handleSearchProduct'])
       <div class="flex gap-4">
         <select
           class="py-2 px-3 border border-gray-300 rounded-md outline-none"
-          @change="(e) => emit('handleChangeSorting', e)"
+          @change="changeSorting"
         >
           <option value="" disabled selected hidden>Отсортировать</option>
           <option id="name">По названию</option>
