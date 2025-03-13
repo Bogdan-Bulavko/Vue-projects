@@ -6,6 +6,10 @@ const emit = defineEmits(['handleChangeSorting', 'handleSearchProduct'])
 const changeSorting = (e) => {
   store.commit('sortProducts', e)
 }
+
+const searchProduct = (e) => {
+  store.commit('searchProduct', e)
+}
 </script>
 
 <template>
@@ -29,7 +33,7 @@ const changeSorting = (e) => {
             class="py-2 pl-5 pr-4 outline-none"
             type="text"
             placeholder="Поиск..."
-            @input="(e) => emit('handleSearchProduct', e)"
+            @input="searchProduct"
           />
         </div>
       </div>

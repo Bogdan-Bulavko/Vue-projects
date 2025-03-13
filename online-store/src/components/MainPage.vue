@@ -42,32 +42,6 @@ import OpenProductCard from './OpenProductCard.vue'
 //   state.dataFavorite = []
 // }
 
-// const onChangeSorting = (e) => {
-//   switch (e.target.options[e.target.selectedIndex].id) {
-//     case 'name':
-//       state.sortingProducts.sort((a, b) => {
-//         if (a.title < b.title) {
-//           return -1
-//         }
-//         if (a.title > b.title) {
-//           return 1
-//         }
-//         return 0
-//       })
-//       break
-//     case 'cheap':
-//       state.sortingProducts.sort((a, b) => {
-//         return a.price - b.price
-//       })
-//       break
-//     case 'dear':
-//       state.sortingProducts.sort((a, b) => {
-//         return b.price - a.price
-//       })
-//       break
-//   }
-// }
-
 // if (!state.dataFavorite.length) {
 //   notEmptyBookMarks.value = true
 // } else {

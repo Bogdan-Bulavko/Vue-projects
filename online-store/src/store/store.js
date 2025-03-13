@@ -38,6 +38,19 @@ const store = createStore({
           break
       }
     },
+    searchProduct(state, e) {
+      console.log('search')
+      if (e.target.value === '') {
+        state.sortingProducts = state.products
+      }
+
+      state.sortingProducts = state.products.filter((product) => {
+        const regex = new RegExp(e.target.value, 'i')
+        if (regex.test(product.title)) {
+          return product
+        }
+      })
+    },
   },
   actions: {
     async getProducts({ commit }) {
