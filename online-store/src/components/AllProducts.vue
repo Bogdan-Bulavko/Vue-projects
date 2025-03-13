@@ -1,7 +1,6 @@
 <script setup>
 import store from '@/store/store'
 import CardList from './CardList.vue'
-const emit = defineEmits(['handleChangeSorting', 'handleSearchProduct'])
 
 const changeSorting = (e) => {
   store.commit('sortProducts', e)

@@ -3,13 +3,9 @@ import store from '@/store/store'
 
 import { computed, onMounted } from 'vue'
 
-// import { inject } from 'vue'
 import CardProduct from './CardProduct.vue'
 
 // const onOpenCard = inject('onOpenCard')
-
-// const { state, onProductsInBasket } = inject('onProductsInBasket')
-// const onFavoriteProducts = inject('onFavoriteProducts')
 
 const products = computed(() => store.state.sortingProducts)
 const addOrRemoveProductFromFavorites = (item) => {
