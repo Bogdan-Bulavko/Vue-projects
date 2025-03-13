@@ -25,24 +25,6 @@ import OpenProductCard from './OpenProductCard.vue'
 // const notEmptyBookMarks = ref(false)
 // const notEmptyBasket = ref(false)
 
-// onMounted(async () => {
-//   try {
-//     const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
-
-//     state.products = await data.map((product) => {
-//       return {
-//         ...product,
-//         isAdded: state.dataProductsInBasket.includes(product.id),
-//         isFavorite: state.dataFavorite.includes(product.id),
-//       }
-//     })
-
-//     state.sortingProducts = state.products
-//   } catch (err) {
-//     console.log(err)
-//   }
-// })
-
 // const onSearchProduct = (e) => {
 //   if (e.target.value === '') {
 //     state.sortingProducts = state.products
@@ -58,32 +40,6 @@ import OpenProductCard from './OpenProductCard.vue'
 
 // if (state.dataFavorite === null) {
 //   state.dataFavorite = []
-// }
-
-// const onChangeSorting = (e) => {
-//   switch (e.target.options[e.target.selectedIndex].id) {
-//     case 'name':
-//       state.sortingProducts.sort((a, b) => {
-//         if (a.title < b.title) {
-//           return -1
-//         }
-//         if (a.title > b.title) {
-//           return 1
-//         }
-//         return 0
-//       })
-//       break
-//     case 'cheap':
-//       state.sortingProducts.sort((a, b) => {
-//         return a.price - b.price
-//       })
-//       break
-//     case 'dear':
-//       state.sortingProducts.sort((a, b) => {
-//         return b.price - a.price
-//       })
-//       break
-//   }
 // }
 
 // if (!state.dataFavorite.length) {

@@ -11,7 +11,7 @@ import CardProduct from './CardProduct.vue'
 // const { state, onProductsInBasket } = inject('onProductsInBasket')
 // const onFavoriteProducts = inject('onFavoriteProducts')
 
-const products = computed(() => store.state.products)
+const products = computed(() => store.state.sortingProducts)
 
 onMounted(() => {
   store.dispatch('getProducts')
