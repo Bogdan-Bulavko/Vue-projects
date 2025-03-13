@@ -1,17 +1,27 @@
 <script setup>
-import { inject } from 'vue'
+import { computed } from 'vue'
+
+import store from '@/store/store'
+
 import CardProduct from './CardProduct.vue'
 
-const onOpenCard = inject('onOpenCard')
+// const onOpenCard = inject('onOpenCard')
 
-const { state, onProductsInBasket } = inject('onProductsInBasket')
-const onFavoriteProducts = inject('onFavoriteProducts')
+const products = computed(() => store.state.products)
+
+const addOrRemoveProductFromFavorites = (item) => {
+  store.commit('addOrRemoveProductFromFavorites', item)
+}
+
+const addOrRemoveProductFromBasket = (item) => {
+  store.commit('addOrRemoveProductFromBasket', item)
+}
 </script>
 
 <template>
   <ul class="grid grid-cols-4 justify-between gap-11">
     <TransitionGroup name="list">
-      <template v-for="product in state.products">
+      <template v-for="product in products">
         <CardProduct
           v-if="product.isFavorite"
           :key="product.id"
@@ -21,8 +31,8 @@ const onFavoriteProducts = inject('onFavoriteProducts')
           :price="product.price"
           :isFavorite="product.isFavorite"
           :isAdded="product.isAdded"
-          :onProductsInBasket="() => onProductsInBasket(product)"
-          :onFavoriteProducts="() => onFavoriteProducts(product)"
+          :onProductsInBasket="() => addOrRemoveProductFromBasket(product)"
+          :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
           :onOpenCard="() => onOpenCard(product)"
         />
       </template>

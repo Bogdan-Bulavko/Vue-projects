@@ -7,6 +7,12 @@ const store = createStore({
     sortingProducts: [],
     dataFavorite: JSON.parse(localStorage.getItem('favorite')),
     dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
+    openBasket: false,
+    openBookmarks: false,
+    notEmptyBookMarks: false,
+    notEmptyBasket: false,
+    totalPrice: JSON.parse(localStorage.getItem('totalPrice')),
+    tax: 0,
   },
   mutations: {
     addCardsInProducts(state, cards) {
@@ -72,11 +78,11 @@ const store = createStore({
         localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
       }
 
-      // if (!state.dataFavorite.length) {
-      //   notEmptyBookMarks.value = true
-      // } else {
-      //   notEmptyBookMarks.value = false
-      // }
+      if (!state.dataFavorite.length) {
+        state.notEmptyBookMarks = true
+      } else {
+        state.notEmptyBookMarks = false
+      }
     },
     addOrRemoveProductFromBasket(state, product) {
       const id = product.id
@@ -93,18 +99,41 @@ const store = createStore({
         })
 
         localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+        state.totalPrice -= product.price
+        localStorage.setItem('totalPrice', state.totalPrice)
+        state.tax = Math.floor((state.totalPrice / 100) * 5)
       } else {
         state.dataProductsInBasket = [...state.dataProductsInBasket, id]
         localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+        state.totalPrice += product.price
+        localStorage.setItem('totalPrice', state.totalPrice)
+        state.tax = Math.floor((state.totalPrice / 100) * 5)
       }
 
-      // if (!state.dataProductsInBasket.length) {
-      //   notEmptyBookMarks.value = true
-      // } else {
-      //   notEmptyBookMarks.value = false
-      // }
+      if (!state.dataProductsInBasket.length) {
+        state.notEmptyBasket = true
+      } else {
+        state.notEmptyBasket = false
+      }
+    },
+
+    openOrCloseBookMarks(state, e) {
+      const id = e.currentTarget.id
+
+      if (id === 'logo') {
+        state.openBookmarks = false
+      } else if (id === 'bookmarks-button') {
+        state.openBookmarks = false
+      } else {
+        state.openBookmarks = true
+      }
+    },
+
+    openOrCloseBusket(state) {
+      state.openBasket = !state.openBasket
     },
   },
+
   actions: {
     async getProducts({ state, commit }) {
       try {
@@ -115,6 +144,18 @@ const store = createStore({
         if (state.dataProductsInBasket === null) {
           state.dataProductsInBasket = []
           localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+        }
+
+        if (!state.dataFavorite.length) {
+          state.notEmptyBookMarks = true
+        } else {
+          state.notEmptyBookMarks = false
+        }
+
+        if (!state.dataProductsInBasket.length) {
+          state.notEmptyBasket = true
+        } else {
+          state.notEmptyBasket = false
         }
 
         const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
@@ -134,6 +175,19 @@ const store = createStore({
       }
     },
   },
+  // getters: {
+  //   priceCalculation(state) {
+  //     state.totalPrice = state.products.reduce((acc, product) => {
+  //       if (product.isAdded) {
+  //         acc += product.price
+  //         localStorage.setItem('totalPrice', acc)
+  //         return acc
+  //       }
+  //       localStorage.setItem('totalPrice', acc)
+  //       return acc
+  //     }, 0)
+  //   },
+  // },
 })
 
 export default store

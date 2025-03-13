@@ -1,16 +1,23 @@
 <script setup>
-import { inject } from 'vue'
+import store from '@/store/store'
+
+import { computed } from 'vue'
+
 import CardProductBasket from './CardProductBasket.vue'
 
-const onOpenCard = inject('onOpenCard')
+// const onOpenCard = inject('onOpenCard')
 
-const { state, onProductsInBasket } = inject('onProductsInBasket')
+const products = computed(() => store.state.products)
+
+const addOrRemoveProductFromBasket = (item) => {
+  store.commit('addOrRemoveProductFromBasket', item)
+}
 </script>
 
 <template>
   <ul class="overflow-auto overflow-x-hidden">
     <TransitionGroup name="list">
-      <template v-for="product in state.products">
+      <template v-for="product in products">
         <CardProductBasket
           v-if="product.isAdded"
           :key="product.id"
@@ -18,7 +25,7 @@ const { state, onProductsInBasket } = inject('onProductsInBasket')
           :imageUrl="product.imageUrl"
           :title="product.title"
           :price="product.price"
-          :onDeleteCard="() => onProductsInBasket(product)"
+          :onDeleteCard="() => addOrRemoveProductFromBasket(product)"
           :onOpenCard="() => onOpenCard(product)"
         />
       </template>
