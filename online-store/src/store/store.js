@@ -5,6 +5,8 @@ const store = createStore({
   state: {
     products: [],
     sortingProducts: [],
+    dataFavorite: JSON.parse(localStorage.getItem('favorite')),
+    dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
   },
   mutations: {
     addCardsInProducts(state, cards) {
@@ -39,7 +41,6 @@ const store = createStore({
       }
     },
     searchProduct(state, e) {
-      console.log('search')
       if (e.target.value === '') {
         state.sortingProducts = state.products
       }
@@ -51,25 +52,83 @@ const store = createStore({
         }
       })
     },
+    addOrRemoveProductFromFavorites(state, product) {
+      const id = product.id
+
+      product.isFavorite = !product.isFavorite
+
+      state.sortingProducts = state.products
+
+      if (state.dataFavorite.includes(id)) {
+        state.dataFavorite = state.dataFavorite.filter((product) => {
+          if (product !== id) {
+            return product
+          }
+        })
+
+        localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+      } else {
+        state.dataFavorite = [...state.dataFavorite, id]
+        localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+      }
+
+      // if (!state.dataFavorite.length) {
+      //   notEmptyBookMarks.value = true
+      // } else {
+      //   notEmptyBookMarks.value = false
+      // }
+    },
+    addOrRemoveProductFromBasket(state, product) {
+      const id = product.id
+
+      product.isAdded = !product.isAdded
+
+      state.sortingProducts = state.products
+
+      if (state.dataProductsInBasket.includes(id)) {
+        state.dataProductsInBasket = state.dataProductsInBasket.filter((product) => {
+          if (product !== id) {
+            return product
+          }
+        })
+
+        localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+      } else {
+        state.dataProductsInBasket = [...state.dataProductsInBasket, id]
+        localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+      }
+
+      // if (!state.dataProductsInBasket.length) {
+      //   notEmptyBookMarks.value = true
+      // } else {
+      //   notEmptyBookMarks.value = false
+      // }
+    },
   },
   actions: {
-    async getProducts({ commit }) {
+    async getProducts({ state, commit }) {
       try {
+        if (state.dataFavorite === null) {
+          state.dataFavorite = []
+          localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
+        }
+        if (state.dataProductsInBasket === null) {
+          state.dataProductsInBasket = []
+          localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+        }
+
         const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
 
         const products = await data.map((product) => {
           return {
             ...product,
-            // isAdded: state.dataProductsInBasket.includes(product.id),
-            // isFavorite: state.dataFavorite.includes(product.id),
-            isAdded: false,
-            isFavorite: false,
+            isAdded: state.dataProductsInBasket.includes(product.id),
+            isFavorite: state.dataFavorite.includes(product.id),
           }
         })
 
         commit('addCardsInProducts', products)
         commit('addCardsInSortingProducts', products)
-        // state.sortingProducts = state.products
       } catch (err) {
         console.log(err)
       }
