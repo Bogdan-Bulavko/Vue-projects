@@ -1,18 +1,28 @@
 <script setup>
-import { inject } from 'vue'
+import store from '@/store/store'
+
+import { computed, onMounted } from 'vue'
+
+// import { inject } from 'vue'
 import CardProduct from './CardProduct.vue'
 
-const onOpenCard = inject('onOpenCard')
+// const onOpenCard = inject('onOpenCard')
 
-const { state, onProductsInBasket } = inject('onProductsInBasket')
-const onFavoriteProducts = inject('onFavoriteProducts')
+// const { state, onProductsInBasket } = inject('onProductsInBasket')
+// const onFavoriteProducts = inject('onFavoriteProducts')
+
+const products = computed(() => store.state.products)
+
+onMounted(() => {
+  store.dispatch('getProducts')
+})
 </script>
 
 <template>
   <ul class="grid grid-cols-4 justify-between gap-11">
     <TransitionGroup name="list">
       <CardProduct
-        v-for="product in state.sortingProducts"
+        v-for="product in products"
         :key="product.id"
         :id="product.id"
         :imageUrl="product.imageUrl"

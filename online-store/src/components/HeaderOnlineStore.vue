@@ -1,7 +1,7 @@
 <script setup>
-defineProps({
-  totalPtice: Number,
-})
+// defineProps({
+//   totalPtice: Number,
+// })
 
 const emit = defineEmits([
   'handleClickCloseBookMarks',
@@ -22,7 +22,7 @@ const emit = defineEmits([
     <ul class="flex items-center gap-2.5">
       <li class="flex items-center gap-2.5 cursor-pointer" @click="emit('handleOpenBasket')">
         <img src="/cart.svg" alt="Cart" />
-        <b class="text-gray-500 hover:text-black">{{ totalPtice }} руб.</b>
+        <!-- <b class="text-gray-500 hover:text-black">{{ totalPtice }} руб.</b> -->
       </li>
       <li
         class="flex items-center gap-2.5 cursor-pointer"
