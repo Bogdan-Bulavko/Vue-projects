@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { createStore } from 'vuex'
-
+const TAXPRODUCT = 5
 const store = createStore({
   state: {
     products: [],
@@ -175,19 +175,22 @@ const store = createStore({
       }
     },
   },
-  // getters: {
-  //   priceCalculation(state) {
-  //     state.totalPrice = state.products.reduce((acc, product) => {
-  //       if (product.isAdded) {
-  //         acc += product.price
-  //         localStorage.setItem('totalPrice', acc)
-  //         return acc
-  //       }
-  //       localStorage.setItem('totalPrice', acc)
-  //       return acc
-  //     }, 0)
-  //   },
-  // },
+  getters: {
+    priceCalculation(state) {
+      return (state.totalPrice = state.products.reduce((acc, product) => {
+        if (product.isAdded) {
+          acc += product.price
+          localStorage.setItem('totalPrice', acc)
+          return acc
+        }
+        localStorage.setItem('totalPrice', acc)
+        return acc
+      }, 0))
+    },
+    taxCalculation(state) {
+      return Math.floor((state.totalPrice / 100) * TAXPRODUCT)
+    },
+  },
 })
 
-export default store
+export { store, TAXPRODUCT }
