@@ -5,8 +5,6 @@ import { store } from '@/store/store'
 
 import CardProduct from './CardProduct.vue'
 
-// const onOpenCard = inject('onOpenCard')
-
 const products = computed(() => store.state.products)
 
 const addOrRemoveProductFromFavorites = (item) => {
@@ -15,6 +13,10 @@ const addOrRemoveProductFromFavorites = (item) => {
 
 const addOrRemoveProductFromBasket = (item) => {
   store.commit('addOrRemoveProductFromBasket', item)
+}
+
+const openOrCloseCard = (item) => {
+  store.commit('openOrCloseCard', item)
 }
 </script>
 
@@ -33,7 +35,7 @@ const addOrRemoveProductFromBasket = (item) => {
           :isAdded="product.isAdded"
           :onProductsInBasket="() => addOrRemoveProductFromBasket(product)"
           :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
-          :onOpenCard="() => onOpenCard(product)"
+          :onOpenCard="() => openOrCloseCard(product)"
         />
       </template>
     </TransitionGroup>

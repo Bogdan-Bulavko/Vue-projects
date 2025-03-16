@@ -5,7 +5,9 @@ import { computed } from 'vue'
 
 import CardProductBasket from './CardProductBasket.vue'
 
-// const onOpenCard = inject('onOpenCard')
+const openOrCloseCard = (item) => {
+  store.commit('openOrCloseCard', item)
+}
 
 const products = computed(() => store.state.products)
 
@@ -26,7 +28,7 @@ const addOrRemoveProductFromBasket = (item) => {
           :title="product.title"
           :price="product.price"
           :onDeleteCard="() => addOrRemoveProductFromBasket(product)"
-          :onOpenCard="() => onOpenCard(product)"
+          :onOpenCard="() => openOrCloseCard(product)"
         />
       </template>
     </TransitionGroup>

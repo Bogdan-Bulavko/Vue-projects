@@ -1,4 +1,6 @@
 <script setup>
+import { store } from '@/store/store'
+
 defineProps({
   id: Number,
   imageUrl: String,
@@ -10,14 +12,16 @@ defineProps({
   onFavoriteProducts: Function,
 })
 
-const emit = defineEmits(['closeCard'])
+const openOrCloseCard = () => {
+  store.commit('openOrCloseCard')
+}
 </script>
 
 <template>
   <section>
     <div
       class="fixed top-0 left-0 z-10 w-full h-full bg-black opacity-50"
-      @click="emit('closeCard')"
+      @click="openOrCloseCard"
     ></div>
     <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
       <article

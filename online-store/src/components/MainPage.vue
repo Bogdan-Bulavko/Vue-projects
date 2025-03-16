@@ -13,24 +13,16 @@ import OpenProductCard from './OpenProductCard.vue'
 const openBasket = computed(() => store.state.openBasket)
 const openBookmarks = computed(() => store.state.openBookmarks)
 
-// const state = reactive({
-//   products: [],
-//   sortingProducts: [],
-//   dataFavorite: JSON.parse(localStorage.getItem('favorite')),
-//   dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
-//   activeOpenCard: {},
-//   taxPercentage: 5,
-// })
+const activeOpenCard = computed(() => store.state.activeOpenCard)
+const openCard = computed(() => store.state.openCard)
 
-// const openCard = ref(false)
+const addOrRemoveProductFromFavorites = (item) => {
+  store.commit('addOrRemoveProductFromFavorites', item)
+}
 
-// const onClickCard = (product) => {
-//   openCard.value = !openCard.value
-
-//   if (openCard.value) {
-//     state.activeOpenCard = product
-//   }
-// }
+const addOrRemoveProductFromBasket = (item) => {
+  store.commit('addOrRemoveProductFromBasket', item)
+}
 </script>
 
 <template>
@@ -38,18 +30,17 @@ const openBookmarks = computed(() => store.state.openBookmarks)
     <Drawer v-if="openBasket" />
   </Transition>
 
-  <!-- <OpenProductCard
+  <OpenProductCard
     v-if="openCard"
-    @closeCard="onClickCard"
-    :id="state.activeOpenCard.id"
-    :imageUrl="state.activeOpenCard.imageUrl"
-    :title="state.activeOpenCard.title"
-    :price="state.activeOpenCard.price"
-    :isFavorite="state.activeOpenCard.isFavorite"
-    :isAdded="state.activeOpenCard.isAdded"
-    :onProductsInBasket="() => onProductsInBasket(state.activeOpenCard)"
-    :onFavoriteProducts="() => onFavoriteProducts(state.activeOpenCard)"
-  /> -->
+    :id="activeOpenCard.id"
+    :imageUrl="activeOpenCard.imageUrl"
+    :title="activeOpenCard.title"
+    :price="activeOpenCard.price"
+    :isFavorite="activeOpenCard.isFavorite"
+    :isAdded="activeOpenCard.isAdded"
+    :onProductsInBasket="() => addOrRemoveProductFromBasket(activeOpenCard)"
+    :onFavoriteProducts="() => addOrRemoveProductFromFavorites(activeOpenCard)"
+  />
 
   <div
     class="w-[1080px] px-16 py-12 m-auto bg-white rounded-3xl shadow-xl h-[100vh] overflow-y-auto"

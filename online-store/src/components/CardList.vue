@@ -16,6 +16,10 @@ const addOrRemoveProductFromBasket = (item) => {
   store.commit('addOrRemoveProductFromBasket', item)
 }
 
+const openOrCloseCard = (item) => {
+  store.commit('openOrCloseCard', item)
+}
+
 onMounted(() => {
   store.dispatch('getProducts')
 })
@@ -35,7 +39,7 @@ onMounted(() => {
         :isAdded="product.isAdded"
         :onProductsInBasket="() => addOrRemoveProductFromBasket(product)"
         :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
-        :onOpenCard="() => onOpenCard(product)"
+        :onOpenCard="() => openOrCloseCard(product)"
       />
     </TransitionGroup>
   </ul>

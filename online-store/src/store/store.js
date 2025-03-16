@@ -5,10 +5,12 @@ const store = createStore({
   state: {
     products: [],
     sortingProducts: [],
+    activeOpenCard: {},
     dataFavorite: JSON.parse(localStorage.getItem('favorite')),
     dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
     openBasket: false,
     openBookmarks: false,
+    openCard: false,
     notEmptyBookMarks: false,
     notEmptyBasket: false,
     totalPrice: JSON.parse(localStorage.getItem('totalPrice')),
@@ -131,6 +133,14 @@ const store = createStore({
 
     openOrCloseBusket(state) {
       state.openBasket = !state.openBasket
+    },
+
+    openOrCloseCard(state, product) {
+      state.openCard = !state.openCard
+
+      if (state.openCard) {
+        state.activeOpenCard = product
+      }
     },
   },
 
