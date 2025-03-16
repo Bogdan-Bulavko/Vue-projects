@@ -1,9 +1,10 @@
 <script setup>
-import { inject } from 'vue'
+import { store, TAXPRODUCT } from '@/store/store'
 
-const taxPercentage = inject('taxPercentage')
-const priceCalculation = inject('priceCalculation')
-const taxСalculation = inject('taxСalculation')
+import { computed } from 'vue'
+
+const totalPrice = computed(() => store.state.totalPrice)
+const tax = computed(() => store.getters.taxCalculation)
 </script>
 
 <template>
@@ -11,12 +12,12 @@ const taxСalculation = inject('taxСalculation')
     <div class="flex gap-2">
       <span class="text-[16px]">Итого:</span>
       <div class="flex-1 border-b border-dashed border-[#DFDFDF]"></div>
-      <b>{{ priceCalculation }} ₽</b>
+      <b>{{ totalPrice }} ₽</b>
     </div>
     <div class="flex gap-2">
-      <span class="text-[16px]">Налог {{ taxPercentage }}%:</span>
+      <span class="text-[16px]">Налог {{ TAXPRODUCT }}%:</span>
       <div class="flex-1 border-b border-dashed border-[#DFDFDF]"></div>
-      <b>{{ taxСalculation }} ₽</b>
+      <b>{{ tax }} ₽</b>
     </div>
     <button class="mt-7 max-w-full w-full inline-block rounded-3xl py-4 bg-[#A5D364] text-white">
       Оформить заказ

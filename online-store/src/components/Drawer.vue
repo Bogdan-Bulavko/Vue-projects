@@ -1,17 +1,21 @@
 <script setup>
+import { store } from '@/store/store'
+
+import { computed } from 'vue'
+
 import BusketCardList from './BusketCardList.vue'
 import BusketResult from './BusketResult.vue'
 
-defineProps({
-  notEmptyBasket: Boolean,
-})
+const notEmptyBasket = computed(() => store.state.notEmptyBasket)
 
-const emit = defineEmits(['handleCloseBasket'])
+const openOrCloseBusket = () => {
+  store.commit('openOrCloseBusket')
+}
 </script>
 
 <template>
   <div class="fixed flex w-[100vw] h-[100vh]">
-    <div class="z-10 w-[80%] h-full bg-black opacity-50" @click="emit('handleCloseBasket')"></div>
+    <div class="z-10 w-[80%] h-full bg-black opacity-50" @click="openOrCloseBusket"></div>
     <div class="z-20 w-[20%] h-full p-9 bg-white">
       <div v-if="notEmptyBasket" class="h-full flex flex-col items-center justify-center">
         <img class="inline w-[70px] mb-8" src="/public/package-icon.png" />
@@ -20,7 +24,7 @@ const emit = defineEmits(['handleCloseBasket'])
           Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.
         </p>
         <button
-          @click="emit('handleCloseBasket')"
+          @click="openOrCloseBusket"
           class="w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white"
         >
           Вернуться назад
