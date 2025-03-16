@@ -1,5 +1,5 @@
 <script setup>
-import store from '@/store/store'
+import { store } from '@/store/store'
 
 import { computed } from 'vue'
 

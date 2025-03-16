@@ -1,10 +1,10 @@
 <script setup>
-import store from '@/store/store'
+import { store, TAXPRODUCT } from '@/store/store'
 
 import { computed } from 'vue'
 
 const totalPrice = computed(() => store.state.totalPrice)
-const tax = computed(() => store.state.tax)
+const tax = computed(() => store.getters.taxCalculation)
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const tax = computed(() => store.state.tax)
       <b>{{ totalPrice }} ₽</b>
     </div>
     <div class="flex gap-2">
-      <span class="text-[16px]">Налог {{ 5 }}%:</span>
+      <span class="text-[16px]">Налог {{ TAXPRODUCT }}%:</span>
       <div class="flex-1 border-b border-dashed border-[#DFDFDF]"></div>
       <b>{{ tax }} ₽</b>
     </div>

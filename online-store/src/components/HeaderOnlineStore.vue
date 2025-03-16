@@ -1,9 +1,9 @@
 <script setup>
-import store from '@/store/store'
+import { store } from '@/store/store'
 
 import { computed } from 'vue'
 
-const totalPrice = computed(() => store.state.totalPrice)
+const totalPrice = computed(() => store.getters.priceCalculation)
 
 const openOrCloseBusket = () => {
   store.commit('openOrCloseBusket')

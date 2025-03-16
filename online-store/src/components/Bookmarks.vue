@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
-import store from '@/store/store'
+import { store } from '@/store/store'
 
 import BookMarksCardList from './BookMarksCardList.vue'
 
