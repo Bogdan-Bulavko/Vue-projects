@@ -1,12 +1,15 @@
 <script setup>
+import { computed } from 'vue'
+
+import { store } from '@/store/store'
+
 import BookMarksCardList from './BookMarksCardList.vue'
 
-defineProps({
-  notEmptyBookMarks: Boolean,
-  handleClickCloseBookMarks: Function,
-})
+const notEmptyBookMarks = computed(() => store.state.notEmptyBookMarks)
 
-const emit = defineEmits(['handleClickCloseBookMarks'])
+const openOrCloseBookMarks = (e) => {
+  store.commit('openOrCloseBookMarks', e)
+}
 </script>
 
 <template>
@@ -16,7 +19,8 @@ const emit = defineEmits(['handleClickCloseBookMarks'])
       <h2 class="text-3xl font-semibold mb-3">Закладок нет :(</h2>
       <p class="text-gray-400 mb-19">Вы ничего не добавляли в закладки</p>
       <button
-        @click="emit('handleClickCloseBookMarks')"
+        id="bookmarks-button"
+        @click="openOrCloseBookMarks"
         class="w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white"
       >
         Вернуться назад
