@@ -38,7 +38,7 @@ const openOrCloseBookMarks = (e) => {
       </li>
       <li class="flex items-center gap-2.5 cursor-pointer">
         <img src="/profile.svg" alt="Profile" />
-        <b class="text-gray-500 hover:text-black">Профиль</b>
+        <b class="text-gray-500 hover:text-black">Зарегистрироваться</b>
       </li>
     </ul>
   </header>
