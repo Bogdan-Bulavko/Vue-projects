@@ -1,8 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/servis/firebase'
 import { store } from '@/store/store'
+
+import Notification from './Notification.vue'
+
+const openNotification = computed(() => store.state.openNotification)
 
 const email = ref('')
 const password = ref('')
@@ -10,7 +14,7 @@ const isSubmitting = ref(false)
 const errorMessage = ref('')
 
 const openOrCloseFormRegister = () => {
-  store.commit('openOrCloseFormRegister')
+  store.commit('openOrCloseFormRegister', false)
 }
 
 const handleRegister = async () => {
@@ -19,12 +23,21 @@ const handleRegister = async () => {
 
   try {
     await createUserWithEmailAndPassword(auth, email.value, password.value)
-    store.commit('openOrCloseFormRegister')
+    store.commit('openOrCloseNotification', 'Ваш аккаунт успешно зарегистрирован!')
   } catch (error) {
     errorMessage.value = error.message || 'Ошибка регистрации'
+    store.commit('openOrCloseNotification', 'Пользователь с этим email уже зарегистрирован!')
     console.log(error)
   } finally {
     isSubmitting.value = false
+
+    setTimeout(() => {
+      store.commit('openOrCloseNotification', 'Ваш аккаунт успешно зарегистрирован!')
+    }, 3000)
+
+    setTimeout(() => {
+      store.commit('openOrCloseFormRegister', false)
+    }, 4000)
   }
 }
 </script>
@@ -35,6 +48,7 @@ const handleRegister = async () => {
       class="fixed top-0 left-0 z-10 w-full h-full bg-black opacity-50"
       @click="openOrCloseFormRegister"
     ></div>
+    <Transition name="notification"> <Notification v-if="openNotification" /></Transition>
     <div
       class="w-[300px] bg-white p-2.5 rounded-3xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
     >
@@ -69,8 +83,24 @@ const handleRegister = async () => {
         >
           Зарегистрироваться
         </button>
-        <p v-if="errorMessage" class="text-red-500 text-sm mt-1">{{ errorMessage }}</p>
+        <!-- <p v-if="errorMessage" class="text-red-500 text-sm mt-1">{{ errorMessage }}</p> -->
       </form>
     </div>
   </section>
 </template>
+
+<style scoped>
+.notification-enter-active,
+.notification-leave-active {
+  transform: translateY(0);
+  position: fixed;
+  transition: 1s;
+}
+
+.notification-enter-from,
+.notification-leave-to {
+  transform: translateY(-70px);
+  position: fixed;
+  transition: 1s;
+}
+</style>

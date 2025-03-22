@@ -1,24 +1,37 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/servis/firebase'
 import { store } from '@/store/store'
 
+import Notification from './Notification.vue'
+
+const openNotification = computed(() => store.state.openNotification)
+
 const email = ref('')
 const password = ref('')
-const errorMessage = ref('')
+// const errorMessage = ref('')
 
 const handleLogin = async () => {
   try {
     await signInWithEmailAndPassword(auth, email.value, password.value)
-    store.commit('openOrCloseFormLogin')
+    store.commit('openOrCloseNotification', 'Вы успешно авторизовались')
   } catch (error) {
-    errorMessage.value = 'Неверный email или пароль'
+    // errorMessage.value = 'Неверный email или пароль'
+    store.commit('openOrCloseNotification', 'Неверный email или пароль')
+  } finally {
+    setTimeout(() => {
+      store.commit('openOrCloseNotification')
+    }, 3000)
+
+    setTimeout(() => {
+      store.commit('openOrCloseFormLogin', false)
+    }, 4000)
   }
 }
 
 const openOrCloseFormLogin = () => {
-  store.commit('openOrCloseFormLogin')
+  store.commit('openOrCloseFormLogin', false)
 }
 </script>
 
@@ -28,6 +41,7 @@ const openOrCloseFormLogin = () => {
       class="fixed top-0 left-0 z-10 w-full h-full bg-black opacity-50"
       @click="openOrCloseFormLogin"
     ></div>
+    <Transition name="notification"> <Notification v-if="openNotification" /></Transition>
     <div
       class="w-[300px] bg-white p-2.5 rounded-3xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
     >
@@ -62,7 +76,23 @@ const openOrCloseFormLogin = () => {
           Войти
         </button>
       </form>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <!-- <p v-if="errorMessage" class="error">{{ errorMessage }}</p> -->
     </div>
   </section>
 </template>
+
+<style scoped>
+.notification-enter-active,
+.notification-leave-active {
+  transform: translateY(0);
+  position: fixed;
+  transition: 1s;
+}
+
+.notification-enter-from,
+.notification-leave-to {
+  transform: translateY(-70px);
+  position: fixed;
+  transition: 1s;
+}
+</style>

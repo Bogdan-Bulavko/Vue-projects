@@ -19,6 +19,9 @@ const store = createStore({
     openBookmarks: false,
     openCard: false,
 
+    openNotification: false,
+    textNotification: '',
+
     notEmptyBookMarks: false,
     notEmptyBasket: false,
     totalPrice: JSON.parse(localStorage.getItem('totalPrice')),
@@ -157,11 +160,15 @@ const store = createStore({
       }
     },
 
-    openOrCloseFormRegister(state) {
-      state.openFormRegister = !state.openFormRegister
+    openOrCloseFormRegister(state, boolean = true) {
+      state.openFormRegister = boolean
     },
-    openOrCloseFormLogin(state) {
-      state.openFormLogin = !state.openFormLogin
+    openOrCloseFormLogin(state, boolean = true) {
+      state.openFormLogin = boolean
+    },
+    openOrCloseNotification(state, text) {
+      state.openNotification = !state.openNotification
+      state.textNotification = text
     },
   },
 
