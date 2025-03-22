@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { createStore } from 'vuex'
+
 const TAXPRODUCT = 5
 const store = createStore({
   state: {
@@ -8,9 +9,16 @@ const store = createStore({
     activeOpenCard: {},
     dataFavorite: JSON.parse(localStorage.getItem('favorite')),
     dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
+
+    openAllProducts: true,
+    openFormRegister: false,
+    openFormLogin: false,
+    isAuthorized: false,
+    openProfile: false,
     openBasket: false,
     openBookmarks: false,
     openCard: false,
+
     notEmptyBookMarks: false,
     notEmptyBasket: false,
     totalPrice: JSON.parse(localStorage.getItem('totalPrice')),
@@ -119,16 +127,22 @@ const store = createStore({
       }
     },
 
-    openOrCloseBookMarks(state, e) {
-      const id = e.currentTarget.id
+    openOrCloseAllProducts(state) {
+      state.openAllProducts = true
+      state.openBookmarks = false
+      state.openProfile = false
+    },
 
-      if (id === 'logo') {
-        state.openBookmarks = false
-      } else if (id === 'bookmarks-button') {
-        state.openBookmarks = false
-      } else {
-        state.openBookmarks = true
-      }
+    openOrCloseBookMarks(state) {
+      state.openBookmarks = true
+      state.openAllProducts = false
+      state.openProfile = false
+    },
+
+    openOrCloseProfile(state) {
+      state.openProfile = true
+      state.openAllProducts = false
+      state.openBookmarks = false
     },
 
     openOrCloseBusket(state) {
@@ -141,6 +155,13 @@ const store = createStore({
       if (state.openCard) {
         state.activeOpenCard = product
       }
+    },
+
+    openOrCloseFormRegister(state) {
+      state.openFormRegister = !state.openFormRegister
+    },
+    openOrCloseFormLogin(state) {
+      state.openFormLogin = !state.openFormLogin
     },
   },
 
