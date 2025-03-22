@@ -9,6 +9,10 @@ const user = ref(auth.currentUser)
 const logout = async () => {
   await signOut(auth)
   store.commit('openOrCloseAllProducts')
+  store.commit('openOrCloseNotification', 'Вы вышли из аккаунта')
+  setTimeout(() => {
+    store.commit('openOrCloseNotification')
+  }, 3000)
 }
 </script>
 

@@ -13,6 +13,9 @@ import OpenProductCard from './OpenProductCard.vue'
 import Register from './Register.vue'
 import Login from './Login.vue'
 import Profile from './Profile.vue'
+import Notification from './Notification.vue'
+
+const openNotification = computed(() => store.state.openNotification)
 
 const openProfile = computed(() => store.state.openProfile)
 
@@ -37,6 +40,8 @@ const addOrRemoveProductFromBasket = (item) => {
 </script>
 
 <template>
+  <Transition name="notification"> <Notification v-if="openNotification" /></Transition>
+
   <Register v-if="openFormRegister"></Register>
   <Login v-if="openFormLogin"></Login>
   <Transition name="fade">
@@ -82,5 +87,19 @@ const addOrRemoveProductFromBasket = (item) => {
 
 ::-webkit-scrollbar {
   width: 0;
+}
+
+.notification-enter-active,
+.notification-leave-active {
+  transform: translateY(0);
+  position: fixed;
+  transition: 1s;
+}
+
+.notification-enter-from,
+.notification-leave-to {
+  transform: translateY(-70px);
+  position: fixed;
+  transition: 1s;
 }
 </style>
