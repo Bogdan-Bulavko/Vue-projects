@@ -2,6 +2,13 @@ import axios from 'axios'
 import { createStore } from 'vuex'
 
 const TAXPRODUCT = 5
+
+const statusImg = {
+  success: '/checked.svg',
+  error: '/error.png',
+  empty: '',
+}
+
 const store = createStore({
   state: {
     products: [],
@@ -21,6 +28,7 @@ const store = createStore({
 
     openNotification: false,
     textNotification: '',
+    imgNotification: '',
 
     notEmptyBookMarks: false,
     notEmptyBasket: false,
@@ -166,9 +174,10 @@ const store = createStore({
     openOrCloseFormLogin(state, boolean = true) {
       state.openFormLogin = boolean
     },
-    openOrCloseNotification(state, text) {
+    openOrCloseNotification(state, { text, img }) {
       state.openNotification = !state.openNotification
       state.textNotification = text
+      state.imgNotification = img
     },
   },
 
@@ -231,4 +240,4 @@ const store = createStore({
   },
 })
 
-export { store, TAXPRODUCT }
+export { store, TAXPRODUCT, statusImg }

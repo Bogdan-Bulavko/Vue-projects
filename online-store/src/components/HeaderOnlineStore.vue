@@ -16,7 +16,6 @@ onMounted(() => {
       user.value = null
     }
   })
-  console.log(user, auth)
 })
 
 const clickOpenProfile = () => {

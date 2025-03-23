@@ -2,16 +2,22 @@
 import { ref } from 'vue'
 import { signOut } from 'firebase/auth'
 import { auth } from '@/servis/firebase'
-import { store } from '@/store/store'
+import { store, statusImg } from '@/store/store'
 
 const user = ref(auth.currentUser)
 
 const logout = async () => {
   await signOut(auth)
   store.commit('openOrCloseAllProducts')
-  store.commit('openOrCloseNotification', 'Вы вышли из аккаунта')
+  store.commit('openOrCloseNotification', {
+    text: 'Вы вышли из аккаунта',
+    img: statusImg.success,
+  })
   setTimeout(() => {
-    store.commit('openOrCloseNotification')
+    store.commit('openOrCloseNotification', {
+      text: '',
+      img: statusImg.empty,
+    })
   }, 3000)
 }
 </script>

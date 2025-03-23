@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/servis/firebase'
-import { store } from '@/store/store'
+import { store, statusImg } from '@/store/store'
 
 import Notification from './Notification.vue'
 
@@ -15,13 +15,22 @@ const password = ref('')
 const handleLogin = async () => {
   try {
     await signInWithEmailAndPassword(auth, email.value, password.value)
-    store.commit('openOrCloseNotification', 'Вы успешно авторизовались')
+    store.commit('openOrCloseNotification', {
+      text: 'Вы успешно авторизовались',
+      img: statusImg.success,
+    })
   } catch (error) {
     // errorMessage.value = 'Неверный email или пароль'
-    store.commit('openOrCloseNotification', 'Неверный email или пароль')
+    store.commit('openOrCloseNotification', {
+      text: 'Неверный email или пароль',
+      img: statusImg.error,
+    })
   } finally {
     setTimeout(() => {
-      store.commit('openOrCloseNotification')
+      store.commit('openOrCloseNotification', {
+        text: '',
+        img: statusImg.empty,
+      })
     }, 3000)
 
     setTimeout(() => {
