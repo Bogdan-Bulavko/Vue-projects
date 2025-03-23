@@ -18,7 +18,6 @@ const openOrCloseFormRegister = () => {
 }
 
 const handleRegister = async () => {
-  isSubmitting.value = true
   errorMessage.value = ''
 
   try {
@@ -27,26 +26,28 @@ const handleRegister = async () => {
       text: 'Ваш аккаунт успешно зарегистрирован!',
       img: statusImg.success,
     })
+
+    setTimeout(() => {
+      store.commit('openOrCloseFormRegister', false)
+    }, 4000)
+    isSubmitting.value = true
   } catch (error) {
-    errorMessage.value = error.message || 'Ошибка регистрации'
+    // errorMessage.value = error.message || 'Ошибка регистрации'
     store.commit('openOrCloseNotification', {
       text: 'Пользователь с этим email уже зарегистрирован!',
       img: statusImg.error,
     })
   } finally {
-    isSubmitting.value = false
-
     setTimeout(() => {
       store.commit('openOrCloseNotification', {
         text: '',
         img: statusImg.empty,
       })
     }, 3000)
-
-    setTimeout(() => {
-      store.commit('openOrCloseFormRegister', false)
-    }, 4000)
   }
+
+  email.value = ''
+  password.value = ''
 }
 </script>
 
