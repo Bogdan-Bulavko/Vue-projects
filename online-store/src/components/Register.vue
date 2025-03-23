@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/servis/firebase'
-import { store } from '@/store/store'
+import { store, statusImg } from '@/store/store'
 
 import Notification from './Notification.vue'
 
@@ -23,16 +23,24 @@ const handleRegister = async () => {
 
   try {
     await createUserWithEmailAndPassword(auth, email.value, password.value)
-    store.commit('openOrCloseNotification', 'Ваш аккаунт успешно зарегистрирован!')
+    store.commit('openOrCloseNotification', {
+      text: 'Ваш аккаунт успешно зарегистрирован!',
+      img: statusImg.success,
+    })
   } catch (error) {
     errorMessage.value = error.message || 'Ошибка регистрации'
-    store.commit('openOrCloseNotification', 'Пользователь с этим email уже зарегистрирован!')
-    console.log(error)
+    store.commit('openOrCloseNotification', {
+      text: 'Пользователь с этим email уже зарегистрирован!',
+      img: statusImg.error,
+    })
   } finally {
     isSubmitting.value = false
 
     setTimeout(() => {
-      store.commit('openOrCloseNotification', 'Ваш аккаунт успешно зарегистрирован!')
+      store.commit('openOrCloseNotification', {
+        text: '',
+        img: statusImg.empty,
+      })
     }, 3000)
 
     setTimeout(() => {
