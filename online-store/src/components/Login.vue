@@ -10,6 +10,7 @@ const openNotification = computed(() => store.state.openNotification)
 
 const email = ref('')
 const password = ref('')
+const isSubmitting = ref(false)
 // const errorMessage = ref('')
 
 const handleLogin = async () => {
@@ -19,6 +20,12 @@ const handleLogin = async () => {
       text: 'Вы успешно авторизовались',
       img: statusImg.success,
     })
+
+    setTimeout(() => {
+      store.commit('openOrCloseFormLogin', false)
+    }, 4000)
+
+    isSubmitting.value = true
   } catch (error) {
     // errorMessage.value = 'Неверный email или пароль'
     store.commit('openOrCloseNotification', {
@@ -33,9 +40,8 @@ const handleLogin = async () => {
       })
     }, 3000)
 
-    setTimeout(() => {
-      store.commit('openOrCloseFormLogin', false)
-    }, 4000)
+    email.value = ''
+    password.value = ''
   }
 }
 
@@ -81,6 +87,7 @@ const openOrCloseFormLogin = () => {
         <button
           class="m-auto block w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white"
           type="submit"
+          :disabled="isSubmitting"
         >
           Войти
         </button>
