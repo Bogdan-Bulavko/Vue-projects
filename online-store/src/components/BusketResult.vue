@@ -5,6 +5,10 @@ import { computed } from 'vue'
 
 const totalPrice = computed(() => store.state.totalPrice)
 const tax = computed(() => store.getters.taxCalculation)
+
+const placeAnOrder = () => {
+  store.dispatch('placeAnOrder')
+}
 </script>
 
 <template>
@@ -19,7 +23,10 @@ const tax = computed(() => store.getters.taxCalculation)
       <div class="flex-1 border-b border-dashed border-[#DFDFDF]"></div>
       <b>{{ tax }} ₽</b>
     </div>
-    <button class="mt-7 max-w-full w-full inline-block rounded-3xl py-4 bg-[#A5D364] text-white">
+    <button
+      @click="placeAnOrder"
+      class="mt-7 max-w-full w-full inline-block rounded-3xl py-4 bg-[#A5D364] text-white"
+    >
       Оформить заказ
     </button>
   </div>

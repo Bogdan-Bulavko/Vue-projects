@@ -1,21 +1,11 @@
 <script setup>
 import { store } from '@/store/store'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 
-const user = ref(null)
-const auth = getAuth()
+const user = computed(() => store.state.user)
 
 onMounted(() => {
-  onAuthStateChanged(auth, (currentUser) => {
-    if (currentUser) {
-      // Пользователь вошел в систему
-      user.value = currentUser
-    } else {
-      // Пользователь вышел из системы
-      user.value = null
-    }
-  })
+  store.dispatch('getUserOnLogin')
 })
 
 const clickOpenProfile = () => {
