@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { store } from '@/store/store'
 
 import AllProducts from './AllProducts.vue'
-import Drawer from './Drawer.vue'
+import Basket from './Basket.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
@@ -12,7 +12,7 @@ import OpenProductCard from './OpenProductCard.vue'
 
 import Register from './Register.vue'
 import Login from './Login.vue'
-import Profile from './Profile.vue'
+import ProfileContent from './ProfileContent.vue'
 import Notification from './Notification.vue'
 
 const openNotification = computed(() => store.state.openNotification)
@@ -34,8 +34,8 @@ const addOrRemoveProductFromFavorites = (item) => {
   store.commit('addOrRemoveProductFromFavorites', item)
 }
 
-const addOrRemoveProductFromBasket = (item) => {
-  store.commit('addOrRemoveProductFromBasket', item)
+const addOrRemoveProductFromIsAdded = (item) => {
+  store.commit('addOrRemoveProductFromIsAdded', item)
 }
 </script>
 
@@ -45,7 +45,7 @@ const addOrRemoveProductFromBasket = (item) => {
   <Register v-if="openFormRegister"></Register>
   <Login v-if="openFormLogin"></Login>
   <Transition name="fade">
-    <Drawer v-if="openBasket" />
+    <Basket v-if="openBasket" />
   </Transition>
 
   <OpenProductCard
@@ -56,7 +56,7 @@ const addOrRemoveProductFromBasket = (item) => {
     :price="activeOpenCard.price"
     :isFavorite="activeOpenCard.isFavorite"
     :isAdded="activeOpenCard.isAdded"
-    :onProductsInBasket="() => addOrRemoveProductFromBasket(activeOpenCard)"
+    :onProductsInBasket="() => addOrRemoveProductFromIsAdded(activeOpenCard)"
     :onFavoriteProducts="() => addOrRemoveProductFromFavorites(activeOpenCard)"
   />
 
@@ -66,7 +66,7 @@ const addOrRemoveProductFromBasket = (item) => {
     <HeaderOnlineStore />
 
     <Bookmarks v-if="openBookmarks" />
-    <Profile v-if="openProfile" />
+    <ProfileContent v-if="openProfile" />
     <template v-if="openAllProducts">
       <Slider />
       <AllProducts />

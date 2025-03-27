@@ -1,42 +1,27 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '@/servis/firebase'
-import { store, statusImg } from '@/store/store'
+import { computed } from 'vue'
+import { store } from '@/store/store'
 
-import Notification from './Notification.vue'
+const password = computed({
+  get() {
+    return store.state.password
+  },
+  set(value) {
+    store.commit('updatePassword', value)
+  },
+})
 
-const openNotification = computed(() => store.state.openNotification)
-
-const email = ref('')
-const password = ref('')
-// const errorMessage = ref('')
+const email = computed({
+  get() {
+    return store.state.email
+  },
+  set(value) {
+    store.commit('updateEmail', value)
+  },
+})
 
 const handleLogin = async () => {
-  try {
-    await signInWithEmailAndPassword(auth, email.value, password.value)
-    store.commit('openOrCloseNotification', {
-      text: 'Вы успешно авторизовались',
-      img: statusImg.success,
-    })
-  } catch (error) {
-    // errorMessage.value = 'Неверный email или пароль'
-    store.commit('openOrCloseNotification', {
-      text: 'Неверный email или пароль',
-      img: statusImg.error,
-    })
-  } finally {
-    setTimeout(() => {
-      store.commit('openOrCloseNotification', {
-        text: '',
-        img: statusImg.empty,
-      })
-    }, 3000)
-
-    setTimeout(() => {
-      store.commit('openOrCloseFormLogin', false)
-    }, 4000)
-  }
+  store.dispatch('handleLogin')
 }
 
 const openOrCloseFormLogin = () => {
@@ -50,7 +35,6 @@ const openOrCloseFormLogin = () => {
       class="fixed top-0 left-0 z-10 w-full h-full bg-black opacity-50"
       @click="openOrCloseFormLogin"
     ></div>
-    <Transition name="notification"> <Notification v-if="openNotification" /></Transition>
     <div
       class="w-[300px] bg-white p-2.5 rounded-3xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
     >
@@ -85,23 +69,8 @@ const openOrCloseFormLogin = () => {
           Войти
         </button>
       </form>
-      <!-- <p v-if="errorMessage" class="error">{{ errorMessage }}</p> -->
     </div>
   </section>
 </template>
 
-<style scoped>
-.notification-enter-active,
-.notification-leave-active {
-  transform: translateY(0);
-  position: fixed;
-  transition: 1s;
-}
-
-.notification-enter-from,
-.notification-leave-to {
-  transform: translateY(-70px);
-  position: fixed;
-  transition: 1s;
-}
-</style>
+<style scoped></style>
