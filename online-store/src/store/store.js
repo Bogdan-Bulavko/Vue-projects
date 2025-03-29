@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { auth, db } from '@/servis/firebase'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, getDocs } from 'firebase/firestore'
 import {
   onAuthStateChanged,
   updateProfile,
@@ -22,12 +22,13 @@ const statusImg = {
 
 const store = createStore({
   state: {
+    user: null,
+    listOrders: null,
+
     email: '',
     password: '',
     name: '',
     isSubmitting: false,
-
-    user: null,
 
     products: [],
     sortingProducts: [],
@@ -51,6 +52,8 @@ const store = createStore({
 
     notEmptyBookMarks: false,
     notEmptyBasket: 'empty',
+    notEmptyListOrders: 'empty',
+
     totalPrice: JSON.parse(localStorage.getItem('totalPrice')),
     tax: 0,
   },
@@ -174,6 +177,9 @@ const store = createStore({
       if (id === 'btnOrderPlaced' || id === 'backgroundOrderPlaced') {
         state.notEmptyBasket = 'empty'
       }
+      if (state.dataIndexProductsInBasket.length) {
+        state.notEmptyBasket = 'notEmpty'
+      }
       state.openBasket = !state.openBasket
     },
 
@@ -234,6 +240,7 @@ const store = createStore({
         // Добавляем заказ в подколлекцию
         const docRef = await addDoc(userOrdersRef, {
           basketProducts: state.basketProducts,
+          totalPrice: state.totalPrice,
           createdAt: new Date(), // Добавляем дату создания заказа
         })
 
@@ -242,9 +249,44 @@ const store = createStore({
         state.notEmptyBasket = 'orderPlaced'
 
         console.log('Заказ сохранен с ID:', docRef.id)
+
+        store.commit('openOrCloseNotification', {
+          text: 'Ваш заказ успешно оформлен!',
+          img: statusImg.success,
+        })
+
+        setTimeout(() => {
+          store.commit('openOrCloseNotification', {
+            text: '',
+            img: '',
+          })
+        }, 2000)
       } catch (error) {
-        console.error('Ошибка при сохранении заказа:', error.message)
+        store.commit('openOrCloseNotification', {
+          text: error,
+          img: statusImg.error,
+        })
+        setTimeout(() => {
+          store.commit('openOrCloseNotification', {
+            text: '',
+            img: '',
+          })
+        }, 2000)
       }
+    },
+    async getPlaceanOrders({ state }) {
+      const orders = await getDocs(collection(db, `users/${state.user.uid}/orders`))
+      state.listOrders = orders.docs.map((order) => {
+        return order.data()
+      })
+
+      if (state.listOrders.length) {
+        state.notEmptyListOrders = 'notEmpty'
+      } else {
+        state.notEmptyListOrders = 'empty'
+      }
+
+      console.log(state.listOrders.length)
     },
     async getProducts({ state, commit }) {
       try {
@@ -292,6 +334,7 @@ const store = createStore({
       onAuthStateChanged(auth, (currentUser) => {
         if (currentUser) {
           state.user = currentUser
+          state.name = state.user.displayName
         } else {
           state.user = null
         }
