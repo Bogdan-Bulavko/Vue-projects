@@ -8,6 +8,7 @@ import CardProduct from './CardProduct.vue'
 // const onOpenCard = inject('onOpenCard')
 
 const products = computed(() => store.state.sortingProducts)
+
 const addOrRemoveProductFromFavorites = (item) => {
   store.commit('addOrRemoveProductFromFavorites', item)
 }

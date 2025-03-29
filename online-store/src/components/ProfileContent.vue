@@ -32,7 +32,7 @@ const displayContent = (e) => {
         </li>
       </ul>
     </section>
-    <section>
+    <section class="w-full">
       <PersonalAccount v-if="openContent === 'personal-account'" />
       <PersonalOrders v-if="openContent === 'personal-orders'" />
     </section>

@@ -4,7 +4,7 @@ import { store } from '@/store/store'
 
 const name = computed({
   get() {
-    return store.state.name // Получаем значение из Vuex
+    return store.user || store.state.name // Получаем значение из Vuex
   },
   set(value) {
     store.commit('updateName', value) // Обновляем через мутацию
