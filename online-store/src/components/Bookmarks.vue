@@ -7,8 +7,8 @@ import BookMarksCardList from './BookMarksCardList.vue'
 
 const notEmptyBookMarks = computed(() => store.state.notEmptyBookMarks)
 
-const openOrCloseBookMarks = (e) => {
-  store.commit('openOrCloseBookMarks', e)
+const openOrCloseAllProducts = () => {
+  store.commit('openOrCloseAllProducts')
 }
 </script>
 
@@ -20,7 +20,7 @@ const openOrCloseBookMarks = (e) => {
       <p class="text-gray-400 mb-19">Вы ничего не добавляли в закладки</p>
       <button
         id="bookmarks-button"
-        @click="openOrCloseBookMarks"
+        @click="openOrCloseAllProducts"
         class="w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white"
       >
         Вернуться назад

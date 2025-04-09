@@ -11,8 +11,8 @@ const openOrCloseCard = (item) => {
 
 const products = computed(() => store.state.products)
 
-const addOrRemoveProductFromBasket = (item) => {
-  store.commit('addOrRemoveProductFromBasket', item)
+const addOrRemoveProductFromIsAdded = (item) => {
+  store.commit('addOrRemoveProductFromIsAdded', item)
 }
 </script>
 
@@ -27,7 +27,7 @@ const addOrRemoveProductFromBasket = (item) => {
           :imageUrl="product.imageUrl"
           :title="product.title"
           :price="product.price"
-          :onDeleteCard="() => addOrRemoveProductFromBasket(product)"
+          :onDeleteCard="() => addOrRemoveProductFromIsAdded(product)"
           :onOpenCard="() => openOrCloseCard(product)"
         />
       </template>

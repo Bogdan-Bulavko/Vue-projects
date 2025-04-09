@@ -8,12 +8,13 @@ import CardProduct from './CardProduct.vue'
 // const onOpenCard = inject('onOpenCard')
 
 const products = computed(() => store.state.sortingProducts)
+
 const addOrRemoveProductFromFavorites = (item) => {
   store.commit('addOrRemoveProductFromFavorites', item)
 }
 
-const addOrRemoveProductFromBasket = (item) => {
-  store.commit('addOrRemoveProductFromBasket', item)
+const addOrRemoveProductFromIsAdded = (item) => {
+  store.commit('addOrRemoveProductFromIsAdded', item)
 }
 
 const openOrCloseCard = (item) => {
@@ -37,7 +38,7 @@ onMounted(() => {
         :price="product.price"
         :isFavorite="product.isFavorite"
         :isAdded="product.isAdded"
-        :onProductsInBasket="() => addOrRemoveProductFromBasket(product)"
+        :onProductsInBasket="() => addOrRemoveProductFromIsAdded(product)"
         :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
         :onOpenCard="() => openOrCloseCard(product)"
       />

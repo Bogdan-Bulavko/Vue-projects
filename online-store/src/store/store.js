@@ -1,18 +1,59 @@
 import axios from 'axios'
+
+import { auth, db } from '@/servis/firebase'
+import { addDoc, collection, getDocs } from 'firebase/firestore'
+import {
+  onAuthStateChanged,
+  updateProfile,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth'
+
 import { createStore } from 'vuex'
+
 const TAXPRODUCT = 5
+
+const statusImg = {
+  success: '/checked.svg',
+  error: '/error.png',
+  empty: '',
+}
+
 const store = createStore({
   state: {
+    user: null,
+    listOrders: null,
+
+    email: '',
+    password: '',
+    name: '',
+    isSubmitting: false,
+
     products: [],
     sortingProducts: [],
+    basketProducts: [],
     activeOpenCard: {},
     dataFavorite: JSON.parse(localStorage.getItem('favorite')),
-    dataProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
+    dataIndexProductsInBasket: JSON.parse(localStorage.getItem('productsInBasket')),
+
+    openAllProducts: true,
+    openFormRegister: false,
+    openFormLogin: false,
+    isAuthorized: false,
+    openProfile: false,
     openBasket: false,
     openBookmarks: false,
     openCard: false,
+
+    openNotification: false,
+    textNotification: '',
+    imgNotification: '',
+
     notEmptyBookMarks: false,
-    notEmptyBasket: false,
+    notEmptyBasket: 'empty',
+    notEmptyListOrders: 'empty',
+
     totalPrice: JSON.parse(localStorage.getItem('totalPrice')),
     tax: 0,
   },
@@ -22,6 +63,9 @@ const store = createStore({
     },
     addCardsInSortingProducts(state, cards) {
       state.sortingProducts = cards
+    },
+    addProductsInBasket(state, products) {
+      state.basketProducts = products
     },
     sortProducts(state, e) {
       switch (e.target.options[e.target.selectedIndex].id) {
@@ -65,8 +109,6 @@ const store = createStore({
 
       product.isFavorite = !product.isFavorite
 
-      state.sortingProducts = state.products
-
       if (state.dataFavorite.includes(id)) {
         state.dataFavorite = state.dataFavorite.filter((product) => {
           if (product !== id) {
@@ -86,52 +128,58 @@ const store = createStore({
         state.notEmptyBookMarks = false
       }
     },
-    addOrRemoveProductFromBasket(state, product) {
+    addOrRemoveProductFromIsAdded(state, product) {
       const id = product.id
 
       product.isAdded = !product.isAdded
 
-      state.sortingProducts = state.products
+      state.basketProducts = state.products.filter((product) => product.isAdded)
 
-      if (state.dataProductsInBasket.includes(id)) {
-        state.dataProductsInBasket = state.dataProductsInBasket.filter((product) => {
+      if (state.dataIndexProductsInBasket.includes(id)) {
+        state.dataIndexProductsInBasket = state.dataIndexProductsInBasket.filter((product) => {
           if (product !== id) {
             return product
           }
         })
 
-        localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
-        state.totalPrice -= product.price
-        localStorage.setItem('totalPrice', state.totalPrice)
-        state.tax = Math.floor((state.totalPrice / 100) * 5)
+        localStorage.setItem('productsInBasket', JSON.stringify(state.dataIndexProductsInBasket))
       } else {
-        state.dataProductsInBasket = [...state.dataProductsInBasket, id]
-        localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
-        state.totalPrice += product.price
-        localStorage.setItem('totalPrice', state.totalPrice)
-        state.tax = Math.floor((state.totalPrice / 100) * 5)
+        state.dataIndexProductsInBasket = [...state.dataIndexProductsInBasket, id]
+        localStorage.setItem('productsInBasket', JSON.stringify(state.dataIndexProductsInBasket))
       }
 
-      if (!state.dataProductsInBasket.length) {
-        state.notEmptyBasket = true
+      if (!state.dataIndexProductsInBasket.length) {
+        state.notEmptyBasket = 'empty'
       } else {
-        state.notEmptyBasket = false
+        state.notEmptyBasket = 'notEmpty'
       }
     },
 
-    openOrCloseBookMarks(state, e) {
-      const id = e.currentTarget.id
-
-      if (id === 'logo') {
-        state.openBookmarks = false
-      } else if (id === 'bookmarks-button') {
-        state.openBookmarks = false
-      } else {
-        state.openBookmarks = true
-      }
+    openOrCloseAllProducts(state) {
+      state.openAllProducts = true
+      state.openBookmarks = false
+      state.openProfile = false
     },
 
-    openOrCloseBusket(state) {
+    openOrCloseBookMarks(state) {
+      state.openBookmarks = true
+      state.openAllProducts = false
+      state.openProfile = false
+    },
+
+    openOrCloseProfile(state) {
+      state.openProfile = true
+      state.openAllProducts = false
+      state.openBookmarks = false
+    },
+
+    openOrCloseBusket(state, id) {
+      if (id === 'btnOrderPlaced' || id === 'backgroundOrderPlaced') {
+        state.notEmptyBasket = 'empty'
+      }
+      if (state.dataIndexProductsInBasket.length) {
+        state.notEmptyBasket = 'notEmpty'
+      }
       state.openBasket = !state.openBasket
     },
 
@@ -142,18 +190,113 @@ const store = createStore({
         state.activeOpenCard = product
       }
     },
+
+    openOrCloseFormRegister(state, boolean = true) {
+      state.openFormRegister = boolean
+    },
+    openOrCloseFormLogin(state, boolean = true) {
+      state.openFormLogin = boolean
+    },
+    openOrCloseNotification(state, { text, img }) {
+      state.openNotification = !state.openNotification
+      state.textNotification = text
+      state.imgNotification = img
+    },
+
+    updateName(state, value) {
+      state.name = value
+    },
+    updatePassword(state, value) {
+      state.password = value
+    },
+    updateEmail(state, value) {
+      state.email = value
+    },
+    deleteProductsFromBasket(state) {
+      state.basketProducts = []
+      state.products = state.products.map((product) => {
+        if (product.isAdded) {
+          product.isAdded = !product.isAdded
+        }
+
+        return product
+      })
+      state.sortingProducts = state.products
+      state.dataIndexProductsInBasket = []
+      localStorage.setItem('productsInBasket', JSON.stringify(state.dataIndexProductsInBasket))
+    },
   },
 
   actions: {
+    async placeAnOrder({ state }) {
+      try {
+        if (!state.user) {
+          throw new Error('Пользователь не авторизован.')
+        }
+
+        // Создаем ссылку на подколлекцию для конкретного пользователя
+        const userOrdersRef = collection(db, `users/${state.user.uid}/orders`)
+
+        // Добавляем заказ в подколлекцию
+        const docRef = await addDoc(userOrdersRef, {
+          basketProducts: state.basketProducts,
+          totalPrice: state.totalPrice,
+          createdAt: new Date(), // Добавляем дату создания заказа
+        })
+
+        store.commit('deleteProductsFromBasket')
+
+        state.notEmptyBasket = 'orderPlaced'
+
+        console.log('Заказ сохранен с ID:', docRef.id)
+
+        store.commit('openOrCloseNotification', {
+          text: 'Ваш заказ успешно оформлен!',
+          img: statusImg.success,
+        })
+
+        setTimeout(() => {
+          store.commit('openOrCloseNotification', {
+            text: '',
+            img: '',
+          })
+        }, 2000)
+      } catch (error) {
+        store.commit('openOrCloseNotification', {
+          text: error,
+          img: statusImg.error,
+        })
+        setTimeout(() => {
+          store.commit('openOrCloseNotification', {
+            text: '',
+            img: '',
+          })
+        }, 2000)
+      }
+    },
+    async getPlaceanOrders({ state }) {
+      const orders = await getDocs(collection(db, `users/${state.user.uid}/orders`))
+      state.listOrders = orders.docs.map((order) => {
+        return order.data()
+      })
+
+      if (state.listOrders.length) {
+        state.notEmptyListOrders = 'notEmpty'
+      } else {
+        state.notEmptyListOrders = 'empty'
+      }
+
+      console.log(state.listOrders.length)
+    },
     async getProducts({ state, commit }) {
       try {
         if (state.dataFavorite === null) {
           state.dataFavorite = []
           localStorage.setItem('favorite', JSON.stringify(state.dataFavorite))
         }
-        if (state.dataProductsInBasket === null) {
-          state.dataProductsInBasket = []
-          localStorage.setItem('productsInBasket', JSON.stringify(state.dataProductsInBasket))
+        if (state.dataIndexProductsInBasket === null) {
+          state.dataIndexProductsInBasket = []
+          localStorage.setItem('productsInBasket', JSON.stringify(state.dataIndexProductsInBasket))
         }
 
         if (!state.dataFavorite.length) {
@@ -162,10 +305,10 @@ const store = createStore({
           state.notEmptyBookMarks = false
         }
 
-        if (!state.dataProductsInBasket.length) {
-          state.notEmptyBasket = true
+        if (!state.dataIndexProductsInBasket.length) {
+          state.notEmptyBasket = 'empty'
         } else {
-          state.notEmptyBasket = false
+          state.notEmptyBasket = 'notEmpty'
         }
 
         const { data } = await axios.get('https://34643c0fb49ad60b.mokky.dev/items')
@@ -173,15 +316,130 @@ const store = createStore({
         const products = await data.map((product) => {
           return {
             ...product,
-            isAdded: state.dataProductsInBasket.includes(product.id),
+            isAdded: state.dataIndexProductsInBasket.includes(product.id),
             isFavorite: state.dataFavorite.includes(product.id),
           }
         })
 
+        const basketProducts = products.filter((product) => product.isAdded)
+
         commit('addCardsInProducts', products)
         commit('addCardsInSortingProducts', products)
+        commit('addProductsInBasket', basketProducts)
       } catch (err) {
         console.log(err)
+      }
+    },
+    async getUserOnLogin({ state }) {
+      onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+          state.user = currentUser
+          state.name = state.user.displayName
+        } else {
+          state.user = null
+        }
+      })
+    },
+    async handleRegister({ state }) {
+      state.isSubmitting = true
+
+      try {
+        await createUserWithEmailAndPassword(auth, state.email, state.password)
+
+        const user = auth.currentUser
+
+        if (user) {
+          await updateProfile(user, {
+            displayName: state.name,
+          })
+        }
+        store.commit('openOrCloseNotification', {
+          text: 'Ваш аккаунт успешно зарегистрирован!',
+          img: statusImg.success,
+        })
+      } catch (error) {
+        store.commit('openOrCloseNotification', {
+          text: 'Пользователь с этим email уже зарегистрирован!',
+          img: statusImg.error,
+        })
+      } finally {
+        state.isSubmitting = false
+
+        setTimeout(() => {
+          store.commit('openOrCloseNotification', {
+            text: '',
+            img: statusImg.empty,
+          })
+        }, 3000)
+
+        setTimeout(() => {
+          store.commit('openOrCloseFormRegister', false)
+        }, 4000)
+      }
+    },
+    async handleLogin({ state }) {
+      try {
+        await signInWithEmailAndPassword(auth, state.email, state.password)
+        store.commit('openOrCloseNotification', {
+          text: 'Вы успешно авторизовались',
+          img: statusImg.success,
+        })
+      } catch (error) {
+        // errorMessage.value = 'Неверный email или пароль'
+        store.commit('openOrCloseNotification', {
+          text: 'Неверный email или пароль',
+          img: statusImg.error,
+        })
+      } finally {
+        setTimeout(() => {
+          store.commit('openOrCloseNotification', {
+            text: '',
+            img: statusImg.empty,
+          })
+        }, 3000)
+
+        setTimeout(() => {
+          store.commit('openOrCloseFormLogin', false)
+        }, 4000)
+      }
+    },
+    async logout() {
+      await signOut(auth)
+      store.commit('openOrCloseAllProducts')
+      store.commit('openOrCloseNotification', {
+        text: 'Вы вышли из аккаунта',
+        img: statusImg.success,
+      })
+      setTimeout(() => {
+        store.commit('openOrCloseNotification', {
+          text: '',
+          img: statusImg.empty,
+        })
+      }, 3000)
+    },
+    async changeName({ state }) {
+      try {
+        if (state.user) {
+          await updateProfile(state.user, {
+            displayName: state.name,
+          })
+          store.commit('openOrCloseNotification', {
+            text: `Вы изменили имя на ${state.name}`,
+            img: statusImg.success,
+          })
+        }
+      } catch (error) {
+        store.commit('openOrCloseNotification', {
+          text: `Ошибка при установке имени: ${error.message}`,
+          img: statusImg.error,
+        })
+      } finally {
+        setTimeout(() => {
+          store.commit('openOrCloseNotification', {
+            text: '',
+            img: statusImg.empty,
+          })
+        }, 3000)
       }
     },
   },
@@ -203,4 +461,4 @@ const store = createStore({
   },
 })
 
-export { store, TAXPRODUCT }
+export { store, TAXPRODUCT, statusImg }
