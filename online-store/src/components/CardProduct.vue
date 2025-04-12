@@ -21,11 +21,15 @@ defineProps({
     >
       <img
         class="z-10"
-        :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
+        :src="isFavorite ? 'public/like-2.svg' : 'public/like-1.svg'"
         alt="button like"
         @click.stop="onFavoriteProducts"
       />
-      <img class="block w-[133px] h-[112px] mb-4" :src="imageUrl" alt="image sneakers" />
+      <img
+        class="block w-[133px] h-[112px] mb-4"
+        :src="`public/${imageUrl}`"
+        alt="image sneakers"
+      />
       <p class="leading-[17px] mb-4">{{ title }}</p>
       <div class="flex justify-between">
         <div>
@@ -34,7 +38,7 @@ defineProps({
         </div>
         <img
           class="block"
-          :src="isAdded ? '/checked.svg' : '/plus.svg'"
+          :src="isAdded ? 'public/checked.svg' : 'public/plus.svg'"
           alt="Add Product"
           @click.stop="onProductsInBasket"
         />
