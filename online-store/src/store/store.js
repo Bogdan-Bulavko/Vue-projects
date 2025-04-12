@@ -15,8 +15,8 @@ import { createStore } from 'vuex'
 const TAXPRODUCT = 5
 
 const statusImg = {
-  success: '/checked.svg',
-  error: '/error.png',
+  success: 'checked.svg',
+  error: 'error.png',
   empty: '',
 }
 
