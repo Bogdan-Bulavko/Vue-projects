@@ -25,7 +25,11 @@ defineProps({
         alt="button like"
         @click.stop="onFavoriteProducts"
       />
-      <img class="block w-[133px] h-[112px] mb-4" :src="imageUrl" alt="image sneakers" />
+      <img
+        class="block w-[133px] h-[112px] mb-4"
+        :src="`/Vue-projects/${imageUrl}`"
+        alt="image sneakers"
+      />
       <p class="leading-[17px] mb-4">{{ title }}</p>
       <div class="flex justify-between">
         <div>
