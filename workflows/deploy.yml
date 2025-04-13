@@ -29,4 +29,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: online-store/dist # Путь к папке dist
-          destination_dir: . # Папка в gh-pagess
+          destination_dir: . # Копировать файлы в корень gh-pages
