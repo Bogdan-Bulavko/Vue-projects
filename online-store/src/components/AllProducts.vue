@@ -13,9 +13,9 @@ const searchProduct = (e) => {
 
 <template>
   <section>
-    <div class="flex justify-between mb-11">
-      <h2 class="text-4xl font-bold">Все кроссовки</h2>
-      <div class="flex gap-4">
+    <div class="flex md:justify-between md:flex-row mb-11 min-[375px]:flex-col">
+      <h2 class="text-4xl font-bold md:mb-0 min-[375px]:mb-3">Все кроссовки</h2>
+      <div class="flex md:flex-row gap-4 min-[375px]:flex-col">
         <select
           class="py-2 px-3 border border-gray-300 rounded-md outline-none"
           @change="changeSorting"
@@ -27,7 +27,7 @@ const searchProduct = (e) => {
         </select>
 
         <div class="flex border pl-5 border-gray-300 rounded-md focus:border-gray-500">
-          <img class="" src="/search.svg" alt="search image" />
+          <img src="/search.svg" alt="search image" />
           <input
             class="py-2 pl-5 pr-4 outline-none"
             type="text"

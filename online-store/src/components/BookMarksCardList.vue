@@ -21,7 +21,9 @@ const openOrCloseCard = (item) => {
 </script>
 
 <template>
-  <ul class="grid grid-cols-4 justify-between gap-11">
+  <ul
+    class="grid lg:grid-cols-4 md:justify-between min-[375px]:justify-items-center gap-11 min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[425px]:grid-cols-1"
+  >
     <TransitionGroup name="list">
       <template v-for="product in products">
         <CardProduct

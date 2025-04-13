@@ -15,7 +15,7 @@ defineProps({
 <template>
   <li>
     <article
-      class="w-[210px] pb-9 px-9 pt-6 rounded-3xl border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition"
+      class="w-[210px] pb-9 px-9 pt-6 min-[375px]:px-4 rounded-3xl border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition"
       :id="id"
       @click="onOpenCard"
     >

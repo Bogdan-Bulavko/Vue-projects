@@ -27,7 +27,7 @@ const openOrCloseAllProducts = () => {
       </button>
     </div>
     <template v-else>
-      <h2 class="mb-5 text-4xl font-bold">Закладки</h2>
+      <h2 class="text-4xl font-bold md:mb-0 min-[375px]:mb-5">Закладки</h2>
       <BookMarksCardList />
     </template>
   </section>

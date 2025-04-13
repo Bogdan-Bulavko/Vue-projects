@@ -23,14 +23,23 @@ const formattedTime = date.toLocaleTimeString('ru-RU', {
 
 <template>
   <li class="flex justify-between items-center mb-5 w-full p-2.5 border-y border-slate-300">
-    <div class="text-gray-500 text-2xl text-center">
+    <div class="text-gray-500 text-4 text-center mr-5">
       <span class="block">{{ formattedDate }}</span> <span class="block">{{ formattedTime }}</span>
     </div>
-    <ul class="flex w-[363px] overflow-x-auto">
+    <ul class="flex overflow-x-auto max-w-[70%]">
+      <li v-for="products in order.basketProducts" :key="products.id">
+        <img class="max-w-[80px] h-[67px]" :src="products.imageUrl" alt="" />
+      </li>
+      <li v-for="products in order.basketProducts" :key="products.id">
+        <img class="max-w-[80px] h-[67px]" :src="products.imageUrl" alt="" />
+      </li>
+      <li v-for="products in order.basketProducts" :key="products.id">
+        <img class="max-w-[80px] h-[67px]" :src="products.imageUrl" alt="" />
+      </li>
       <li v-for="products in order.basketProducts" :key="products.id">
         <img class="max-w-[80px] h-[67px]" :src="products.imageUrl" alt="" />
       </li>
     </ul>
-    <span class="text-gray-500 text-2xl">{{ order.totalPrice }}₽</span>
+    <span class="ml-5 text-gray-500 text-4">{{ order.totalPrice }}₽</span>
   </li>
 </template>
