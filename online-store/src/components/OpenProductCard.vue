@@ -30,7 +30,7 @@ const openOrCloseCard = () => {
       >
         <img
           class="absolute left-9 block w-14"
-          :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
+          :src="isFavorite ? 'like-2.svg' : 'like-1.svg'"
           alt="button like"
           @click="onFavoriteProducts"
         />
@@ -43,7 +43,7 @@ const openOrCloseCard = () => {
         </div>
         <img
           class="absolute bottom-9 right-9 block"
-          :src="isAdded ? '/checked.svg' : '/plus.svg'"
+          :src="isAdded ? 'checked.svg' : 'plus.svg'"
           alt="Added Product"
           @click="onProductsInBasket"
         />
