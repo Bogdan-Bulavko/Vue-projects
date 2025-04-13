@@ -18,15 +18,20 @@ jobs:
         with:
           node-version: 20.17.0
 
+      - name: Navigate to online-store directory
+        run: cd online-store
+
       - name: Install dependencies
         run: npm install
+        working-directory: online-store
 
       - name: Build project
         run: npm run build
+        working-directory: online-store
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: online-store/dist # Путь к папке dist
-          destination_dir: . # Копировать файлы в корень gh-pagesы
+          destination_dir: . # Копировать файлы в корень gh-pages
