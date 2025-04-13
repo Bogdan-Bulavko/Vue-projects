@@ -28,5 +28,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: Vue-projects/online-store/dist # Путь к папке dist
-          destination_dir: Vue-projects # Папка в gh-pages
+          publish_dir: online-store/dist # Путь к папке dist
+          destination_dir: . # Папка в gh-pages
