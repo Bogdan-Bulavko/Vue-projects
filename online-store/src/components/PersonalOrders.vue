@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full p-6 min-[375px]:p-2" v-if="notEmptyListOrders === 'notEmpty'">
+  <div class="w-full p-6 min-[320px]:p-1.5" v-if="notEmptyListOrders === 'notEmpty'">
     <h2 class="mb-3.5 text-3xl font-medium">Все Заказы</h2>
     <div class="m-auto mb-3.5 w-[95%] flex justify-between">
       <span>Дата заказа</span> <span>Товары</span> <span>Цена</span>
