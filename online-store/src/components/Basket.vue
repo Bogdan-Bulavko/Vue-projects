@@ -17,13 +17,13 @@ const openOrCloseBusket = (e) => {
   <div class="fixed flex w-[100vw] h-[100vh]">
     <div
       id="backgroundOrderPlaced"
-      class="z-10 w-[80%] h-full bg-black opacity-50"
+      class="z-10 w-[80%] lg:w-[60%] md:w-[50%] min-[375px]:w-[0%] h-full bg-black opacity-50"
       @click="openOrCloseBusket"
     ></div>
-    <div class="z-20 w-[20%] h-full p-9 bg-white">
+    <div class="z-20 w-[20%] lg:w-[40%] md:w-[50%] min-[375px]:w-[100%] h-full p-9 bg-white">
       <div
         v-if="notEmptyBasket === 'empty'"
-        class="h-full flex flex-col items-center justify-center"
+        class="h-full flex flex-col items-center justify-center text-center"
       >
         <img class="inline w-[70px] mb-8" src="/public/package-icon.png" />
         <h2 class="text-3xl font-semibold mb-3">Корзина пустая</h2>
@@ -38,7 +38,11 @@ const openOrCloseBusket = (e) => {
         </button>
       </div>
       <template v-if="notEmptyBasket === 'notEmpty'">
-        <h3 class="text-3xl font-bold mb-9">Корзина</h3>
+        <div class="flex items-start justify-between">
+          <h3 class="text-3xl font-bold mb-9">Корзина</h3>
+          <img src="/close.png" class="w-8" @click="openOrCloseBusket" />
+        </div>
+
         <div class="h-full flex flex-col justify-between pb-9">
           <BusketCardList />
           <BusketResult />

@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full p-6" v-if="notEmptyListOrders === 'notEmpty'">
+  <div class="w-full p-6 min-[375px]:p-2" v-if="notEmptyListOrders === 'notEmpty'">
     <h2 class="mb-3.5 text-3xl font-medium">Все Заказы</h2>
     <div class="m-auto mb-3.5 w-[95%] flex justify-between">
       <span>Дата заказа</span> <span>Товары</span> <span>Цена</span>
@@ -28,7 +28,7 @@ onMounted(() => {
     </ul>
   </div>
   <div
-    class="h-full flex flex-col items-center justify-center"
+    class="h-full flex flex-col items-center justify-center text-center"
     v-else-if="notEmptyListOrders === 'empty'"
   >
     <img class="inline w-[70px] mb-8" src="/public/emoji-1.png" />
