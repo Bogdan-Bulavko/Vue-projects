@@ -22,7 +22,7 @@ const displayContent = (e) => {
 
 <template>
   <div class="h-full pt-3.5 flex">
-    <section class="pr-3.5 border-r border-slate-300">
+    <section class="pr-2 border-r border-slate-300">
       <ul>
         <li @click="displayContent" class="mb-3.5" id="personal-account">
           <p class="cursor-pointer text-gray-500 hover:text-black text-2xl">Профиль</p>
