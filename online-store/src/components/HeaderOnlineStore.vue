@@ -47,9 +47,9 @@ const openOrCloseAllProducts = () => {
         <p class="text-gray-500">Магазин лучших кроссовок</p>
       </div>
     </div>
-    <ul class="flex md:items-center min-[320px]:justify-center min-[320px]:items-start gap-2.5">
+    <ul class="flex gap-2.5 md:items-center min-[320px]:justify-center min-[320px]:items-start">
       <li
-        class="flex items-center min-[320px]:flex-col md:flex-row gap-2.5 cursor-pointer"
+        class="flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row"
         @click="openOrCloseBusket"
       >
         <img src="/cart.svg" alt="Cart" />
@@ -57,24 +57,24 @@ const openOrCloseAllProducts = () => {
       </li>
       <li
         id="bookmarks"
-        class="flex items-center min-[320px]:flex-col md:flex-row gap-2.5 cursor-pointer"
+        class="flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row"
         @click="openOrCloseBookMarks"
       >
         <img src="/heart.svg" alt="Heart" />
         <b class="text-gray-500 hover:text-black">Закладки</b>
       </li>
-      <li class="flex items-center min-[320px]:flex-col md:flex-row gap-2.5 cursor-pointer">
+      <li class="flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row">
         <img src="/profile.svg" alt="Profile" />
         <b v-if="user" @click="clickOpenProfile" class="text-gray-500 hover:text-black">Профиль</b>
         <b v-else class="text-gray-500"
           ><span
-            class="md:inline min-[320px]:text-center hover:text-black"
+            class="md:inline hover:text-black min-[320px]:text-center"
             @click="openOrCloseFormRegister"
             >Sign up
           </span>
           /
           <span
-            class="md:inline min-[320px]:text-center hover:text-black"
+            class="md:inline hover:text-black min-[320px]:text-center"
             @click="openOrCloseFormLogin"
             >Sign in</span
           ></b

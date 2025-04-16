@@ -21,10 +21,10 @@ const changeName = async () => {
 </script>
 
 <template>
-  <div class="w-full p-6 space-y-6">
+  <div class="w-full p-6 space-y-6 min-[320px]:p-2">
     <h1 class="text-2xl font-bold">Личный кабинет</h1>
 
-    <div class="md:w-[400px] space-y-4">
+    <div class="space-y-4 md:w-[400px]">
       <h2 class="text-xl font-semibold">Персональная информация</h2>
       <form class="flex flex-col" @submit.prevent="changeName">
         <label class="font-medium">Имя: {{ name }}</label>

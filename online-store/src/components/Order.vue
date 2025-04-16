@@ -27,7 +27,7 @@ const formattedTime = date.toLocaleTimeString('ru-RU', {
       <span class="block">{{ formattedDate }}</span> <span class="block">{{ formattedTime }}</span>
     </div>
     <ul
-      class="flex overflow-x-auto w-[500px] md:w-[400px] min-[375px]:w-[120px] min-[320px]:w-[50px]"
+      class="flex overflow-x-auto justify-center w-[500px] md:w-[400px] min-[375px]:w-[90px] min-[320px]:w-[50px]"
     >
       <li v-for="products in order.basketProducts" :key="products.id">
         <img

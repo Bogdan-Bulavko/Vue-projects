@@ -61,7 +61,7 @@ const addOrRemoveProductFromIsAdded = (item) => {
   />
 
   <div
-    class="max-w-[1080px] md:px-16 py-12 min-[375px]:px-3 m-auto bg-white rounded-3xl shadow-xl h-[100vh] overflow-y-auto"
+    class="max-w-[1080px] py-12 m-auto bg-white rounded-3xl shadow-xl h-[100vh] overflow-y-auto md:px-16 min-[375px]:px-3"
   >
     <HeaderOnlineStore />
 

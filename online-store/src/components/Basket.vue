@@ -17,11 +17,11 @@ const openOrCloseBusket = (e) => {
   <div class="fixed flex w-[100vw] h-[100vh]">
     <div
       id="backgroundOrderPlaced"
-      class="z-10 w-[80%] lg:w-[60%] md:w-[50%] min-[320px]:w-[0%] h-full bg-black opacity-50"
+      class="h-full bg-black opacity-50 z-10 w-[80%] lg:w-[60%] md:w-[50%] min-[320px]:w-[0%]"
       @click="openOrCloseBusket"
     ></div>
     <div
-      class="z-20 w-[20%] lg:w-[40%] md:w-[50%] min-[320px]:w-[100%] h-full p-9 min-[320px]:p-2 bg-white"
+      class="h-full p-9 min-[320px]:p-2 bg-white z-20 w-[20%] lg:w-[40%] md:w-[50%] min-[320px]:w-[100%]"
     >
       <div
         v-if="notEmptyBasket === 'empty'"
