@@ -1,28 +1,9 @@
 <script setup>
-import { computed } from 'vue'
-
-import { store } from '@/store/store'
-
 import CardProduct from './CardProduct.vue'
-
-const products = computed(() => store.state.products)
-
-const addOrRemoveProductFromFavorites = (item) => {
-  store.commit('addOrRemoveProductFromFavorites', item)
-}
-
-const addOrRemoveProductFromIsAdded = (item) => {
-  store.commit('addOrRemoveProductFromIsAdded', item)
-}
-
-const openOrCloseCard = (item) => {
-  store.commit('openOrCloseCard', item)
-}
 </script>
-
 <template>
   <ul
-    class="grid mt-4 lg:grid-cols-4 gap-11 md:justify-between min-[320px]:justify-items-center min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[425px]:grid-cols-1"
+    class="/* Layout */ grid gap-11 mt-4 lg:grid-cols-4 md:justify-between min-[320px]:justify-items-center min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[425px]:grid-cols-1"
   >
     <TransitionGroup name="list">
       <template v-for="product in products">

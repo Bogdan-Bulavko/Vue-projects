@@ -1,38 +1,39 @@
 <script setup>
-import { ref } from 'vue'
-
 import PersonalAccount from './PersonalAccount.vue'
 import PersonalOrders from './PersonalOrders.vue'
-
-const openContent = ref('personal-account')
-
-const displayContent = (e) => {
-  const target = e.currentTarget
-
-  switch (target.id) {
-    case 'personal-account':
-      openContent.value = target.id
-      break
-    case 'personal-orders':
-      openContent.value = target.id
-      break
-  }
-}
 </script>
 
 <template>
-  <div class="h-full pt-3.5 flex">
-    <section class="pr-2 border-r border-slate-300">
+  <div
+    class="/* Layout */ h-full pt-3.5 flex /* Typography */ /* Border */ /* Background */ /* Effects */"
+  >
+    <section
+      class="/* Layout */ pr-2 border-r /* Typography */ /* Border */ border-slate-300 /* Background */ /* Effects */"
+    >
       <ul>
-        <li @click="displayContent" class="mb-3.5" id="personal-account">
-          <p class="cursor-pointer text-gray-500 hover:text-black text-2xl">Профиль</p>
+        <li
+          class="/* Layout */ mb-3.5 /* Typography */ /* Border */ /* Background */ /* Effects */"
+          @click="displayContent"
+          id="personal-account"
+        >
+          <p class="/* Typography */ text-2xl text-gray-500 hover:text-black cursor-pointer">
+            Профиль
+          </p>
         </li>
-        <li @click="displayContent" class="mb-3.5" id="personal-orders">
-          <p class="cursor-pointer text-gray-500 hover:text-black text-2xl">Заказы</p>
+        <li
+          class="/* Layout */ mb-3.5 /* Typography */ /* Border */ /* Background */ /* Effects */"
+          @click="displayContent"
+          id="personal-orders"
+        >
+          <p class="/* Typography */ text-2xl text-gray-500 hover:text-black cursor-pointer">
+            Заказы
+          </p>
         </li>
       </ul>
     </section>
-    <section class="w-full">
+    <section
+      class="/* Layout */ w-full /* Typography */ /* Border */ /* Background */ /* Effects */"
+    >
       <PersonalAccount v-if="openContent === 'personal-account'" />
       <PersonalOrders v-if="openContent === 'personal-orders'" />
     </section>

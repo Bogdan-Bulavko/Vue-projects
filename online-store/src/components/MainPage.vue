@@ -1,8 +1,4 @@
 <script setup>
-import { computed } from 'vue'
-
-import { store } from '@/store/store'
-
 import AllProducts from './AllProducts.vue'
 import Basket from './Basket.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
@@ -14,33 +10,12 @@ import Register from './Register.vue'
 import Login from './Login.vue'
 import ProfileContent from './ProfileContent.vue'
 import Notification from './Notification.vue'
-
-const openNotification = computed(() => store.state.openNotification)
-
-const openProfile = computed(() => store.state.openProfile)
-
-const openFormRegister = computed(() => store.state.openFormRegister)
-const openFormLogin = computed(() => store.state.openFormLogin)
-
-const openBasket = computed(() => store.state.openBasket)
-const openBookmarks = computed(() => store.state.openBookmarks)
-
-const activeOpenCard = computed(() => store.state.activeOpenCard)
-const openCard = computed(() => store.state.openCard)
-
-const openAllProducts = computed(() => store.state.openAllProducts)
-
-const addOrRemoveProductFromFavorites = (item) => {
-  store.commit('addOrRemoveProductFromFavorites', item)
-}
-
-const addOrRemoveProductFromIsAdded = (item) => {
-  store.commit('addOrRemoveProductFromIsAdded', item)
-}
 </script>
 
 <template>
-  <Transition name="notification"> <Notification v-if="openNotification" /></Transition>
+  <Transition name="notification">
+    <Notification v-if="openNotification" />
+  </Transition>
 
   <Register v-if="openFormRegister"></Register>
   <Login v-if="openFormLogin"></Login>
@@ -61,7 +36,7 @@ const addOrRemoveProductFromIsAdded = (item) => {
   />
 
   <div
-    class="max-w-[1080px] py-12 m-auto bg-white rounded-3xl shadow-xl h-[100vh] overflow-y-auto md:px-16 min-[375px]:px-3"
+    class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-12 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
   >
     <HeaderOnlineStore />
 

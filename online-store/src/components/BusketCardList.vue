@@ -1,23 +1,9 @@
 <script setup>
-import { store } from '@/store/store'
-
-import { computed } from 'vue'
-
 import CardProductBasket from './CardProductBasket.vue'
-
-const openOrCloseCard = (item) => {
-  store.commit('openOrCloseCard', item)
-}
-
-const products = computed(() => store.state.products)
-
-const addOrRemoveProductFromIsAdded = (item) => {
-  store.commit('addOrRemoveProductFromIsAdded', item)
-}
 </script>
 
 <template>
-  <ul class="overflow-auto overflow-x-hidden">
+  <ul class="/* Layout */ overflow-auto overflow-x-hidden">
     <TransitionGroup name="list">
       <template v-for="product in products">
         <CardProductBasket
