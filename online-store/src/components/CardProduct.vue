@@ -1,10 +1,13 @@
-<script setup></script>
+<script setup lang="ts">
+import type { Product } from 'src/types/product.types'
+defineProps<Product>()
+</script>
 
 <template>
   <li>
     <article
       class="/* Layout */ min-h-[276px] rounded-3xl border hover:-translate-y-2 transition min-[320px]:p-2 min-[450px]:w-[210px] min-[320px]:w-[168px] /* Typography */ /* Border */ border-gray-100 /* Background */ /* Effects */ hover:shadow-xl"
-      :id="id"
+      :id="String(id)"
       @click="onOpenCard"
     >
       <img

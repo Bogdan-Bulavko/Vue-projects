@@ -1,5 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import CardList from './CardList.vue'
+
+import type { Product } from 'src/types/product.types'
+
+defineProps<{ products: Product[] }>()
 </script>
 
 <template>
@@ -13,7 +17,7 @@ import CardList from './CardList.vue'
       <div
         class="/* Layout */ flex gap-4 md:flex-row min-[320px]:flex-col /* Border */ /* Background */ /* Effects */"
       >
-        <select
+        <!-- <select
           class="/* Layout */ py-2 px-3 rounded-md /* Border */ border border-gray-300 /* Typography */ outline-none /* Effects */"
           @change="changeSorting"
         >
@@ -21,22 +25,22 @@ import CardList from './CardList.vue'
           <option id="name">По названию</option>
           <option id="cheap">По цене (дешевые)</option>
           <option id="dear">По цене (дорогие)</option>
-        </select>
+        </select> -->
 
         <div
           class="/* Layout */ flex rounded-md pl-5 /* Border */ border border-gray-300 focus:border-gray-500 /* Background */ /* Effects */"
         >
           <img src="/search.svg" alt="search image" />
-          <input
+          <!-- <input
             class="/* Layout */ py-2 pl-5 pr-4 /* Border */ /* Typography */ outline-none /* Effects */"
             type="text"
             placeholder="Поиск..."
             @input="searchProduct"
-          />
+          /> -->
         </div>
       </div>
     </div>
-    <CardList />
+    <CardList :products="products" />
   </section>
 </template>
 

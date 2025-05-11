@@ -1,5 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import CardProduct from './CardProduct.vue'
+
+import type { Product } from 'src/types/product.types'
+
+defineProps<{ products: Product[] }>()
 </script>
 
 <template>
@@ -16,14 +20,14 @@ import CardProduct from './CardProduct.vue'
         :price="product.price"
         :isFavorite="product.isFavorite"
         :isAdded="product.isAdded"
-        :onProductsInBasket="() => addOrRemoveProductFromIsAdded(product)"
-        :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
-        :onOpenCard="() => openOrCloseCard(product)"
       />
     </TransitionGroup>
   </ul>
 </template>
 
+<!-- :onProductsInBasket="() => addOrRemoveProductFromIsAdded(product)"
+        :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
+        :onOpenCard="() => openOrCloseCard(product)" -->
 <style scoped>
 .list-enter-active,
 .list-leave-active {

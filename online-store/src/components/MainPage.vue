@@ -1,29 +1,61 @@
-<script setup>
+<script setup lang="ts">
 import AllProducts from './AllProducts.vue'
-import Basket from './Basket.vue'
+// import Basket from './Basket.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
-import Bookmarks from './Bookmarks.vue'
-import OpenProductCard from './OpenProductCard.vue'
+// import Bookmarks from './Bookmarks.vue'
+// import OpenProductCard from './OpenProductCard.vue'
+// import Register from './Register.vue'
+// import Login from './Login.vue'
+// import ProfileContent from './ProfileContent.vue'
+// import Notification from './Notification.vue'
 
-import Register from './Register.vue'
-import Login from './Login.vue'
-import ProfileContent from './ProfileContent.vue'
-import Notification from './Notification.vue'
+import { onMounted, ref } from 'vue'
+import type { Ref } from 'vue'
+
+import { Product } from 'src/types/product.types'
+
+const products: Ref<Product[] | null> = ref(null)
+
+const getProductsFetch = async (): Promise<Product[]> => {
+  try {
+    const response: Response = await fetch('https://34643c0fb49ad60b.mokky.dev/items')
+
+    if (!response.ok) throw new Error('Ошибка загрузки')
+
+    const data: Product[] = await response.json()
+    const products: Product[] = data.map((product: Product) => {
+      return {
+        ...product,
+        isAdded: false,
+        isFavorite: false,
+      }
+    })
+
+    return products
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}
+
+onMounted(async () => {
+  products.value = await getProductsFetch()
+})
 </script>
 
 <template>
-  <Transition name="notification">
+  <!-- <Transition name="notification">
     <Notification v-if="openNotification" />
-  </Transition>
+  </Transition> -->
 
-  <Register v-if="openFormRegister"></Register>
+  <!-- <Register v-if="openFormRegister"></Register>
   <Login v-if="openFormLogin"></Login>
   <Transition name="fade">
     <Basket v-if="openBasket" />
-  </Transition>
+  </Transition> -->
 
-  <OpenProductCard
+  <!-- <OpenProductCard
     v-if="openCard"
     :id="activeOpenCard.id"
     :imageUrl="activeOpenCard.imageUrl"
@@ -33,19 +65,19 @@ import Notification from './Notification.vue'
     :isAdded="activeOpenCard.isAdded"
     :onProductsInBasket="() => addOrRemoveProductFromIsAdded(activeOpenCard)"
     :onFavoriteProducts="() => addOrRemoveProductFromFavorites(activeOpenCard)"
-  />
+  /> -->
 
   <div
     class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-12 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
   >
     <HeaderOnlineStore />
 
-    <Bookmarks v-if="openBookmarks" />
-    <ProfileContent v-if="openProfile" />
-    <template v-if="openAllProducts">
-      <Slider />
-      <AllProducts />
-    </template>
+    <!-- <Bookmarks v-if="openBookmarks" />
+    <ProfileContent v-if="openProfile" /> -->
+    <!-- <template v-if="openAllProducts"> -->
+    <Slider />
+    <AllProducts :products="products" />
+    <!-- </template> -->
   </div>
 </template>
 
