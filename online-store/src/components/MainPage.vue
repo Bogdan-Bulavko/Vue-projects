@@ -102,16 +102,15 @@ onMounted(async () => {
       :onBasketProducts="onBasketProducts"
     />
     <!-- <ProfileContent v-if="openProfile" /> -->
-    <!-- <template v-if="openAllProducts"> -->
-    <Slider />
-    <AllProducts
-      v-if="activeBlock === 'allProducts'"
-      :activeBlock="activeBlock"
-      :products="products"
-      :onFavoriteProducts="onFavoriteProducts"
-      :onBasketProducts="onBasketProducts"
-    />
-    <!-- </template> -->
+    <template v-if="activeBlock === 'allProducts'">
+      <Slider />
+      <AllProducts
+        :activeBlock="activeBlock"
+        :products="products"
+        :onFavoriteProducts="onFavoriteProducts"
+        :onBasketProducts="onBasketProducts"
+      />
+    </template>
   </div>
 </template>
 

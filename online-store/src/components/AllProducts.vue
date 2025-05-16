@@ -9,6 +9,7 @@ const { products } = defineProps<{
   activeBlock: string
   products: Product[]
   onFavoriteProducts: (product: Product) => void
+  onBasketProducts: (product: Product) => void
 }>()
 
 const sortingProducts: Ref<Product[] | []> = ref([])
@@ -107,8 +108,9 @@ watch(
     </div>
     <CardList
       :products="sortingProducts"
-      :onFavoriteProducts="onFavoriteProducts"
       :activeBlock="activeBlock"
+      :onFavoriteProducts="onFavoriteProducts"
+      :onBasketProducts="onBasketProducts"
     />
   </section>
 </template>
