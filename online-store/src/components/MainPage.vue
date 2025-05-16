@@ -16,6 +16,8 @@ import type { Ref } from 'vue'
 import { Product } from 'src/types/product.types'
 
 const products: Ref<Product[] | []> = ref([])
+const localFavorite: Ref<number[]> = ref([])
+const localBasket: Ref<number[]> = ref([])
 const activeBlock: Ref<string> = ref('allProducts')
 
 const getProductsFetch = async (): Promise<Product[]> => {
@@ -28,8 +30,8 @@ const getProductsFetch = async (): Promise<Product[]> => {
     const products: Product[] = data.map((product: Product) => {
       return {
         ...product,
-        isAdded: false,
-        isFavorite: false,
+        isAdded: localBasket.value.includes(product.id),
+        isFavorite: localFavorite.value.includes(product.id),
       }
     })
 
@@ -42,26 +44,77 @@ const getProductsFetch = async (): Promise<Product[]> => {
 
 const onActiveBlock = (e: Event): void => {
   const target = e.currentTarget as HTMLElement
-  const id: string = target.id
-  switch (id) {
+  const dataAtribute: string | undefined = target.dataset.id
+
+  switch (dataAtribute) {
     case 'allProducts':
-      activeBlock.value = target.id
+      activeBlock.value = dataAtribute
       break
     case 'bookmarks':
-      activeBlock.value = target.id
+      activeBlock.value = dataAtribute
       break
   }
 }
 
 const onFavoriteProducts = (product: Product): void => {
   product.isFavorite = !product.isFavorite
+  updateLocalFavorite(product.id)
 }
 
 const onBasketProducts = (product: Product): void => {
   product.isAdded = !product.isAdded
+  updateLocalBasket(product.id)
+}
+
+const updateLocalFavorite = (id: number | undefined = undefined): void => {
+  const localStorageValue: number[] | null = JSON.parse(localStorage.getItem('favorite') as string)
+
+  if (Array.isArray(localStorageValue)) {
+    localFavorite.value = localStorageValue
+  }
+
+  if (typeof id === 'number') {
+    if (localFavorite.value.includes(id)) {
+      localFavorite.value = localFavorite.value.filter((product) => {
+        if (product !== id) {
+          return product
+        }
+      })
+
+      localStorage.setItem('favorite', JSON.stringify(localFavorite.value))
+    } else {
+      localFavorite.value = [...localFavorite.value, id]
+      localStorage.setItem('favorite', JSON.stringify(localFavorite.value))
+    }
+  }
+}
+
+const updateLocalBasket = (id: number | undefined = undefined): void => {
+  const localStorageValue: number[] | null = JSON.parse(localStorage.getItem('basket') as string)
+
+  if (Array.isArray(localStorageValue)) {
+    localBasket.value = localStorageValue
+  }
+
+  if (typeof id === 'number') {
+    if (localBasket.value.includes(id)) {
+      localBasket.value = localBasket.value.filter((product) => {
+        if (product !== id) {
+          return product
+        }
+      })
+
+      localStorage.setItem('basket', JSON.stringify(localBasket.value))
+    } else {
+      localBasket.value = [...localBasket.value, id]
+      localStorage.setItem('basket', JSON.stringify(localBasket.value))
+    }
+  }
 }
 
 onMounted(async () => {
+  updateLocalFavorite()
+  updateLocalBasket()
   products.value = await getProductsFetch()
 })
 </script>
@@ -98,8 +151,10 @@ onMounted(async () => {
       v-if="activeBlock === 'bookmarks'"
       :activeBlock="activeBlock"
       :products="products"
+      :localFavorite="localFavorite"
       :onFavoriteProducts="onFavoriteProducts"
       :onBasketProducts="onBasketProducts"
+      :onActiveBlock="onActiveBlock"
     />
     <!-- <ProfileContent v-if="openProfile" /> -->
     <template v-if="activeBlock === 'allProducts'">

@@ -6,7 +6,7 @@ defineProps<{ onActiveBlock: (e: Event) => void }>()
     class="/* Layout */ min-[320px]:block md:flex justify-between border-b pb-6 /* Typography */ /* Border */ border-slate-300 /* Background */ /* Effects */"
   >
     <div
-      id="allProducts"
+      data-id="allProducts"
       class="/* Layout */ flex items-center min-[320px]:justify-center min-[320px]:mb-6 cursor-pointer /* Typography */"
       @click="onActiveBlock"
     >
@@ -29,7 +29,7 @@ defineProps<{ onActiveBlock: (e: Event) => void }>()
         <b class="/* Typography */ text-gray-500 hover:text-black">{{ totalPrice }} руб.</b>
       </li>
       <li
-        id="bookmarks"
+        data-id="bookmarks"
         class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
         @click="onActiveBlock"
       >

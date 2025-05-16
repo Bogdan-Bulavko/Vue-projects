@@ -72,7 +72,7 @@ watch(
 </script>
 
 <template>
-  <section id="allProducts">
+  <section data-id="allProducts">
     <div
       class="/* Layout */ flex gap-4 mb-11 p-2 md:justify-between md:flex-row min-[320px]:flex-col /* Border */ /* Background */ /* Effects */"
     >
