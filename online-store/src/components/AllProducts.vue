@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import CardList from './CardList.vue'
 
 import type { Ref } from 'vue'
 import type { Product } from 'src/types/product.types'
 
-const { products } = defineProps<{ products: Product[] }>()
+const { products } = defineProps<{
+  activeBlock: string
+  products: Product[]
+  onFavoriteProducts: (product: Product) => void
+}>()
 
-const sortingProducts: Ref<Product[]> = ref([...products])
+const sortingProducts: Ref<Product[] | []> = ref([])
 
 const changeSorting = (e: Event): void => {
   const target = e.target as HTMLSelectElement
   const selectedOptions = target.options as HTMLOptionsCollection
   const id: string = selectedOptions[target.selectedIndex].id
-
   switch (id) {
     case 'name':
       sortingProducts.value.sort((a: Product, b: Product): number => {
@@ -55,10 +58,20 @@ const searchProduct = (e: Event): void => {
     }
   })
 }
+
+watch(
+  () => products,
+  (newProducts) => {
+    if (newProducts.length > 0) {
+      sortingProducts.value = [...newProducts]
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
-  <section>
+  <section id="allProducts">
     <div
       class="/* Layout */ flex gap-4 mb-11 p-2 md:justify-between md:flex-row min-[320px]:flex-col /* Border */ /* Background */ /* Effects */"
     >
@@ -92,7 +105,11 @@ const searchProduct = (e: Event): void => {
         </div>
       </div>
     </div>
-    <CardList :products="sortingProducts" />
+    <CardList
+      :products="sortingProducts"
+      :onFavoriteProducts="onFavoriteProducts"
+      :activeBlock="activeBlock"
+    />
   </section>
 </template>
 

@@ -3,7 +3,7 @@ import AllProducts from './AllProducts.vue'
 // import Basket from './Basket.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
-// import Bookmarks from './Bookmarks.vue'
+import Bookmarks from './Bookmarks.vue'
 // import OpenProductCard from './OpenProductCard.vue'
 // import Register from './Register.vue'
 // import Login from './Login.vue'
@@ -15,7 +15,8 @@ import type { Ref } from 'vue'
 
 import { Product } from 'src/types/product.types'
 
-const products: Ref<Product[] | null> = ref(null)
+const products: Ref<Product[] | []> = ref([])
+const activeBlock: Ref<string> = ref('allProducts')
 
 const getProductsFetch = async (): Promise<Product[]> => {
   try {
@@ -37,6 +38,27 @@ const getProductsFetch = async (): Promise<Product[]> => {
     console.error(error)
     return []
   }
+}
+
+const onActiveBlock = (e: Event): void => {
+  const target = e.currentTarget as HTMLElement
+  const id: string = target.id
+  switch (id) {
+    case 'allProducts':
+      activeBlock.value = target.id
+      break
+    case 'bookmarks':
+      activeBlock.value = target.id
+      break
+  }
+}
+
+const onFavoriteProducts = (product: Product): void => {
+  product.isFavorite = !product.isFavorite
+}
+
+const onBasketProducts = (product: Product): void => {
+  product.isAdded = !product.isAdded
 }
 
 onMounted(async () => {
@@ -70,13 +92,25 @@ onMounted(async () => {
   <div
     class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-12 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
   >
-    <HeaderOnlineStore />
+    <HeaderOnlineStore :onActiveBlock="onActiveBlock" />
 
-    <!-- <Bookmarks v-if="openBookmarks" />
-    <ProfileContent v-if="openProfile" /> -->
+    <Bookmarks
+      v-if="activeBlock === 'bookmarks'"
+      :activeBlock="activeBlock"
+      :products="products"
+      :onFavoriteProducts="onFavoriteProducts"
+      :onBasketProducts="onBasketProducts"
+    />
+    <!-- <ProfileContent v-if="openProfile" /> -->
     <!-- <template v-if="openAllProducts"> -->
     <Slider />
-    <AllProducts :products="products" />
+    <AllProducts
+      v-if="activeBlock === 'allProducts'"
+      :activeBlock="activeBlock"
+      :products="products"
+      :onFavoriteProducts="onFavoriteProducts"
+      :onBasketProducts="onBasketProducts"
+    />
     <!-- </template> -->
   </div>
 </template>

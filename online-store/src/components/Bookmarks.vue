@@ -1,9 +1,17 @@
-<script setup>
-import BookMarksCardList from './BookMarksCardList.vue'
+<script setup lang="ts">
+import CardList from './CardList.vue'
+import type { Product } from 'src/types/product.types'
+
+defineProps<{
+  activeBlock: string
+  products: Product[]
+  onFavoriteProducts: (product: Product) => void
+  onBasketProducts: (product: Product) => void
+}>()
 </script>
 
 <template>
-  <section class="/* Layout */ mt-5 h-full">
+  <section class="/* Layout */ mt-5 h-full" id="bookmarks">
     <div
       v-if="notEmptyBookMarks"
       class="/* Layout */ h-full flex flex-col items-center justify-center text-center"
@@ -23,7 +31,12 @@ import BookMarksCardList from './BookMarksCardList.vue'
       <h2 class="/* Typography */ text-4xl font-bold /* Layout */ md:mb-0 min-[375px]:mb-5">
         Закладки
       </h2>
-      <BookMarksCardList />
+      <CardList
+        :products="products"
+        :activeBlock="activeBlock"
+        :onFavoriteProducts="onFavoriteProducts"
+        :onBasketProducts="onBasketProducts"
+      />
     </template>
   </section>
 </template>

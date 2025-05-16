@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import type { Product } from 'src/types/product.types'
-defineProps<Product>()
+defineProps<{
+  id: number
+  imageUrl: string
+  title: string
+  price: number
+  isFavorite: boolean
+  isAdded: boolean
+  onFavoriteProducts: (product: Product) => void
+  onBasketProducts: (product: Product) => void
+}>()
 </script>
 
 <template>
@@ -14,7 +23,7 @@ defineProps<Product>()
         class="/* Layout */ z-10"
         :src="isFavorite ? 'like-2.svg' : 'like-1.svg'"
         alt="button like"
-        @click.stop="onFavoriteProducts"
+        @click="onFavoriteProducts"
       />
       <img
         class="/* Layout */ block w-[133px] h-[112px] mb-4"
@@ -31,7 +40,7 @@ defineProps<Product>()
           class="/* Layout */ block"
           :src="isAdded ? 'checked.svg' : 'plus.svg'"
           alt="Add Product"
-          @click.stop="onProductsInBasket"
+          @click.stop="onBasketProducts"
         />
       </div>
     </article>
