@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ onActiveBlock: (e: Event) => void }>()
+defineProps<{ totalPrice: number; onActiveBlock: (e: Event) => void }>()
 </script>
 <template>
   <header
@@ -22,8 +22,9 @@ defineProps<{ onActiveBlock: (e: Event) => void }>()
       class="/* Layout */ flex gap-2.5 min-[320px]:justify-center min-[320px]:items-start md:items-center /* Typography */"
     >
       <li
+        data-id="basket"
         class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
-        @click="openOrCloseBusket"
+        @click="onActiveBlock"
       >
         <img src="/cart.svg" alt="Cart" />
         <b class="/* Typography */ text-gray-500 hover:text-black">{{ totalPrice }} руб.</b>

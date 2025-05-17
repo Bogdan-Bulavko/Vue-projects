@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AllProducts from './AllProducts.vue'
-// import Basket from './Basket.vue'
+import Basket from './Basket.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
@@ -10,7 +10,7 @@ import Bookmarks from './Bookmarks.vue'
 // import ProfileContent from './ProfileContent.vue'
 // import Notification from './Notification.vue'
 
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
 
 import { Product } from 'src/types/product.types'
@@ -19,6 +19,19 @@ const products: Ref<Product[] | []> = ref([])
 const localFavorite: Ref<number[]> = ref([])
 const localBasket: Ref<number[]> = ref([])
 const activeBlock: Ref<string> = ref('allProducts')
+const activeBasket: Ref<boolean> = ref(false)
+
+const totalPrice = computed<number>(() =>
+  products.value.reduce((acc, product) => {
+    if (product.isAdded) {
+      acc += product.price
+      localStorage.setItem('totalPrice', String(acc))
+      return acc
+    }
+    localStorage.setItem('totalPrice', String(acc))
+    return acc
+  }, 0),
+)
 
 const getProductsFetch = async (): Promise<Product[]> => {
   try {
@@ -45,14 +58,17 @@ const getProductsFetch = async (): Promise<Product[]> => {
 const onActiveBlock = (e: Event): void => {
   const target = e.currentTarget as HTMLElement
   const dataAtribute: string | undefined = target.dataset.id
-
-  switch (dataAtribute) {
-    case 'allProducts':
-      activeBlock.value = dataAtribute
-      break
-    case 'bookmarks':
-      activeBlock.value = dataAtribute
-      break
+  if (dataAtribute === 'basket') {
+    activeBasket.value = !activeBasket.value
+  } else {
+    switch (dataAtribute) {
+      case 'allProducts':
+        activeBlock.value = dataAtribute
+        break
+      case 'bookmarks':
+        activeBlock.value = dataAtribute
+        break
+    }
   }
 }
 
@@ -115,6 +131,7 @@ const updateLocalBasket = (id: number | undefined = undefined): void => {
 onMounted(async () => {
   updateLocalFavorite()
   updateLocalBasket()
+
   products.value = await getProductsFetch()
 })
 </script>
@@ -125,10 +142,18 @@ onMounted(async () => {
   </Transition> -->
 
   <!-- <Register v-if="openFormRegister"></Register>
-  <Login v-if="openFormLogin"></Login>
+  <Login v-if="openFormLogin"></Login> -->
+
   <Transition name="fade">
-    <Basket v-if="openBasket" />
-  </Transition> -->
+    <Basket
+      v-if="activeBasket"
+      :products="products"
+      :localBasket="localBasket"
+      :totalPrice="totalPrice"
+      :onBasketProducts="onBasketProducts"
+      :onActiveBlock="onActiveBlock"
+    />
+  </Transition>
 
   <!-- <OpenProductCard
     v-if="openCard"
@@ -145,7 +170,7 @@ onMounted(async () => {
   <div
     class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-12 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
   >
-    <HeaderOnlineStore :onActiveBlock="onActiveBlock" />
+    <HeaderOnlineStore :totalPrice="totalPrice" :onActiveBlock="onActiveBlock" />
 
     <Bookmarks
       v-if="activeBlock === 'bookmarks'"

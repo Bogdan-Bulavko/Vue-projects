@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+
 import CardList from './CardList.vue'
 
 import type { Ref } from 'vue'
