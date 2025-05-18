@@ -7,10 +7,7 @@ import type { Ref } from 'vue'
 import type { Product } from 'src/types/product.types'
 
 const { products } = defineProps<{
-  activeBlock: string
   products: Product[]
-  onFavoriteProducts: (product: Product) => void
-  onBasketProducts: (product: Product) => void
 }>()
 
 const sortingProducts: Ref<Product[] | []> = ref([])
@@ -107,12 +104,7 @@ watch(
         </div>
       </div>
     </div>
-    <CardList
-      :products="sortingProducts"
-      :activeBlock="activeBlock"
-      :onFavoriteProducts="onFavoriteProducts"
-      :onBasketProducts="onBasketProducts"
-    />
+    <CardList :sortingProducts="sortingProducts" />
   </section>
 </template>
 

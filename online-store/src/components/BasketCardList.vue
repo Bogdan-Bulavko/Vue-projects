@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { inject } from 'vue'
+
 import BasketCardProduct from './BasketCardProduct.vue'
 
 import type { Product } from 'src/types/product.types'
 
-defineProps<{ products: Product[]; onBasketProducts: (product: Product) => void }>()
+const products = inject<Product[]>('products')
+const onBasketProducts = inject('onBasketProducts') as (product: Product) => void
+const onOpenCardProduct = inject('onOpenCardProduct') as (product: Product) => void
 </script>
 
 <template>
@@ -18,14 +22,15 @@ defineProps<{ products: Product[]; onBasketProducts: (product: Product) => void 
           :title="product.title"
           :price="product.price"
           :onBasketProducts="() => onBasketProducts(product)"
+          :onOpenCardProduct="() => onOpenCardProduct(product)"
         />
       </template>
     </TransitionGroup>
   </ul>
 </template>
 <!-- 
-          :onDeleteCard="() => addOrRemoveProductFromIsAdded(product)"
-          :onOpenCard="() => openOrCloseCard(product)" -->
+
+          :-->
 
 <style scoped>
 .list-enter-active,

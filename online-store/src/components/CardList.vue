@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { inject } from 'vue'
 import CardProduct from './CardProduct.vue'
 
 import type { Product } from 'src/types/product.types'
 
-defineProps<{
-  products: Product[]
-  activeBlock: string
-  onFavoriteProducts: (product: Product) => void
-  onBasketProducts: (product: Product) => void
-}>()
+defineProps<{ sortingProducts?: Product[] }>()
+
+const products = inject<Product[]>('products')
+
+const activeBlock = inject<string>('activeBlock')
+
+const onFavoriteProducts = inject('onFavoriteProducts') as (product: Product) => void
+const onBasketProducts = inject('onBasketProducts') as (product: Product) => void
+const onOpenCardProduct = inject('onOpenCardProduct') as (product: Product) => void
 </script>
 
 <template>
@@ -18,7 +22,7 @@ defineProps<{
   >
     <TransitionGroup name="list">
       <CardProduct
-        v-for="product in products"
+        v-for="product in sortingProducts"
         :key="product.id"
         :id="product.id"
         :imageUrl="product.imageUrl"
@@ -28,6 +32,7 @@ defineProps<{
         :isAdded="product.isAdded"
         :onFavoriteProducts="() => onFavoriteProducts(product)"
         :onBasketProducts="() => onBasketProducts(product)"
+        :onOpenCardProduct="() => onOpenCardProduct(product)"
       />
     </TransitionGroup>
   </ul>
@@ -48,15 +53,13 @@ defineProps<{
           :isAdded="product.isAdded"
           :onFavoriteProducts="() => onFavoriteProducts(product)"
           :onBasketProducts="() => onBasketProducts(product)"
+          :onOpenCardProduct="() => onOpenCardProduct(product)"
         />
       </template>
     </TransitionGroup>
   </ul>
 </template>
 
-<!-- 
-        
-        :onOpenCard="() => openOrCloseCard(product)" -->
 <style scoped>
 .list-enter-active,
 .list-leave-active {

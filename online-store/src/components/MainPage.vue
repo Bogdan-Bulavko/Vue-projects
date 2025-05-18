@@ -4,21 +4,23 @@ import Basket from './Basket.vue'
 import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
-// import OpenProductCard from './OpenProductCard.vue'
+import OpenProductCard from './OpenProductCard.vue'
 // import Register from './Register.vue'
 // import Login from './Login.vue'
 // import ProfileContent from './ProfileContent.vue'
 // import Notification from './Notification.vue'
 
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, provide, ref } from 'vue'
 import type { Ref } from 'vue'
 
 import { Product } from 'src/types/product.types'
 
 const products: Ref<Product[] | []> = ref([])
+const activeOpenCard: Ref<Product> = ref(products.value[0])
 const localFavorite: Ref<number[]> = ref([])
 const localBasket: Ref<number[]> = ref([])
 const activeBlock: Ref<string> = ref('allProducts')
+const openCard: Ref<boolean> = ref(false)
 const activeBasket: Ref<boolean> = ref(false)
 const TAXPRODUCT: number = 5
 
@@ -134,12 +136,30 @@ const updateLocalBasket = (id: number | undefined = undefined): void => {
   }
 }
 
+const onOpenCardProduct = (product: Product | undefined = undefined): void => {
+  openCard.value = !openCard.value
+  if (product) {
+    activeOpenCard.value = product
+  }
+}
+
 onMounted(async () => {
   updateLocalFavorite()
   updateLocalBasket()
 
   products.value = await getProductsFetch()
 })
+//CardList(BookMarks) end BasketCardList
+provide('products', products)
+//BasketResult
+provide('totalPrice', totalPrice)
+provide('calculateTaxTotalPrice', calculateTaxTotalPrice)
+provide('TAXPRODUCT', TAXPRODUCT)
+//BasketCardList end CardList
+provide('activeBlock', activeBlock)
+provide('onFavoriteProducts', onFavoriteProducts)
+provide('onBasketProducts', onBasketProducts)
+provide('onOpenCardProduct', onOpenCardProduct)
 </script>
 
 <template>
@@ -151,19 +171,10 @@ onMounted(async () => {
   <Login v-if="openFormLogin"></Login> -->
 
   <Transition name="fade">
-    <Basket
-      v-if="activeBasket"
-      :products="products"
-      :localBasket="localBasket"
-      :totalPrice="totalPrice"
-      :calculateTaxTotalPrice="calculateTaxTotalPrice"
-      :TAXPRODUCT="TAXPRODUCT"
-      :onBasketProducts="onBasketProducts"
-      :onActiveBlock="onActiveBlock"
-    />
+    <Basket v-if="activeBasket" :localBasket="localBasket" :onActiveBlock="onActiveBlock" />
   </Transition>
 
-  <!-- <OpenProductCard
+  <OpenProductCard
     v-if="openCard"
     :id="activeOpenCard.id"
     :imageUrl="activeOpenCard.imageUrl"
@@ -171,9 +182,10 @@ onMounted(async () => {
     :price="activeOpenCard.price"
     :isFavorite="activeOpenCard.isFavorite"
     :isAdded="activeOpenCard.isAdded"
-    :onProductsInBasket="() => addOrRemoveProductFromIsAdded(activeOpenCard)"
-    :onFavoriteProducts="() => addOrRemoveProductFromFavorites(activeOpenCard)"
-  /> -->
+    :onBasketProducts="() => onBasketProducts(activeOpenCard)"
+    :onFavoriteProducts="() => onFavoriteProducts(activeOpenCard)"
+    :onOpenCardProduct="onOpenCardProduct"
+  />
 
   <div
     class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-12 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
@@ -185,22 +197,13 @@ onMounted(async () => {
 
     <Bookmarks
       v-if="activeBlock === 'bookmarks'"
-      :activeBlock="activeBlock"
-      :products="products"
       :localFavorite="localFavorite"
-      :onFavoriteProducts="onFavoriteProducts"
-      :onBasketProducts="onBasketProducts"
       :onActiveBlock="onActiveBlock"
     />
     <!-- <ProfileContent v-if="openProfile" /> -->
     <template v-if="activeBlock === 'allProducts'">
       <Slider />
-      <AllProducts
-        :activeBlock="activeBlock"
-        :products="products"
-        :onFavoriteProducts="onFavoriteProducts"
-        :onBasketProducts="onBasketProducts"
-      />
+      <AllProducts :activeBlock="activeBlock" :products="products" />
     </template>
   </div>
 </template>

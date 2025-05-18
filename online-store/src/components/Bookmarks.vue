@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import CardList from './CardList.vue'
-import type { Product } from 'src/types/product.types'
 
 defineProps<{
-  activeBlock: string
-  products: Product[]
   localFavorite: number[]
-  onFavoriteProducts: (product: Product) => void
-  onBasketProducts: (product: Product) => void
   onActiveBlock: (e: Event) => void
 }>()
 </script>
@@ -33,12 +28,7 @@ defineProps<{
       <h2 class="/* Typography */ text-4xl font-bold /* Layout */ md:mb-0 min-[375px]:mb-5">
         Закладки
       </h2>
-      <CardList
-        :products="products"
-        :activeBlock="activeBlock"
-        :onFavoriteProducts="onFavoriteProducts"
-        :onBasketProducts="onBasketProducts"
-      />
+      <CardList />
     </template>
   </section>
 </template>

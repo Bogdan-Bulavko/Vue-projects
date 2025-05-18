@@ -1,9 +1,9 @@
 <script setup lang="ts">
-defineProps<{
-  totalPrice: number
-  calculateTaxTotalPrice: number
-  TAXPRODUCT: number
-}>()
+import { inject } from 'vue'
+
+const totalPrice = inject<number>('totalPrice')
+const calculateTaxTotalPrice = inject<number>('calculateTaxTotalPrice')
+const TAXPRODUCT = inject<number>('TAXPRODUCT')
 </script>
 
 <template>

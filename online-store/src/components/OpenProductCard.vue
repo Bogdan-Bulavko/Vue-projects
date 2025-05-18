@@ -1,17 +1,29 @@
-<script setup></script>
+<script setup lang="ts">
+defineProps<{
+  id: number
+  imageUrl: string
+  title: string
+  price: number
+  isFavorite: boolean
+  isAdded: boolean
+  onFavoriteProducts: () => void
+  onBasketProducts: () => void
+  onOpenCardProduct: () => void
+}>()
+</script>
 
 <template>
   <section>
     <div
       class="/* Layout */ fixed top-0 left-0 z-10 w-full h-full /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
-      @click="openOrCloseCard"
+      @click="onOpenCardProduct"
     ></div>
     <div
       class="/* Layout */ fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
     >
       <article
         class="/* Layout */ relative w-[350px] rounded-3xl border hover:shadow-xl transition z-10 /* Typography */ /* Border */ border-gray-100 /* Background */ bg-white /* Effects */ pb-9 px-9 pt-6"
-        :id="id"
+        :id="String(id)"
       >
         <img
           class="/* Layout */ absolute left-9 block w-14"
@@ -34,7 +46,7 @@
           class="/* Layout */ absolute bottom-9 right-9 block"
           :src="isAdded ? 'checked.svg' : 'plus.svg'"
           alt="Added Product"
-          @click="onProductsInBasket"
+          @click="onBasketProducts"
         />
       </article>
     </div>
