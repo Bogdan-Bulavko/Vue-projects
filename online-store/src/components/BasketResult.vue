@@ -1,6 +1,9 @@
 <script setup lang="ts">
-defineProps<{ totalPrice: number }>()
-const TAXPRODUCT = 5
+defineProps<{
+  totalPrice: number
+  calculateTaxTotalPrice: number
+  TAXPRODUCT: number
+}>()
 </script>
 
 <template>
@@ -10,11 +13,11 @@ const TAXPRODUCT = 5
       <div class="/* Layout */ flex-1 /* Border */ border-b border-dashed border-[#DFDFDF]"></div>
       <b> {{ totalPrice }} ₽</b>
     </div>
-    <!-- <div class="/* Layout */ flex gap-2">
+    <div class="/* Layout */ flex gap-2">
       <span class="/* Typography */ text-[16px]">Налог {{ TAXPRODUCT }}%:</span>
       <div class="/* Layout */ flex-1 /* Border */ border-b border-dashed border-[#DFDFDF]"></div>
-      <b>{{ tax }} ₽</b>
-    </div> -->
+      <b>{{ calculateTaxTotalPrice }} ₽</b>
+    </div>
     <button
       @click="placeAnOrder"
       class="/* Layout */ mt-7 max-w-full w-full inline-block rounded-3xl py-4 /* Typography */ text-white /* Border */ /* Background */ bg-[#A5D364] /* Effects */"

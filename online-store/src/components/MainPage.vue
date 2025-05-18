@@ -20,18 +20,23 @@ const localFavorite: Ref<number[]> = ref([])
 const localBasket: Ref<number[]> = ref([])
 const activeBlock: Ref<string> = ref('allProducts')
 const activeBasket: Ref<boolean> = ref(false)
+const TAXPRODUCT: number = 5
 
 const totalPrice = computed<number>(() =>
   products.value.reduce((acc, product) => {
     if (product.isAdded) {
       acc += product.price
-      localStorage.setItem('totalPrice', String(acc))
       return acc
     }
-    localStorage.setItem('totalPrice', String(acc))
     return acc
   }, 0),
 )
+
+const calculateTaxTotalPrice = computed<number>(() => {
+  const result = Math.floor(totalPrice.value + (totalPrice.value / 100) * TAXPRODUCT)
+  localStorage.setItem('taxTotalPrice', String(result))
+  return result
+})
 
 const getProductsFetch = async (): Promise<Product[]> => {
   try {
@@ -58,6 +63,7 @@ const getProductsFetch = async (): Promise<Product[]> => {
 const onActiveBlock = (e: Event): void => {
   const target = e.currentTarget as HTMLElement
   const dataAtribute: string | undefined = target.dataset.id
+
   if (dataAtribute === 'basket') {
     activeBasket.value = !activeBasket.value
   } else {
@@ -150,6 +156,8 @@ onMounted(async () => {
       :products="products"
       :localBasket="localBasket"
       :totalPrice="totalPrice"
+      :calculateTaxTotalPrice="calculateTaxTotalPrice"
+      :TAXPRODUCT="TAXPRODUCT"
       :onBasketProducts="onBasketProducts"
       :onActiveBlock="onActiveBlock"
     />
@@ -170,7 +178,10 @@ onMounted(async () => {
   <div
     class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-12 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
   >
-    <HeaderOnlineStore :totalPrice="totalPrice" :onActiveBlock="onActiveBlock" />
+    <HeaderOnlineStore
+      :calculateTaxTotalPrice="calculateTaxTotalPrice"
+      :onActiveBlock="onActiveBlock"
+    />
 
     <Bookmarks
       v-if="activeBlock === 'bookmarks'"

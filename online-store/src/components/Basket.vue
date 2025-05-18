@@ -8,6 +8,8 @@ defineProps<{
   products: Product[]
   localBasket: number[]
   totalPrice: number
+  calculateTaxTotalPrice: number
+  TAXPRODUCT: number
   onBasketProducts: (product: Product) => void
   onActiveBlock: (e: Event) => void
 }>()
@@ -48,7 +50,11 @@ defineProps<{
 
         <div class="/* Layout */ h-full flex flex-col justify-between pb-9">
           <BasketCardList :products="products" :onBasketProducts="onBasketProducts" />
-          <BasketResult :totalPrice="totalPrice" />
+          <BasketResult
+            :totalPrice="totalPrice"
+            :calculateTaxTotalPrice="calculateTaxTotalPrice"
+            :TAXPRODUCT="TAXPRODUCT"
+          />
         </div>
       </template>
       <!-- <div

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ totalPrice: number; onActiveBlock: (e: Event) => void }>()
+defineProps<{ calculateTaxTotalPrice: number; onActiveBlock: (e: Event) => void }>()
 </script>
 <template>
   <header
@@ -27,7 +27,9 @@ defineProps<{ totalPrice: number; onActiveBlock: (e: Event) => void }>()
         @click="onActiveBlock"
       >
         <img src="/cart.svg" alt="Cart" />
-        <b class="/* Typography */ text-gray-500 hover:text-black">{{ totalPrice }} руб.</b>
+        <b class="/* Typography */ text-gray-500 hover:text-black"
+          >{{ calculateTaxTotalPrice }} руб.</b
+        >
       </li>
       <li
         data-id="bookmarks"
