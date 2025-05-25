@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { inject } from 'vue'
+// Pinia Store
 
-const totalPrice = inject<number>('totalPrice')
-const calculateTaxTotalPrice = inject<number>('calculateTaxTotalPrice')
-const TAXPRODUCT = inject<number>('TAXPRODUCT')
+import { useProductStore } from '/src/store/productsStore'
+
+const storeProducts = useProductStore()
 </script>
 
 <template>
@@ -11,12 +11,12 @@ const TAXPRODUCT = inject<number>('TAXPRODUCT')
     <div class="/* Layout */ flex gap-2">
       <span class="/* Typography */ text-[16px]">Итого:</span>
       <div class="/* Layout */ flex-1 /* Border */ border-b border-dashed border-[#DFDFDF]"></div>
-      <b> {{ totalPrice }} ₽</b>
+      <b> {{ storeProducts.totalPrice }} ₽</b>
     </div>
     <div class="/* Layout */ flex gap-2">
-      <span class="/* Typography */ text-[16px]">Налог {{ TAXPRODUCT }}%:</span>
+      <span class="/* Typography */ text-[16px]">Налог {{ storeProducts.TAXPRODUCT }}%:</span>
       <div class="/* Layout */ flex-1 /* Border */ border-b border-dashed border-[#DFDFDF]"></div>
-      <b>{{ calculateTaxTotalPrice }} ₽</b>
+      <b>{{ storeProducts.calculateTaxTotalPrice }} ₽</b>
     </div>
     <button
       @click="placeAnOrder"

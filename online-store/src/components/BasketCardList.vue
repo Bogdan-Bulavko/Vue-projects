@@ -1,22 +1,25 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-
+// Components
 import BasketCardProduct from './BasketCardProduct.vue'
 
+// Types
 import type { Product } from 'src/types/product.types'
 
-const products = inject<Product[]>('products')
-const onBasketProducts = inject('onBasketProducts') as (product: Product) => void
-const onActiveBlockAboveContent = inject('onActiveBlockAboveContent') as (
-  e: Event,
-  product: Product,
-) => void
+// Pinia store
+import { useActiveBlockStore } from '@/store/activeBlockStore'
+import { useProductStore } from '@/store/productsStore'
+
+const storeActiveBlock = useActiveBlockStore()
+const { onActiveBlockAboveContent } = storeActiveBlock
+
+const storeProducts = useProductStore()
+const { onBasketProducts } = storeProducts
 </script>
 
 <template>
   <ul class="/* Layout */ overflow-auto overflow-x-hidden">
     <TransitionGroup name="list">
-      <template v-for="product in products">
+      <template v-for="product in storeProducts.products">
         <BasketCardProduct
           v-if="product.isAdded"
           :key="product.id"

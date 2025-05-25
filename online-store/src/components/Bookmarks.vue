@@ -1,16 +1,21 @@
 <script setup lang="ts">
+//  Components
 import CardList from './CardList.vue'
 
-defineProps<{
-  localFavorite: number[]
-  onActiveBlock: (e: Event) => void
-}>()
+// Pinia store
+import { useActiveBlockStore } from '/src/store/activeBlockStore'
+import { useProductStore } from '/src/store/productsStore'
+
+const storeActiveBlock = useActiveBlockStore()
+const { onActiveBlock } = storeActiveBlock
+
+const storeProduct = useProductStore()
 </script>
 
 <template>
   <section class="/* Layout */ mt-5 h-full" id="bookmarks">
     <div
-      v-if="localFavorite.length === 0"
+      v-if="storeProduct.localFavorite.length === 0"
       class="/* Layout */ h-full flex flex-col items-center justify-center text-center"
     >
       <img class="/* Layout */ inline w-[70px] mb-8" src="/public/emoji-1.png" />

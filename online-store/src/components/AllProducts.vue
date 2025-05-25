@@ -1,14 +1,17 @@
 <script setup lang="ts">
+// Vue lib
 import { ref, watch } from 'vue'
 
+// Components
 import CardList from './CardList.vue'
 
+// Types
 import type { Ref } from 'vue'
 import type { Product } from 'src/types/product.types'
 
-const { products } = defineProps<{
-  products: Product[]
-}>()
+import { useProductStore } from '/src/store/productsStore'
+
+const storeProducts = useProductStore()
 
 const sortingProducts: Ref<Product[] | []> = ref([])
 
@@ -39,7 +42,7 @@ const changeSorting = (e: Event): void => {
       })
       break
     case 'default':
-      sortingProducts.value = [...products]
+      sortingProducts.value = [...storeProducts.products]
       break
   }
 }
@@ -47,10 +50,10 @@ const changeSorting = (e: Event): void => {
 const searchProduct = (e: Event): void => {
   const target = e.target as HTMLInputElement
   if (target.value === '') {
-    sortingProducts.value = [...products]
+    sortingProducts.value = [...storeProducts.products]
   }
 
-  sortingProducts.value = [...products].filter((product) => {
+  sortingProducts.value = [...storeProducts.products].filter((product) => {
     const regex = new RegExp(target.value, 'i')
     if (regex.test(product.title)) {
       return product
@@ -59,7 +62,7 @@ const searchProduct = (e: Event): void => {
 }
 
 watch(
-  () => products,
+  () => storeProducts.products,
   (newProducts) => {
     if (newProducts.length > 0) {
       sortingProducts.value = [...newProducts]

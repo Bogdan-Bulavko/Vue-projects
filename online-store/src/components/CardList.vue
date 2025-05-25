@@ -1,26 +1,25 @@
 <script setup lang="ts">
-import { inject } from 'vue'
+// Pinia Store
+import { useActiveBlockStore } from '/src/store/activeBlockStore'
+import { useProductStore } from '/src/store/productsStore'
+// Components
 import CardProduct from './CardProduct.vue'
 
+// Types
 import type { Product } from 'src/types/product.types'
 
 defineProps<{ sortingProducts?: Product[] }>()
 
-const products = inject<Product[]>('products')
+const storeActiveBlock = useActiveBlockStore()
+const { onActiveBlockAboveContent } = storeActiveBlock
 
-const activeBlock = inject<string>('activeBlock')
-
-const onFavoriteProducts = inject('onFavoriteProducts') as (product: Product) => void
-const onBasketProducts = inject('onBasketProducts') as (product: Product) => void
-const onActiveBlockAboveContent = inject('onActiveBlockAboveContent') as (
-  e: Event,
-  product: Product,
-) => void
+const storeProducts = useProductStore()
+const { onFavoriteProducts, onBasketProducts } = storeProducts
 </script>
 
 <template>
   <ul
-    v-if="activeBlock === 'allProducts'"
+    v-if="storeActiveBlock.activeBlock === 'allProducts'"
     class="/* Layout */ grid gap-11 lg:grid-cols-4 md:justify-between min-[320px]:gap-3 min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[320px]:grid-cols-2"
   >
     <TransitionGroup name="list">
@@ -40,11 +39,11 @@ const onActiveBlockAboveContent = inject('onActiveBlockAboveContent') as (
     </TransitionGroup>
   </ul>
   <ul
-    v-if="activeBlock === 'bookmarks'"
+    v-if="storeActiveBlock.activeBlock === 'bookmarks'"
     class="/* Layout */ grid gap-11 mt-4 lg:grid-cols-4 md:justify-between min-[320px]:justify-items-center min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[425px]:grid-cols-1"
   >
     <TransitionGroup name="list">
-      <template v-for="product in products">
+      <template v-for="product in storeProducts.products">
         <CardProduct
           v-if="product.isFavorite"
           :key="product.id"

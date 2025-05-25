@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Pinia store
+import { useActiveBlockStore } from '/src/store/activeBlockStore'
+
 defineProps<{
   id: number
   imageUrl: string
@@ -8,8 +11,10 @@ defineProps<{
   isAdded: boolean
   onFavoriteProducts: () => void
   onBasketProducts: () => void
-  onActiveBlockAboveContent: (e: Event) => void
 }>()
+
+const storeActiveBlock = useActiveBlockStore()
+const { onActiveBlockAboveContent } = storeActiveBlock
 </script>
 
 <template>

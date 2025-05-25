@@ -1,9 +1,12 @@
 <script setup lang="ts">
-defineProps<{
-  calculateTaxTotalPrice: number
-  onActiveBlock: (e: Event) => void
-  onActiveBlockAboveContent: (e: Event) => void
-}>()
+// Pinia store
+import { useActiveBlockStore } from '/src/store/activeBlockStore'
+import { useProductStore } from '/src/store/productsStore'
+
+const storeProducts = useProductStore()
+
+const storeActiveBlock = useActiveBlockStore()
+const { onActiveBlock, onActiveBlockAboveContent } = storeActiveBlock
 </script>
 <template>
   <header
@@ -32,7 +35,7 @@ defineProps<{
       >
         <img src="/cart.svg" alt="Cart" />
         <b class="/* Typography */ text-gray-500 hover:text-black"
-          >{{ calculateTaxTotalPrice }} руб.</b
+          >{{ storeProducts.calculateTaxTotalPrice }} руб.</b
         >
       </li>
       <li

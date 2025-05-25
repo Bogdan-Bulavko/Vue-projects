@@ -1,11 +1,16 @@
 <script setup lang="ts">
+// Components
 import BasketCardList from './BasketCardList.vue'
 import BasketResult from './BasketResult.vue'
 
-defineProps<{
-  localBasket: number[]
-  onActiveBlockAboveContent: (e: Event) => void
-}>()
+// Pinia store
+import { useActiveBlockStore } from '/src/store/activeBlockStore'
+import { useProductStore } from '/src/store/productsStore'
+
+const storeActiveBlock = useActiveBlockStore()
+const storeProducts = useProductStore()
+
+const { onActiveBlockAboveContent } = storeActiveBlock
 </script>
 
 <template>
@@ -19,7 +24,7 @@ defineProps<{
       class="/* Layout */ h-full p-9 w-[20%] z-20 lg:w-[40%] md:w-[50%] min-[320px]:w-[100%] /* Typography */ /* Border */ /* Background */ bg-white /* Effects */"
     >
       <div
-        v-if="localBasket.length === 0"
+        v-if="storeProducts.localBasket.length === 0"
         class="/* Layout */ h-full flex flex-col items-center justify-center text-center"
       >
         <img class="/* Layout */ inline w-[70px] mb-8" src="/public/package-icon.png" />
@@ -35,7 +40,7 @@ defineProps<{
           Вернуться назад
         </button>
       </div>
-      <template v-if="localBasket.length > 0">
+      <template v-if="storeProducts.localBasket.length > 0">
         <div class="/* Layout */ flex items-start justify-between">
           <h3 class="/* Typography */ text-3xl font-bold mb-9">Корзина</h3>
           <img
