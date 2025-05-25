@@ -12,7 +12,10 @@ const activeBlock = inject<string>('activeBlock')
 
 const onFavoriteProducts = inject('onFavoriteProducts') as (product: Product) => void
 const onBasketProducts = inject('onBasketProducts') as (product: Product) => void
-const onOpenCardProduct = inject('onOpenCardProduct') as (product: Product) => void
+const onActiveBlockAboveContent = inject('onActiveBlockAboveContent') as (
+  e: Event,
+  product: Product,
+) => void
 </script>
 
 <template>
@@ -32,7 +35,7 @@ const onOpenCardProduct = inject('onOpenCardProduct') as (product: Product) => v
         :isAdded="product.isAdded"
         :onFavoriteProducts="() => onFavoriteProducts(product)"
         :onBasketProducts="() => onBasketProducts(product)"
-        :onOpenCardProduct="() => onOpenCardProduct(product)"
+        :onActiveBlockAboveContent="(e) => onActiveBlockAboveContent(e, product)"
       />
     </TransitionGroup>
   </ul>
@@ -53,7 +56,7 @@ const onOpenCardProduct = inject('onOpenCardProduct') as (product: Product) => v
           :isAdded="product.isAdded"
           :onFavoriteProducts="() => onFavoriteProducts(product)"
           :onBasketProducts="() => onBasketProducts(product)"
-          :onOpenCardProduct="() => onOpenCardProduct(product)"
+          :onActiveBlockAboveContent="(e) => onActiveBlockAboveContent(e, product)"
         />
       </template>
     </TransitionGroup>

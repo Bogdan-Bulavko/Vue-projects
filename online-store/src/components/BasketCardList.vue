@@ -7,7 +7,10 @@ import type { Product } from 'src/types/product.types'
 
 const products = inject<Product[]>('products')
 const onBasketProducts = inject('onBasketProducts') as (product: Product) => void
-const onOpenCardProduct = inject('onOpenCardProduct') as (product: Product) => void
+const onActiveBlockAboveContent = inject('onActiveBlockAboveContent') as (
+  e: Event,
+  product: Product,
+) => void
 </script>
 
 <template>
@@ -22,15 +25,12 @@ const onOpenCardProduct = inject('onOpenCardProduct') as (product: Product) => v
           :title="product.title"
           :price="product.price"
           :onBasketProducts="() => onBasketProducts(product)"
-          :onOpenCardProduct="() => onOpenCardProduct(product)"
+          :onActiveBlockAboveContent="(e) => onActiveBlockAboveContent(e, product)"
         />
       </template>
     </TransitionGroup>
   </ul>
 </template>
-<!-- 
-
-          :-->
 
 <style scoped>
 .list-enter-active,

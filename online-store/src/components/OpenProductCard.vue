@@ -8,15 +8,16 @@ defineProps<{
   isAdded: boolean
   onFavoriteProducts: () => void
   onBasketProducts: () => void
-  onOpenCardProduct: () => void
+  onActiveBlockAboveContent: (e: Event) => void
 }>()
 </script>
 
 <template>
   <section>
     <div
-      class="/* Layout */ fixed top-0 left-0 z-10 w-full h-full /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
-      @click="onOpenCardProduct"
+      class="/* Layout */ fixed top-0 left-0 z-20 w-full h-full /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
+      data-id="cardProduct"
+      @click="onActiveBlockAboveContent"
     ></div>
     <div
       class="/* Layout */ fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"

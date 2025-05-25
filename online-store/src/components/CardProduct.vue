@@ -8,7 +8,7 @@ defineProps<{
   isAdded: boolean
   onFavoriteProducts: () => void
   onBasketProducts: () => void
-  onOpenCardProduct: () => void
+  onActiveBlockAboveContent: (e: Event) => void
 }>()
 </script>
 
@@ -18,7 +18,7 @@ defineProps<{
       class="/* Layout */ min-h-[276px] rounded-3xl border hover:-translate-y-2 transition min-[320px]:p-2 min-[450px]:w-[210px] min-[320px]:w-[168px] /* Typography */ /* Border */ border-gray-100 /* Background */ /* Effects */ hover:shadow-xl"
       :id="String(id)"
       data-id="cardProduct"
-      @click="onOpenCardProduct"
+      @click="onActiveBlockAboveContent"
     >
       <img
         class="/* Layout */ z-10"

@@ -20,8 +20,7 @@ const activeOpenCard: Ref<Product> = ref(products.value[0])
 const localFavorite: Ref<number[]> = ref([])
 const localBasket: Ref<number[]> = ref([])
 const activeBlock: Ref<string> = ref('allProducts')
-const openCard: Ref<boolean> = ref(false)
-const activeBasket: Ref<boolean> = ref(false)
+const activeBlockAboveContent: Ref<string> = ref('')
 const TAXPRODUCT: number = 5
 
 const totalPrice = computed<number>(() =>
@@ -66,17 +65,38 @@ const onActiveBlock = (e: Event): void => {
   const target = e.currentTarget as HTMLElement
   const dataAtribute: string | undefined = target.dataset.id
 
-  if (dataAtribute === 'basket') {
-    activeBasket.value = !activeBasket.value
-  } else {
-    switch (dataAtribute) {
-      case 'allProducts':
-        activeBlock.value = dataAtribute
-        break
-      case 'bookmarks':
-        activeBlock.value = dataAtribute
-        break
-    }
+  switch (dataAtribute) {
+    case 'allProducts':
+      activeBlock.value = dataAtribute
+      break
+    case 'bookmarks':
+      activeBlock.value = dataAtribute
+      break
+  }
+}
+
+const onActiveBlockAboveContent = (e: Event, product?: Product): void => {
+  const target = e.currentTarget as HTMLElement
+  const dataAtribute: string | undefined = target.dataset.id
+
+  switch (dataAtribute) {
+    case 'basket':
+      if (activeBlockAboveContent.value === 'basket') {
+        activeBlockAboveContent.value = ''
+      } else {
+        activeBlockAboveContent.value = dataAtribute
+      }
+      break
+    case 'cardProduct':
+      if (activeBlockAboveContent.value === 'cardProduct') {
+        activeBlockAboveContent.value = ''
+      } else {
+        activeBlockAboveContent.value = dataAtribute
+      }
+      if (product) {
+        activeOpenCard.value = product
+      }
+      break
   }
 }
 
@@ -136,13 +156,6 @@ const updateLocalBasket = (id: number | undefined = undefined): void => {
   }
 }
 
-const onOpenCardProduct = (product: Product | undefined = undefined): void => {
-  openCard.value = !openCard.value
-  if (product) {
-    activeOpenCard.value = product
-  }
-}
-
 onMounted(async () => {
   updateLocalFavorite()
   updateLocalBasket()
@@ -159,7 +172,7 @@ provide('TAXPRODUCT', TAXPRODUCT)
 provide('activeBlock', activeBlock)
 provide('onFavoriteProducts', onFavoriteProducts)
 provide('onBasketProducts', onBasketProducts)
-provide('onOpenCardProduct', onOpenCardProduct)
+provide('onActiveBlockAboveContent', onActiveBlockAboveContent)
 </script>
 
 <template>
@@ -171,11 +184,15 @@ provide('onOpenCardProduct', onOpenCardProduct)
   <Login v-if="openFormLogin"></Login> -->
 
   <Transition name="fade">
-    <Basket v-if="activeBasket" :localBasket="localBasket" :onActiveBlock="onActiveBlock" />
+    <Basket
+      v-if="activeBlockAboveContent === 'basket'"
+      :localBasket="localBasket"
+      :onActiveBlockAboveContent="onActiveBlockAboveContent"
+    />
   </Transition>
 
   <OpenProductCard
-    v-if="openCard"
+    v-if="activeBlockAboveContent === 'cardProduct'"
     :id="activeOpenCard.id"
     :imageUrl="activeOpenCard.imageUrl"
     :title="activeOpenCard.title"
@@ -184,7 +201,7 @@ provide('onOpenCardProduct', onOpenCardProduct)
     :isAdded="activeOpenCard.isAdded"
     :onBasketProducts="() => onBasketProducts(activeOpenCard)"
     :onFavoriteProducts="() => onFavoriteProducts(activeOpenCard)"
-    :onOpenCardProduct="onOpenCardProduct"
+    :onActiveBlockAboveContent="onActiveBlockAboveContent"
   />
 
   <div
@@ -193,6 +210,7 @@ provide('onOpenCardProduct', onOpenCardProduct)
     <HeaderOnlineStore
       :calculateTaxTotalPrice="calculateTaxTotalPrice"
       :onActiveBlock="onActiveBlock"
+      :onActiveBlockAboveContent="onActiveBlockAboveContent"
     />
 
     <Bookmarks
@@ -203,7 +221,7 @@ provide('onOpenCardProduct', onOpenCardProduct)
     <!-- <ProfileContent v-if="openProfile" /> -->
     <template v-if="activeBlock === 'allProducts'">
       <Slider />
-      <AllProducts :activeBlock="activeBlock" :products="products" />
+      <AllProducts :products="products" />
     </template>
   </div>
 </template>

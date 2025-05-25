@@ -1,5 +1,9 @@
 <script setup lang="ts">
-defineProps<{ calculateTaxTotalPrice: number; onActiveBlock: (e: Event) => void }>()
+defineProps<{
+  calculateTaxTotalPrice: number
+  onActiveBlock: (e: Event) => void
+  onActiveBlockAboveContent: (e: Event) => void
+}>()
 </script>
 <template>
   <header
@@ -24,7 +28,7 @@ defineProps<{ calculateTaxTotalPrice: number; onActiveBlock: (e: Event) => void 
       <li
         data-id="basket"
         class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
-        @click="onActiveBlock"
+        @click="onActiveBlockAboveContent"
       >
         <img src="/cart.svg" alt="Cart" />
         <b class="/* Typography */ text-gray-500 hover:text-black"
