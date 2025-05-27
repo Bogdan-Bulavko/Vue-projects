@@ -1,6 +1,5 @@
 <script setup lang="ts">
 // Pinia Store
-
 import { useProductStore } from '/src/store/productsStore'
 
 const storeProducts = useProductStore()

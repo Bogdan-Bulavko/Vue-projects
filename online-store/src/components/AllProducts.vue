@@ -1,71 +1,22 @@
 <script setup lang="ts">
 // Vue lib
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 
 // Components
 import CardList from './CardList.vue'
 
-// Types
-import type { Ref } from 'vue'
-import type { Product } from 'src/types/product.types'
-
+// Pinia store
 import { useProductStore } from '/src/store/productsStore'
 
 const storeProducts = useProductStore()
 
-const sortingProducts: Ref<Product[] | []> = ref([])
-
-const changeSorting = (e: Event): void => {
-  const target = e.target as HTMLSelectElement
-  const selectedOptions = target.options as HTMLOptionsCollection
-  const id: string = selectedOptions[target.selectedIndex].id
-  switch (id) {
-    case 'name':
-      sortingProducts.value.sort((a: Product, b: Product): number => {
-        if (a.title < b.title) {
-          return -1
-        }
-        if (a.title > b.title) {
-          return 1
-        }
-        return 0
-      })
-      break
-    case 'cheap':
-      sortingProducts.value.sort((a: Product, b: Product): number => {
-        return a.price - b.price
-      })
-      break
-    case 'dear':
-      sortingProducts.value.sort((a: Product, b: Product): number => {
-        return b.price - a.price
-      })
-      break
-    case 'default':
-      sortingProducts.value = [...storeProducts.products]
-      break
-  }
-}
-
-const searchProduct = (e: Event): void => {
-  const target = e.target as HTMLInputElement
-  if (target.value === '') {
-    sortingProducts.value = [...storeProducts.products]
-  }
-
-  sortingProducts.value = [...storeProducts.products].filter((product) => {
-    const regex = new RegExp(target.value, 'i')
-    if (regex.test(product.title)) {
-      return product
-    }
-  })
-}
+const { changeSorting, searchProduct } = storeProducts
 
 watch(
   () => storeProducts.products,
   (newProducts) => {
     if (newProducts.length > 0) {
-      sortingProducts.value = [...newProducts]
+      storeProducts.sortingProducts = [...newProducts]
     }
   },
   { immediate: true },
@@ -107,7 +58,7 @@ watch(
         </div>
       </div>
     </div>
-    <CardList :sortingProducts="sortingProducts" />
+    <CardList :sortingProducts="storeProducts.sortingProducts" />
   </section>
 </template>
 

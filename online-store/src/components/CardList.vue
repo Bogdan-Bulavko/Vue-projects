@@ -2,6 +2,7 @@
 // Pinia Store
 import { useActiveBlockStore } from '/src/store/activeBlockStore'
 import { useProductStore } from '/src/store/productsStore'
+
 // Components
 import CardProduct from './CardProduct.vue'
 

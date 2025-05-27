@@ -10,10 +10,58 @@ import { ref, computed } from 'vue'
 
 export const useProductStore = defineStore('products', () => {
   const products: Ref<Product[] | []> = ref([])
+  const sortingProducts: Ref<Product[] | []> = ref([])
   const activeOpenCard: Ref<Product> = ref(products.value[0])
   const localFavorite: Ref<number[]> = ref([])
   const localBasket: Ref<number[]> = ref([])
   const TAXPRODUCT: number = 5
+
+  const changeSorting = (e: Event): void => {
+    const target = e.target as HTMLSelectElement
+    const selectedOptions = target.options as HTMLOptionsCollection
+    const id: string = selectedOptions[target.selectedIndex].id
+
+    switch (id) {
+      case 'name':
+        sortingProducts.value.sort((a: Product, b: Product): number => {
+          if (a.title < b.title) {
+            return -1
+          }
+          if (a.title > b.title) {
+            return 1
+          }
+          return 0
+        })
+        break
+      case 'cheap':
+        sortingProducts.value.sort((a: Product, b: Product): number => {
+          return a.price - b.price
+        })
+        break
+      case 'dear':
+        sortingProducts.value.sort((a: Product, b: Product): number => {
+          return b.price - a.price
+        })
+        break
+      case 'default':
+        sortingProducts.value = [...products.value]
+        break
+    }
+  }
+
+  const searchProduct = (e: Event): void => {
+    const target = e.target as HTMLInputElement
+    if (target.value === '') {
+      sortingProducts.value = [...products.value]
+    }
+
+    sortingProducts.value = [...products.value].filter((product) => {
+      const regex = new RegExp(target.value, 'i')
+      if (regex.test(product.title)) {
+        return product
+      }
+    })
+  }
 
   const totalPrice = computed<number>(() =>
     products.value.reduce((acc, product) => {
@@ -112,6 +160,7 @@ export const useProductStore = defineStore('products', () => {
 
   return {
     products,
+    sortingProducts,
     activeOpenCard,
     localFavorite,
     localBasket,
@@ -123,5 +172,7 @@ export const useProductStore = defineStore('products', () => {
     onBasketProducts,
     updateLocalFavorite,
     updateLocalBasket,
+    changeSorting,
+    searchProduct,
   }
 })
