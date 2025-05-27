@@ -2,11 +2,14 @@
 // Pinia store
 import { useActiveBlockStore } from '/src/store/activeBlockStore'
 import { useProductStore } from '/src/store/productsStore'
+import { useUserStore } from '/src/store/userStore'
 
 const storeProducts = useProductStore()
 
 const storeActiveBlock = useActiveBlockStore()
 const { onActiveBlock, onActiveBlockAboveContent } = storeActiveBlock
+
+const storeUser = useUserStore()
 </script>
 <template>
   <header
@@ -51,7 +54,7 @@ const { onActiveBlock, onActiveBlockAboveContent } = storeActiveBlock
       >
         <img src="/profile.svg" alt="Profile" />
         <b
-          v-if="user"
+          v-if="storeUser.user"
           @click="clickOpenProfile"
           class="/* Typography */ text-gray-500 hover:text-black"
         >
@@ -60,13 +63,15 @@ const { onActiveBlock, onActiveBlockAboveContent } = storeActiveBlock
         <b v-else class="/* Typography */ text-gray-500">
           <span
             class="/* Typography */ md:inline hover:text-black min-[320px]:text-center"
-            @click="openOrCloseFormRegister"
+            @click="onActiveBlockAboveContent"
+            data-id="formRegistration"
             >Sign up</span
           >
           /
           <span
             class="/* Typography */ md:inline hover:text-black min-[320px]:text-center"
-            @click="openOrCloseFormLogin"
+            @click="onActiveBlockAboveContent"
+            data-id="formLogin"
             >Sign in</span
           >
         </b>

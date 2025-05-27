@@ -6,10 +6,10 @@ import HeaderOnlineStore from './HeaderOnlineStore.vue'
 import Slider from './Slider.vue'
 import Bookmarks from './Bookmarks.vue'
 import OpenProductCard from './OpenProductCard.vue'
-// import Register from './Register.vue'
-// import Login from './Login.vue'
+import Register from './Register.vue'
+import Login from './Login.vue'
 // import ProfileContent from './ProfileContent.vue'
-// import Notification from './Notification.vue'
+import Notification from './Notification.vue'
 
 // Vue lib
 import { onMounted } from 'vue'
@@ -36,12 +36,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- <Transition name="notification">
-    <Notification v-if="openNotification" />
-  </Transition> -->
+  <Transition name="notification">
+    <Notification v-if="storeActiveBlock.activeNotification" />
+  </Transition>
 
-  <!-- <Register v-if="openFormRegister"></Register>
-  <Login v-if="openFormLogin"></Login> -->
+  <Register v-if="storeActiveBlock.activeBlockAboveContent === 'formRegistration'"></Register>
+  <Login v-if="storeActiveBlock.activeBlockAboveContent === 'formLogin'"></Login>
 
   <Transition name="fade">
     <Basket v-if="storeActiveBlock.activeBlockAboveContent === 'basket'" />
@@ -96,7 +96,7 @@ onMounted(async () => {
 
 .notification-enter-from,
 .notification-leave-to {
-  transform: translateY(-70px);
+  transform: translateY(-100px);
   position: fixed;
   transition: 1s;
 }

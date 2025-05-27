@@ -16,6 +16,10 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
 
   const activeBlock: Ref<string> = ref('allProducts')
   const activeBlockAboveContent: Ref<string> = ref('')
+  const activeNotification: Ref<boolean> = ref(false)
+
+  const textNotification: Ref<string> = ref('')
+  const imageNotification: Ref<string> = ref('')
 
   const onActiveBlock = (e: Event): void => {
     const target = e.currentTarget as HTMLElement
@@ -31,30 +35,57 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
     }
   }
 
-  const onActiveBlockAboveContent = (e: Event, product?: Product): void => {
-    const target = e.currentTarget as HTMLElement
-    const dataAtribute: string | undefined = target.dataset.id
-
-    switch (dataAtribute) {
-      case 'basket':
-        if (activeBlockAboveContent.value === 'basket') {
-          activeBlockAboveContent.value = ''
-        } else {
-          activeBlockAboveContent.value = dataAtribute
-        }
-        break
-      case 'cardProduct':
-        if (activeBlockAboveContent.value === 'cardProduct') {
-          activeBlockAboveContent.value = ''
-        } else {
-          activeBlockAboveContent.value = dataAtribute
-        }
-        if (product) {
-          storeProducts.activeOpenCard = product
-        }
-        break
+  const assignActiveBlock = (block: string): void => {
+    if (activeBlockAboveContent.value === block) {
+      activeBlockAboveContent.value = ''
+    } else {
+      activeBlockAboveContent.value = block
     }
   }
 
-  return { activeBlock, onActiveBlock, activeBlockAboveContent, onActiveBlockAboveContent }
+  const onActiveBlockAboveContent = (e?: Event, product?: Product): void => {
+    if (e) {
+      const target = e.currentTarget as HTMLElement
+      const dataAtribute: string | undefined = target.dataset.id
+
+      switch (dataAtribute) {
+        case 'basket':
+          assignActiveBlock('basket')
+          break
+        case 'cardProduct':
+          assignActiveBlock('cardProduct')
+          if (product) {
+            storeProducts.activeOpenCard = product
+          }
+          break
+        case 'formLogin':
+          assignActiveBlock('formLogin')
+          break
+        case 'formRegistration':
+          assignActiveBlock('formRegistration')
+          break
+      }
+    } else {
+      activeBlockAboveContent.value = ''
+    }
+  }
+
+  const onActiveNotification = (text?: string, image?: string): void => {
+    if (text) {
+      textNotification.value = text
+      imageNotification.value = image
+    }
+    activeNotification.value = !activeNotification.value
+  }
+
+  return {
+    activeBlock,
+    onActiveBlock,
+    activeBlockAboveContent,
+    onActiveBlockAboveContent,
+    activeNotification,
+    textNotification,
+    imageNotification,
+    onActiveNotification,
+  }
 })
