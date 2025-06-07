@@ -1,13 +1,13 @@
 <script setup lang="ts">
 // Pinia Store
-import { useActiveBlockStore } from '/src/store/activeBlockStore'
-import { useProductStore } from '/src/store/productsStore'
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
+import { useProductStore } from '@/stores/productsStore'
 
 // Components
 import CardProduct from './CardProduct.vue'
 
 // Types
-import type { Product } from 'src/types/product.types'
+import type { Product } from '@/types/product.types'
 
 defineProps<{ sortingProducts?: Product[] }>()
 
