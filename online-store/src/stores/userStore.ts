@@ -15,7 +15,6 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
-  User,
 } from 'firebase/auth'
 
 // Firebase init

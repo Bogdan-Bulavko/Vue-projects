@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Pinia Store
-import { useProductStore } from '/src/store/productsStore'
+import { useProductStore } from '@/stores/productsStore'
 
 const storeProducts = useProductStore()
 </script>

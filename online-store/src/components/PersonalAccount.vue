@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
-import { useUserStore } from '/src/store/userStore'
+import { useUserStore } from '@/stores/userStore'
 
 const { signOutUser, updateAccount } = useUserStore()
 

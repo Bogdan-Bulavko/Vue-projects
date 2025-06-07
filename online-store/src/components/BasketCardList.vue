@@ -3,11 +3,11 @@
 import BasketCardProduct from './BasketCardProduct.vue'
 
 // Types
-import type { Product } from 'src/types/product.types'
+import type { Product } from '@/types/product.types'
 
 // Pinia store
-import { useActiveBlockStore } from '@/store/activeBlockStore'
-import { useProductStore } from '@/store/productsStore'
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
+import { useProductStore } from '@/stores/productsStore'
 
 const storeActiveBlock = useActiveBlockStore()
 const { onActiveBlockAboveContent } = storeActiveBlock

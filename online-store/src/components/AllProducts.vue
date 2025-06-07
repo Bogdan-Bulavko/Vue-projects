@@ -1,12 +1,11 @@
 <script setup lang="ts">
 // Vue lib
 import { watch } from 'vue'
-
 // Components
 import CardList from './CardList.vue'
 
 // Pinia store
-import { useProductStore } from '/src/store/productsStore'
+import { useProductStore } from '@/stores/productsStore'
 
 const storeProducts = useProductStore()
 

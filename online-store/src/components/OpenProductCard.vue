@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Pinia store
-import { useActiveBlockStore } from '/src/store/activeBlockStore'
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
 
 defineProps<{
   id: number

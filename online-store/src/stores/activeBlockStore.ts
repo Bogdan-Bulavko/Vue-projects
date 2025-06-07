@@ -3,13 +3,13 @@ import { defineStore } from 'pinia'
 
 // Types
 import type { Ref } from 'vue'
-import type { Product } from 'src/types/product.types'
+import type { Product } from '@/types/product.types'
 
 // Vue lib
 import { ref } from 'vue'
+import { useProductStore } from './productsStore'
 
 // Pinia store
-import { useProductStore } from '/src/store/productsStore'
 
 export const useActiveBlockStore = defineStore('activeBlock', () => {
   const storeProducts = useProductStore()

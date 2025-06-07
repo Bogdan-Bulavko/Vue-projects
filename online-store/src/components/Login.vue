@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Pinia store
-import { useActiveBlockStore } from '/src/store/activeBlockStore'
-import { useUserStore } from '/src/store/userStore'
+import { useUserStore } from '@/stores/userStore'
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
 
 const storeActiveBlock = useActiveBlockStore()
 const storeUser = useUserStore()

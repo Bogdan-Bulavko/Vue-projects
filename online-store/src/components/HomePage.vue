@@ -15,9 +15,8 @@ import Notification from './Notification.vue'
 import { onMounted } from 'vue'
 
 // Pinia Store
-import { useActiveBlockStore } from '/src/store/activeBlockStore'
-import { useProductStore } from '/src/store/productsStore'
-
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
+import { useProductStore } from '@/stores/productsStore'
 const storeActiveBlock = useActiveBlockStore()
 const storeProducts = useProductStore()
 const {
