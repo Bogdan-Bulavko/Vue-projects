@@ -55,7 +55,8 @@ const storeUser = useUserStore()
         <img src="/profile.svg" alt="Profile" />
         <b
           v-if="storeUser.user"
-          @click="clickOpenProfile"
+          @click="onActiveBlock"
+          data-id="profile"
           class="/* Typography */ text-gray-500 hover:text-black"
         >
           Профиль

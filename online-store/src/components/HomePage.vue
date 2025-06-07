@@ -8,7 +8,7 @@ import Bookmarks from './Bookmarks.vue'
 import OpenProductCard from './OpenProductCard.vue'
 import Register from './Register.vue'
 import Login from './Login.vue'
-// import ProfileContent from './ProfileContent.vue'
+import ProfileContent from './ProfileContent.vue'
 import Notification from './Notification.vue'
 
 // Vue lib
@@ -64,7 +64,7 @@ onMounted(async () => {
   >
     <HeaderOnlineStore />
     <Bookmarks v-if="storeActiveBlock.activeBlock === 'bookmarks'" />
-    <!-- <ProfileContent v-if="openProfile" /> -->
+    <ProfileContent v-if="storeActiveBlock.activeBlock === 'profile'" />
     <template v-if="storeActiveBlock.activeBlock === 'allProducts'">
       <Slider />
       <AllProducts />
@@ -96,7 +96,7 @@ onMounted(async () => {
 
 .notification-enter-from,
 .notification-leave-to {
-  transform: translateY(-100px);
+  transform: translateY(-150px);
   position: fixed;
   transition: 1s;
 }

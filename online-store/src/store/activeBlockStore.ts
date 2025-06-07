@@ -16,10 +16,11 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
 
   const activeBlock: Ref<string> = ref('allProducts')
   const activeBlockAboveContent: Ref<string> = ref('')
+  const activeBlockInProfile: Ref<string> = ref('personalAccount')
   const activeNotification: Ref<boolean> = ref(false)
 
   const textNotification: Ref<string> = ref('')
-  const imageNotification: Ref<string> = ref('')
+  const imageNotification: Ref<string | undefined> = ref('')
 
   const onActiveBlock = (e: Event): void => {
     const target = e.currentTarget as HTMLElement
@@ -31,6 +32,15 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
         break
       case 'bookmarks':
         activeBlock.value = dataAtribute
+        break
+      case 'profile':
+        activeBlock.value = dataAtribute
+        break
+      case 'personalAccount':
+        activeBlockInProfile.value = dataAtribute
+        break
+      case 'personalOrders':
+        activeBlockInProfile.value = dataAtribute
         break
     }
   }
@@ -74,12 +84,15 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
     if (text) {
       textNotification.value = text
       imageNotification.value = image
+      setTimeout(() => onActiveNotification(), 3000)
+      console.log(textNotification.value, imageNotification.value)
     }
     activeNotification.value = !activeNotification.value
   }
 
   return {
     activeBlock,
+    activeBlockInProfile,
     onActiveBlock,
     activeBlockAboveContent,
     onActiveBlockAboveContent,

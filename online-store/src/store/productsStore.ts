@@ -8,6 +8,9 @@ import type { Product } from 'src/types/product.types'
 // Vue lib
 import { ref, computed } from 'vue'
 
+// Pinia  store
+import { useActiveBlockStore } from './activeBlockStore'
+
 export const useProductStore = defineStore('products', () => {
   const products: Ref<Product[] | []> = ref([])
   const sortingProducts: Ref<Product[] | []> = ref([])
@@ -15,6 +18,8 @@ export const useProductStore = defineStore('products', () => {
   const localFavorite: Ref<number[]> = ref([])
   const localBasket: Ref<number[]> = ref([])
   const TAXPRODUCT: number = 5
+
+  const storeActiveBlock = useActiveBlockStore()
 
   const changeSorting = (e: Event): void => {
     const target = e.target as HTMLSelectElement
@@ -107,6 +112,14 @@ export const useProductStore = defineStore('products', () => {
 
   const onBasketProducts = (product: Product): void => {
     product.isAdded = !product.isAdded
+    if (product.isAdded) {
+      storeActiveBlock.onActiveNotification(
+        product.title + ': Добавлен в корзину',
+        product.imageUrl,
+      )
+    } else {
+      storeActiveBlock.onActiveNotification(product.title + ': Удалён из корзины', product.imageUrl)
+    }
     updateLocalBasket(product.id)
   }
 

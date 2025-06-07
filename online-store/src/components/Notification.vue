@@ -7,10 +7,10 @@ const storeActiveBlock = useActiveBlockStore()
 
 <template>
   <div
-    class="/* Layout */ fixed flex w-[400px] p-4 rounded-2xl z-30 /* Typography */ text-2xl font-bold text-gray-800 /* Border */ /* Background */ bg-white /* Effects */"
+    class="/* Layout */ fixed flex items-center w-[400px] p-4 rounded-2xl z-30 /* Typography */ text-2xl font-bold text-gray-800 /* Border */ /* Background */ bg-gray-50 /* Effects */"
   >
     <img
-      class="/* Layout */ mr-4 w-[30px] h-[30px]"
+      class="/* Layout */ mr-4 w-[50px] h-[50px]"
       :src="storeActiveBlock.imageNotification"
       alt="Notification"
     />

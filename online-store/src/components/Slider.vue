@@ -3,7 +3,7 @@
 <template>
   <section class="/* Layout */ my-12">
     <div
-      class="/* Layout */ pl-6 pt-2 flex w-full rounded-3xl md:pl-2 md:justify-between md:flex-row lg:min-h-[300px] md:min-h-[190px] min-[425px]:items-center min-[320px]:flex-col items-end /* Typography */ /* Border */ /* Background */ bg-[#F4EFE9] /* Effects */"
+      class="/* Layout */ max-[425px]:pt-2 pl-6 flex w-full rounded-3xl md:pl-2 md:justify-between md:flex-row lg:min-h-[300px] md:min-h-[190px] min-[425px]:items-center min-[320px]:flex-col items-end /* Typography */ /* Border */ /* Background */ bg-[#F4EFE9] /* Effects */"
     >
       <div
         class="/* Layout */ flex md:flex-col md:justify-between min-[320px]:flex-row-reverse min-[320px]:mb-5 min-[320px]:items-start md:mb-0 /* Typography */ /* Border */ /* Background */ /* Effects */"

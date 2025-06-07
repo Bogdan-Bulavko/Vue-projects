@@ -26,7 +26,7 @@ const { onActiveBlockAboveContent } = storeActiveBlock
         Регистрация
       </h2>
       <form @submit.prevent="registerUser" class="/* Layout */ space-y-4">
-        <!-- <div>
+        <div>
           <label for="name" class="/* Typography */ block text-sm font-medium text-gray-700"
             >Имя</label
           >
@@ -36,9 +36,8 @@ const { onActiveBlockAboveContent } = storeActiveBlock
             type="text"
             placeholder="Введите ваше Имя"
             class="/* Layout */ mt-1 block w-full /* Typography */ sm:text-sm /* Border */ border border-gray-300 focus:border-indigo-500 focus:outline-none /* Background */ /* Effects */ focus:ring-indigo-500 shadow-sm rounded-md px-3 py-2"
-            required
           />
-        </div> -->
+        </div>
         <div>
           <label for="email" class="/* Typography */ block text-sm font-medium text-gray-700"
             >Email</label
