@@ -1,35 +1,55 @@
-<script setup>
-import { store } from '@/store/store'
+<script setup lang="ts">
+// Vue lib
+import { watch } from 'vue'
+// Components
 import CardList from './CardList.vue'
 
-const changeSorting = (e) => {
-  store.commit('sortProducts', e)
-}
+// Pinia store
+import { useProductStore } from '@/stores/productsStore'
 
-const searchProduct = (e) => {
-  store.commit('searchProduct', e)
-}
+const storeProducts = useProductStore()
+
+const { changeSorting, searchProduct } = storeProducts
+
+watch(
+  () => storeProducts.products,
+  (newProducts) => {
+    if (newProducts.length > 0) {
+      storeProducts.sortingProducts = [...newProducts]
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
-  <section>
-    <div class="flex p-2 md:justify-between md:flex-row mb-11 min-[320px]:flex-col">
-      <h2 class="text-4xl font-bold md:mb-0 min-[320px]:mb-3">Все кроссовки</h2>
-      <div class="flex md:flex-row gap-4 min-[320px]:flex-col">
+  <section data-id="allProducts">
+    <div
+      class="/* Layout */ flex gap-4 mb-11 p-2 md:justify-between md:flex-row min-[320px]:flex-col /* Border */ /* Background */ /* Effects */"
+    >
+      <h2 class="/* Typography */ text-4xl font-bold /* Layout */ md:mb-0 min-[320px]:mb-3">
+        Все кроссовки
+      </h2>
+      <div
+        class="/* Layout */ flex gap-4 md:flex-row min-[320px]:flex-col /* Border */ /* Background */ /* Effects */"
+      >
         <select
-          class="py-2 px-3 border border-gray-300 rounded-md outline-none"
+          class="/* Layout */ py-2 px-3 rounded-md /* Border */ border border-gray-300 /* Typography */ outline-none /* Effects */"
           @change="changeSorting"
         >
           <option value="" disabled selected hidden>Отсортировать</option>
+          <option id="default">По умолчанию</option>
           <option id="name">По названию</option>
           <option id="cheap">По цене (дешевые)</option>
           <option id="dear">По цене (дорогие)</option>
         </select>
 
-        <div class="flex border pl-5 border-gray-300 rounded-md focus:border-gray-500">
+        <div
+          class="/* Layout */ flex rounded-md pl-5 /* Border */ border border-gray-300 focus:border-gray-500 /* Background */ /* Effects */"
+        >
           <img src="/search.svg" alt="search image" />
           <input
-            class="py-2 pl-5 pr-4 outline-none"
+            class="/* Layout */ py-2 pl-5 pr-4 /* Border */ /* Typography */ outline-none /* Effects */"
             type="text"
             placeholder="Поиск..."
             @input="searchProduct"
@@ -37,7 +57,7 @@ const searchProduct = (e) => {
         </div>
       </div>
     </div>
-    <CardList />
+    <CardList :sortingProducts="storeProducts.sortingProducts" />
   </section>
 </template>
 

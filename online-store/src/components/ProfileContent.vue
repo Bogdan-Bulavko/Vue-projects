@@ -1,40 +1,41 @@
-<script setup>
-import { ref } from 'vue'
-
+<script setup lang="ts">
+// Components
 import PersonalAccount from './PersonalAccount.vue'
 import PersonalOrders from './PersonalOrders.vue'
 
-const openContent = ref('personal-account')
+// Pinia  store
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
 
-const displayContent = (e) => {
-  const target = e.currentTarget
-
-  switch (target.id) {
-    case 'personal-account':
-      openContent.value = target.id
-      break
-    case 'personal-orders':
-      openContent.value = target.id
-      break
-  }
-}
+const storeActiveBlock = useActiveBlockStore()
 </script>
 
 <template>
-  <div class="h-full pt-3.5 flex">
-    <section class="pr-2 border-r border-slate-300">
+  <div class="/* Layout */ h-full pt-3.5 flex">
+    <section class="/* Layout */ pr-2 border-r /* Border */ border-slate-300">
       <ul>
-        <li @click="displayContent" class="mb-3.5" id="personal-account">
-          <p class="cursor-pointer text-gray-500 hover:text-black text-2xl">Профиль</p>
+        <li
+          class="/* Layout */ mb-3.5"
+          @click="storeActiveBlock.onActiveBlock"
+          data-id="personalAccount"
+        >
+          <p class="/* Typography */ text-2xl text-gray-500 hover:text-black cursor-pointer">
+            Профиль
+          </p>
         </li>
-        <li @click="displayContent" class="mb-3.5" id="personal-orders">
-          <p class="cursor-pointer text-gray-500 hover:text-black text-2xl">Заказы</p>
+        <li
+          class="/* Layout */ mb-3.5"
+          @click="storeActiveBlock.onActiveBlock"
+          data-id="personalOrders"
+        >
+          <p class="/* Typography */ text-2xl text-gray-500 hover:text-black cursor-pointer">
+            Заказы
+          </p>
         </li>
       </ul>
     </section>
-    <section class="w-full">
-      <PersonalAccount v-if="openContent === 'personal-account'" />
-      <PersonalOrders v-if="openContent === 'personal-orders'" />
+    <section class="/* Layout */ w-full">
+      <PersonalAccount v-if="storeActiveBlock.activeBlockInProfile === 'personalAccount'" />
+      <PersonalOrders v-if="storeActiveBlock.activeBlockInProfile === 'personalOrders'" />
     </section>
   </div>
 </template>

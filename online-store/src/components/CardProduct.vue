@@ -1,42 +1,47 @@
-<script setup>
-defineProps({
-  id: Number,
-  imageUrl: String,
-  title: String,
-  price: Number,
-  isFavorite: Boolean,
-  isAdded: Boolean,
-  onProductsInBasket: Function,
-  onFavoriteProducts: Function,
-  onOpenCard: Function,
-})
+<script setup lang="ts">
+defineProps<{
+  id: number
+  imageUrl: string
+  title: string
+  price: number
+  isFavorite: boolean
+  isAdded: boolean
+  onFavoriteProducts: () => void
+  onBasketProducts: () => void
+  onActiveBlockAboveContent: (e: Event) => void
+}>()
 </script>
 
 <template>
   <li>
     <article
-      class="min-h-[276px] pb-9 px-9 pt-6 rounded-3xl border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition min-[320px]:p-2 min-[375px]:px-4 min-[450px]:w-[210px] min-[320px]:w-[168px]"
-      :id="id"
-      @click="onOpenCard"
+      class="/* Layout */ min-h-[276px] rounded-3xl border hover:-translate-y-2 transition min-[320px]:p-2 min-[450px]:w-[210px] min-[320px]:w-[168px] /* Typography */ /* Border */ border-gray-100 /* Background */ /* Effects */ hover:shadow-xl"
+      :id="String(id)"
+      data-id="cardProduct"
+      @click="onActiveBlockAboveContent"
     >
       <img
-        class="z-10"
+        class="/* Layout */ z-10"
         :src="isFavorite ? 'like-2.svg' : 'like-1.svg'"
         alt="button like"
         @click.stop="onFavoriteProducts"
       />
-      <img class="block w-[133px] h-[112px] mb-4" :src="`${imageUrl}`" alt="image sneakers" />
-      <p class="leading-[17px] mb-4">{{ title }}</p>
-      <div class="flex justify-between">
+      <img
+        class="/* Layout */ block w-[133px] h-[112px] mb-4"
+        :src="`${imageUrl}`"
+        alt="image sneakers"
+      />
+      <p class="/* Typography */ leading-[17px] mb-4">{{ title }}</p>
+      <div class="/* Layout */ flex justify-between">
         <div>
-          <p class="text-[0.8rem] text-[#BDBDBD]">ЦЕНА:</p>
-          <p class="font-bold">{{ price }}руб.</p>
+          <p class="/* Typography */ text-[0.8rem] text-[#BDBDBD]">ЦЕНА:</p>
+          <p class="/* Typography */ font-bold">{{ price }}руб.</p>
         </div>
         <img
-          class="block"
+          class="/* Layout */ block"
           :src="isAdded ? 'checked.svg' : 'plus.svg'"
           alt="Add Product"
-          @click.stop="onProductsInBasket"
+          @click.stop="onBasketProducts"
         />
       </div>
     </article>

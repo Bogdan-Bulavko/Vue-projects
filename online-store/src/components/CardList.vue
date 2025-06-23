@@ -1,38 +1,31 @@
-<script setup>
-import { store } from '@/store/store'
+<script setup lang="ts">
+// Pinia Store
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
+import { useProductStore } from '@/stores/productsStore'
 
-import { computed, onMounted } from 'vue'
-
+// Components
 import CardProduct from './CardProduct.vue'
 
-// const onOpenCard = inject('onOpenCard')
+// Types
+import type { Product } from '@/types/product.types'
 
-const products = computed(() => store.state.sortingProducts)
+defineProps<{ sortingProducts?: Product[] }>()
 
-const addOrRemoveProductFromFavorites = (item) => {
-  store.commit('addOrRemoveProductFromFavorites', item)
-}
+const storeActiveBlock = useActiveBlockStore()
+const { onActiveBlockAboveContent } = storeActiveBlock
 
-const addOrRemoveProductFromIsAdded = (item) => {
-  store.commit('addOrRemoveProductFromIsAdded', item)
-}
-
-const openOrCloseCard = (item) => {
-  store.commit('openOrCloseCard', item)
-}
-
-onMounted(() => {
-  store.dispatch('getProducts')
-})
+const storeProducts = useProductStore()
+const { onFavoriteProducts, onBasketProducts } = storeProducts
 </script>
 
 <template>
   <ul
-    class="grid lg:grid-cols-4 md:justify-between min-[450px]:gap-11 min-[320px]:gap-3 min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[320px]:grid-cols-2"
+    v-if="storeActiveBlock.activeBlock === 'allProducts'"
+    class="/* Layout */ grid gap-11 lg:grid-cols-4 md:justify-between min-[320px]:gap-3 min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[320px]:grid-cols-2"
   >
     <TransitionGroup name="list">
       <CardProduct
-        v-for="product in products"
+        v-for="product in sortingProducts"
         :key="product.id"
         :id="product.id"
         :imageUrl="product.imageUrl"
@@ -40,10 +33,32 @@ onMounted(() => {
         :price="product.price"
         :isFavorite="product.isFavorite"
         :isAdded="product.isAdded"
-        :onProductsInBasket="() => addOrRemoveProductFromIsAdded(product)"
-        :onFavoriteProducts="() => addOrRemoveProductFromFavorites(product)"
-        :onOpenCard="() => openOrCloseCard(product)"
+        :onFavoriteProducts="() => onFavoriteProducts(product)"
+        :onBasketProducts="() => onBasketProducts(product)"
+        :onActiveBlockAboveContent="(e) => onActiveBlockAboveContent(e, product)"
       />
+    </TransitionGroup>
+  </ul>
+  <ul
+    v-if="storeActiveBlock.activeBlock === 'bookmarks'"
+    class="/* Layout */ grid gap-11 mt-4 lg:grid-cols-4 md:justify-between min-[320px]:justify-items-center min-[600px]:grid-cols-3 min-[510px]:grid-cols-2 min-[425px]:grid-cols-1"
+  >
+    <TransitionGroup name="list">
+      <template v-for="product in storeProducts.products">
+        <CardProduct
+          v-if="product.isFavorite"
+          :key="product.id"
+          :id="product.id"
+          :imageUrl="product.imageUrl"
+          :title="product.title"
+          :price="product.price"
+          :isFavorite="product.isFavorite"
+          :isAdded="product.isAdded"
+          :onFavoriteProducts="() => onFavoriteProducts(product)"
+          :onBasketProducts="() => onBasketProducts(product)"
+          :onActiveBlockAboveContent="(e) => onActiveBlockAboveContent(e, product)"
+        />
+      </template>
     </TransitionGroup>
   </ul>
 </template>

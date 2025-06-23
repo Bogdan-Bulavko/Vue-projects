@@ -1,72 +1,78 @@
-<script setup>
-import { store } from '@/store/store'
+<script setup lang="ts">
+// Components
+import BasketCardList from './BasketCardList.vue'
+import BasketResult from './BasketResult.vue'
 
-import { computed } from 'vue'
+// Pinia store
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
+import { useProductStore } from '@/stores/productsStore'
 
-import BusketCardList from './BusketCardList.vue'
-import BusketResult from './BusketResult.vue'
+const storeActiveBlock = useActiveBlockStore()
+const storeProducts = useProductStore()
 
-const notEmptyBasket = computed(() => store.state.notEmptyBasket)
-
-const openOrCloseBusket = (e) => {
-  store.commit('openOrCloseBusket', e.currentTarget.id)
-}
+const { onActiveBlockAboveContent } = storeActiveBlock
 </script>
 
 <template>
-  <div class="fixed flex w-[100vw] h-[100vh]">
+  <div class="/* Layout */ fixed flex w-[100vw] h-[100vh]">
     <div
-      id="backgroundOrderPlaced"
-      class="h-full bg-black opacity-50 z-10 w-[80%] lg:w-[60%] md:w-[50%] min-[320px]:w-[0%]"
-      @click="openOrCloseBusket"
+      data-id="basket"
+      class="/* Layout */ h-full w-[80%] z-10 lg:w-[60%] md:w-[50%] min-[320px]:w-[0%] /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
+      @click="onActiveBlockAboveContent"
     ></div>
     <div
-      class="h-full p-9 min-[320px]:p-2 bg-white z-20 w-[20%] lg:w-[40%] md:w-[50%] min-[320px]:w-[100%]"
+      class="/* Layout */ h-full p-9 w-[20%] z-20 lg:w-[40%] md:w-[50%] min-[320px]:w-[100%] /* Typography */ /* Border */ /* Background */ bg-white /* Effects */"
     >
       <div
-        v-if="notEmptyBasket === 'empty'"
-        class="h-full flex flex-col items-center justify-center text-center"
+        v-if="storeProducts.localBasket.length === 0"
+        class="/* Layout */ h-full flex flex-col items-center justify-center text-center"
       >
-        <img class="inline w-[70px] mb-8" src="/public/package-icon.png" />
-        <h2 class="text-3xl font-semibold mb-3">Корзина пустая</h2>
-        <p class="text-gray-400 mb-19 text-center">
+        <img class="/* Layout */ inline w-[70px] mb-8" src="/public/package-icon.png" />
+        <h2 class="/* Typography */ text-3xl font-semibold mb-3">Корзина пустая</h2>
+        <p class="/* Typography */ text-gray-400 mb-19 text-center">
           Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.
         </p>
         <button
-          @click="openOrCloseBusket"
-          class="w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white"
+          data-id="basket"
+          @click="onActiveBlockAboveContent"
+          class="/* Layout */ w-48 rounded-4xl py-4 cursor-pointer /* Typography */ text-white /* Border */ /* Background */ bg-[#A5D364] /* Effects */"
         >
           Вернуться назад
         </button>
       </div>
-      <template v-if="notEmptyBasket === 'notEmpty'">
-        <div class="flex items-start justify-between">
-          <h3 class="text-3xl font-bold mb-9">Корзина</h3>
-          <img src="/close.png" class="w-8" @click="openOrCloseBusket" />
+      <template v-if="storeProducts.localBasket.length > 0">
+        <div class="/* Layout */ flex items-start justify-between">
+          <h3 class="/* Typography */ text-3xl font-bold mb-9">Корзина</h3>
+          <img
+            class="/* Layout */ w-8"
+            src="/close.png"
+            @click="onActiveBlockAboveContent"
+            data-id="basket"
+          />
         </div>
 
-        <div class="h-full flex flex-col justify-between pb-9">
-          <BusketCardList />
-          <BusketResult />
+        <div class="/* Layout */ h-full flex flex-col justify-between pb-9">
+          <BasketCardList />
+          <BasketResult />
         </div>
       </template>
-      <div
+      <!-- <div
         v-if="notEmptyBasket === 'orderPlaced'"
-        class="h-full flex flex-col items-center justify-center"
+        class="/* Layout */ h-full flex flex-col items-center justify-center"
       >
-        <img class="inline w-[70px] mb-8" src="/public/orderPlaced.svg" />
-        <h2 class="text-3xl text-[#87C20A] font-semibold mb-3">Заказ оформлен!</h2>
-        <p class="text-gray-400 mb-19 text-center">
+        <img class="/* Layout */ inline w-[70px] mb-8" src="/public/orderPlaced.svg" />
+        <h2 class="/* Typography */ text-3xl font-semibold mb-3 text-[#87C20A]">Заказ оформлен!</h2>
+        <p class="/* Typography */ text-gray-400 mb-19 text-center">
           Ваш заказ #18 скоро будет передан курьерской доставке
         </p>
         <button
           id="btnOrderPlaced"
           @click="openOrCloseBusket"
-          class="w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white"
+          class="/* Layout */ w-48 rounded-4xl py-4 cursor-pointer /* Typography */ text-white /* Border */ /* Background */ bg-[#A5D364] /* Effects */"
         >
           Вернуться назад
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

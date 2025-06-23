@@ -1,84 +1,81 @@
-<script setup>
-import { store } from '@/store/store'
-import { computed, onMounted } from 'vue'
+<script setup lang="ts">
+// Pinia store
+import { useActiveBlockStore } from '@/stores/activeBlockStore'
+import { useProductStore } from '@/stores/productsStore'
+import { useUserStore } from '@/stores/userStore'
 
-const user = computed(() => store.state.user)
+const storeProducts = useProductStore()
 
-onMounted(() => {
-  store.dispatch('getUserOnLogin')
-})
+const storeActiveBlock = useActiveBlockStore()
+const { onActiveBlock, onActiveBlockAboveContent } = storeActiveBlock
 
-const clickOpenProfile = () => {
-  store.commit('openOrCloseProfile')
-}
-
-const openOrCloseFormRegister = () => {
-  store.commit('openOrCloseFormRegister')
-}
-
-const openOrCloseFormLogin = () => {
-  store.commit('openOrCloseFormLogin')
-}
-const totalPrice = computed(() => store.getters.priceCalculation)
-
-const openOrCloseBusket = () => {
-  store.commit('openOrCloseBusket')
-}
-
-const openOrCloseBookMarks = (e) => {
-  store.commit('openOrCloseBookMarks', e)
-}
-
-const openOrCloseAllProducts = () => {
-  store.commit('openOrCloseAllProducts')
-}
+const storeUser = useUserStore()
 </script>
-
 <template>
-  <header class="min-[320px]:block md:flex justify-between border-b border-slate-300 pb-6">
+  <header
+    class="/* Layout */ min-[320px]:block md:flex justify-between border-b pb-6 /* Typography */ /* Border */ border-slate-300 /* Background */ /* Effects */"
+  >
     <div
-      id="logo"
-      class="flex items-center min-[320px]:justify-center min-[320px]:mb-6 cursor-pointer"
-      @click="openOrCloseAllProducts"
+      data-id="allProducts"
+      class="/* Layout */ flex items-center min-[320px]:justify-center min-[320px]:mb-6 cursor-pointer /* Typography */"
+      @click="onActiveBlock"
     >
-      <div class="mr-4"><img src="/logo.png" alt="Logo" class="w-[40px]" /></div>
+      <div class="mr-4">
+        <img src="/logo.png" alt="Logo" class="w-[40px]" />
+      </div>
       <div>
-        <h2 class="text-xl font-bold uppercase">Vue Online Store</h2>
-        <p class="text-gray-500">Магазин лучших кроссовок</p>
+        <h2 class="/* Typography */ text-xl font-bold uppercase">Vue Online Store</h2>
+        <p class="/* Typography */ text-gray-500">Магазин лучших кроссовок</p>
       </div>
     </div>
-    <ul class="flex gap-2.5 md:items-center min-[320px]:justify-center min-[320px]:items-start">
+    <ul
+      class="/* Layout */ flex gap-2.5 min-[320px]:justify-center min-[320px]:items-start md:items-center /* Typography */"
+    >
       <li
-        class="flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row"
-        @click="openOrCloseBusket"
+        data-id="basket"
+        class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
+        @click="onActiveBlockAboveContent"
       >
         <img src="/cart.svg" alt="Cart" />
-        <b class="text-gray-500 hover:text-black">{{ totalPrice }} руб.</b>
+        <b class="/* Typography */ text-gray-500 hover:text-black"
+          >{{ storeProducts.calculateTaxTotalPrice }} руб.</b
+        >
       </li>
       <li
-        id="bookmarks"
-        class="flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row"
-        @click="openOrCloseBookMarks"
+        data-id="bookmarks"
+        class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
+        @click="onActiveBlock"
       >
         <img src="/heart.svg" alt="Heart" />
-        <b class="text-gray-500 hover:text-black">Закладки</b>
+        <b class="/* Typography */ text-gray-500 hover:text-black">Закладки</b>
       </li>
-      <li class="flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row">
+      <li
+        class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
+      >
         <img src="/profile.svg" alt="Profile" />
-        <b v-if="user" @click="clickOpenProfile" class="text-gray-500 hover:text-black">Профиль</b>
-        <b v-else class="text-gray-500"
-          ><span
-            class="md:inline hover:text-black min-[320px]:text-center"
-            @click="openOrCloseFormRegister"
-            >Sign up
-          </span>
+        <b
+          v-if="storeUser.user"
+          @click="onActiveBlock"
+          data-id="profile"
+          class="/* Typography */ text-gray-500 hover:text-black"
+        >
+          Профиль
+        </b>
+        <b v-else class="/* Typography */ text-gray-500">
+          <span
+            class="/* Typography */ md:inline hover:text-black min-[320px]:text-center"
+            @click="onActiveBlockAboveContent"
+            data-id="formRegistration"
+            >Sign up</span
+          >
           /
           <span
-            class="md:inline hover:text-black min-[320px]:text-center"
-            @click="openOrCloseFormLogin"
+            class="/* Typography */ md:inline hover:text-black min-[320px]:text-center"
+            @click="onActiveBlockAboveContent"
+            data-id="formLogin"
             >Sign in</span
-          ></b
-        >
+          >
+        </b>
       </li>
     </ul>
   </header>

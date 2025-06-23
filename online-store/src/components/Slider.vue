@@ -1,29 +1,33 @@
-<script></script>
+<script setup lang="ts"></script>
 
 <template>
-  <section class="my-12">
+  <section class="/* Layout */ my-12">
     <div
-      class="pl-6 pt-2 flex w-full bg-[#F4EFE9] rounded-3xl md:pl-2 md:justify-between md:flex-row min-[425px]:items-center min-[320px]:flex-col items-end lg:min-h-[300px] md:min-h-[190px]"
+      class="/* Layout */ max-[425px]:pt-2 pl-6 flex w-full rounded-3xl md:pl-2 md:justify-between md:flex-row lg:min-h-[300px] md:min-h-[190px] min-[425px]:items-center min-[320px]:flex-col items-end /* Typography */ /* Border */ /* Background */ bg-[#F4EFE9] /* Effects */"
     >
       <div
-        class="flex md:flex-col md:justify-between md:mb-0 min-[320px]:items-start min-[320px]:flex-row-reverse min-[320px]:mb-5"
+        class="/* Layout */ flex md:flex-col md:justify-between min-[320px]:flex-row-reverse min-[320px]:mb-5 min-[320px]:items-start md:mb-0 /* Typography */ /* Border */ /* Background */ /* Effects */"
       >
         <img
-          class="block mr-6 mt-2 lg:mb-15 lg:w-[99px] md:mb-6 md:w-[90px] min-[320px]:w-[100px]"
+          class="/* Layout */ block mr-6 mt-2 lg:w-[99px] md:w-[90px] min-[320px]:w-[100px]"
           src="/image 7.png"
           alt="logo image"
         />
-        <div class="lg:mb-14 lg:ml-14 md:mb-9 md:ml-14">
-          <h1 class="text-3xl font-bold lg:mb-4 md:mb-2 min-[425px]:w-64 min-[320px]:mb-5">
+        <div class="/* Layout */ lg:mb-14 lg:ml-14 md:mb-9 md:ml-14">
+          <h1
+            class="/* Typography */ text-3xl font-bold lg:mb-4 md:mb-2 min-[425px]:w-64 min-[320px]:mb-5"
+          >
             <span class="text-[#A5D364]">Stan Smith</span>, Forever!
           </h1>
-          <button class="w-48 rounded-4xl py-4 bg-[#A5D364] cursor-pointer text-white">
+          <button
+            class="/* Layout */ w-48 rounded-4xl py-4 cursor-pointer /* Typography */ text-white /* Border */ /* Background */ bg-[#A5D364] /* Effects */"
+          >
             Купить
           </button>
         </div>
       </div>
       <img
-        class="block lg:w-[65%] md:w-[55%] min-[320px]:w-full min-[320px]:h-full"
+        class="/* Layout */ block lg:w-[65%] md:w-[55%] min-[320px]:w-full min-[320px]:h-full"
         src="/image 6.png"
         alt="Slider Image"
       />
