@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 // Types
 import type { Ref } from 'vue'
-import type { Product } from 'src/types/product.types'
+import type { Product } from '@/types/product.types'
 
 // Vue lib
 import { ref, computed } from 'vue'
@@ -13,6 +13,7 @@ import { useActiveBlockStore } from './activeBlockStore'
 
 export const useProductStore = defineStore('products', () => {
   const products: Ref<Product[] | []> = ref([])
+  const productsInBasket: Ref<Product[] | []> = ref([])
   const sortingProducts: Ref<Product[] | []> = ref([])
   const activeOpenCard: Ref<Product> = ref(products.value[0])
   const localFavorite: Ref<number[]> = ref([])
@@ -72,7 +73,6 @@ export const useProductStore = defineStore('products', () => {
     products.value.reduce((acc, product) => {
       if (product.isAdded) {
         acc += product.price
-        return acc
       }
       return acc
     }, 0),
@@ -117,8 +117,10 @@ export const useProductStore = defineStore('products', () => {
         product.title + ': Добавлен в корзину',
         product.imageUrl,
       )
+      productsInBasket.value = [...productsInBasket.value, product]
     } else {
       storeActiveBlock.onActiveNotification(product.title + ': Удалён из корзины', product.imageUrl)
+      productsInBasket.value = productsInBasket.value.filter((prod) => prod.id !== product.id)
     }
     updateLocalBasket(product.id)
   }
@@ -171,8 +173,37 @@ export const useProductStore = defineStore('products', () => {
     }
   }
 
+  const updateProductInBasket = (): void => {
+    productsInBasket.value = products.value.filter((product) =>
+      localBasket.value.includes(product.id),
+    )
+  }
+
+  const clearProductInBasket = (): void => {
+    products.value = products.value.map((product) => {
+      if (product.isAdded) {
+        product.isAdded = false
+        updateLocalBasket(product.id)
+      }
+      return product
+    })
+
+    productsInBasket.value = []
+  }
+
+  const clearProductInFavorite = (): void => {
+    products.value = products.value.map((product) => {
+      if (product.isFavorite) {
+        product.isFavorite = false
+        updateLocalFavorite(product.id)
+      }
+      return product
+    })
+  }
+
   return {
     products,
+    productsInBasket,
     sortingProducts,
     activeOpenCard,
     localFavorite,
@@ -185,6 +216,9 @@ export const useProductStore = defineStore('products', () => {
     onBasketProducts,
     updateLocalFavorite,
     updateLocalBasket,
+    updateProductInBasket,
+    clearProductInBasket,
+    clearProductInFavorite,
     changeSorting,
     searchProduct,
   }

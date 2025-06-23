@@ -1,11 +1,13 @@
 // Pinia lib
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
 // Vue lib
 import { ref } from 'vue'
 
 // Types
 import type { Ref } from 'vue'
+import type { User } from 'firebase/auth'
+import type { ListOrders } from '@/types/order.types'
 
 // Firebase lib
 import {
@@ -15,13 +17,20 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
+  sendEmailVerification,
+  verifyBeforeUpdateEmail,
+  deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from 'firebase/auth'
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore'
 
 // Firebase init
-import { app } from '/src/firebase'
+import { app, db } from '@/firebase'
 
 // Pinia store
 import { useActiveBlockStore } from './activeBlockStore'
+import { useProductStore } from './productsStore'
 
 export const useUserStore = defineStore('user', () => {
   const storeActiveBlock = useActiveBlockStore()
@@ -30,27 +39,125 @@ export const useUserStore = defineStore('user', () => {
 
   const user: Ref<User | null> = ref(null)
 
+  const listOrders: Ref<ListOrders> = ref([])
+
+  const formUpdateName: Ref<string> = ref('')
+  const formUpdateEmail: Ref<string> = ref('')
+
+  const storeProducts = useProductStore()
+
+  const { clearProductInBasket, clearProductInFavorite } = storeProducts
+
+  const { productsInBasket, calculateTaxTotalPrice } = storeToRefs(storeProducts)
+
   const formData: Ref<{ email: string; password: string; name: string }> = ref({
     email: '',
     password: '',
     name: '',
   })
 
-  const updateAccount = async (
-    displayName: string | undefined | null = user.value?.displayName,
-  ): Promise<void> => {
+  onAuthStateChanged(auth, async (userAuth) => {
+    if (userAuth) {
+      user.value = userAuth
+    }
+  })
+
+  const clearUserData = (): void => {
+    user.value = null
+    listOrders.value = []
+    clearProductInBasket()
+    clearProductInFavorite()
+  }
+
+  const placeAnOrder = async (): Promise<void> => {
+    try {
+      if (user.value === null) {
+        throw 'Для оформления заказа вам нужно авторизоваться'
+      }
+
+      const now = new Date()
+
+      const docRef = await addDoc(collection(db, `users/${user.value.uid}/orders`), {
+        products: productsInBasket.value,
+        totalPrice: calculateTaxTotalPrice.value,
+        date: now.getTime(),
+      })
+
+      await updateDoc(docRef, { id: docRef.id })
+
+      storeActiveBlock.onActiveNotification('Ваш заказ оформлен', 'checked.svg')
+
+      clearProductInBasket()
+    } catch (err) {
+      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+    }
+  }
+
+  const getListOrders = async (): Promise<void> => {
+    if (user.value !== null) {
+      const querySnapshot = await getDocs(collection(db, `users/${user.value.uid}/orders`))
+      const list: ListOrders = []
+
+      querySnapshot.forEach((doc) => {
+        list.push(doc.data())
+      })
+
+      list.sort((a, b) => {
+        console.log
+        return b.date - a.date
+      })
+
+      listOrders.value = list
+    }
+  }
+
+  const updateAccount = async (): Promise<void> => {
     try {
       const userAuth = auth.currentUser as User
 
-      await updateProfile(userAuth, {
-        displayName: displayName,
-      })
+      if (formUpdateName.value.length > 0) {
+        // const credential = promptForCredentials()
+        await updateProfile(userAuth, {
+          displayName: formUpdateName.value,
+        })
+        updateUserData('displayName', formUpdateName.value)
+        storeActiveBlock.onActiveNotification('Изменения успешно сохранены!', 'checked.svg')
+      }
 
-      user.value = userAuth
-      storeActiveBlock.onActiveNotification('Изменения успешно сохранены!', 'checked.svg')
+      if (formUpdateEmail.value.length > 0) {
+        await verifyBeforeUpdateEmail(userAuth, formUpdateEmail.value)
+
+        storeActiveBlock.onActiveNotification(
+          'Мы отправили вам письмо для подтверждения новой почты, подтвердите почту и войдите с новыми данными!',
+          'checked.svg',
+        )
+
+        signOutUser()
+      }
     } catch (err) {
-      const errorMessage = err.message
-      storeActiveBlock.onActiveNotification(errorMessage, 'error.png')
+      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+    } finally {
+      formUpdateName.value = ''
+      formUpdateEmail.value = ''
+    }
+  }
+
+  const updateUserData = (property: string, value: string): void => {
+    const userAuth = auth.currentUser as User
+    user.value = {
+      ...userAuth,
+      [property]: value,
+    }
+  }
+
+  const sendlVerificationEmail = async (): Promise<void> => {
+    if (auth.currentUser) {
+      sendEmailVerification(auth.currentUser)
+      signOutUser()
+      storeActiveBlock.onActiveNotification(
+        'Мы отправили вам письмо для подтверждения почты, подтвердите для изменения статуса. После подверждения обновите страницу',
+        'checked.svg',
+      )
     }
   }
 
@@ -62,21 +169,25 @@ export const useUserStore = defineStore('user', () => {
         formData.value.password,
       )
 
-      if (formData.value.name !== '') {
-        updateAccount(formData.value.name)
-      }
-
       storeActiveBlock.onActiveNotification('Вы успешно зарегистрировались!', 'checked.svg')
       user.value = firebaseUser.user
-    } catch (err) {
-      const errorMessage = err.message
-      storeActiveBlock.onActiveNotification(errorMessage, 'error.png')
-    } finally {
+
+      if (formUpdateName.value !== '') {
+        await updateProfile(firebaseUser.user, {
+          displayName: formUpdateName.value,
+        })
+        formUpdateName.value = ''
+      }
+
       setTimeout(() => {
         if (storeActiveBlock.activeBlockAboveContent !== '') {
           storeActiveBlock.onActiveBlockAboveContent()
+          formData.value.email = ''
+          formData.value.password = ''
         }
       }, 5000)
+    } catch (err) {
+      storeActiveBlock.onActiveNotification(err.message, 'error.png')
     }
   }
 
@@ -90,47 +201,66 @@ export const useUserStore = defineStore('user', () => {
 
       user.value = firebaseUser.user
       storeActiveBlock.onActiveNotification('Вы успешно авторизовались!', 'checked.svg')
-    } catch (err) {
-      const errorMessage = err.message
-      storeActiveBlock.onActiveNotification(errorMessage, 'error.png')
-    } finally {
       setTimeout(() => {
         if (storeActiveBlock.activeBlockAboveContent !== '') {
           storeActiveBlock.onActiveBlockAboveContent()
         }
       }, 5000)
+    } catch (err) {
+      storeActiveBlock.onActiveNotification(err.message, 'error.png')
     }
-  }
-
-  const authenticationUser = (): void => {
-    onAuthStateChanged(auth, (userAuth) => {
-      if (userAuth) {
-        user.value = userAuth
-        storeActiveBlock.onActiveNotification('Вы успешно аунтефицировались', 'checked.svg')
-      } else {
-        user.value = null
-      }
-    })
   }
 
   const signOutUser = async (): Promise<void> => {
     try {
       storeActiveBlock.activeBlock = 'allProducts'
-      user.value = null
+      clearUserData()
       await signOut(auth)
-      storeActiveBlock.onActiveNotification('Выход из учетной записи', 'checked.svg')
     } catch (err) {
-      const errorMessage = err.message
-      storeActiveBlock.onActiveNotification(errorMessage, 'error.png')
+      storeActiveBlock.onActiveNotification(err.message, 'error.png')
     }
   }
+
+  const deleteProfile = async (): Promise<void> => {
+    try {
+      const userAuth = auth.currentUser as User
+
+      storeActiveBlock.activeBlock = 'allProducts'
+
+      const credential = EmailAuthProvider.credential(userAuth.email as string, 'kladenec')
+
+      await reauthenticateWithCredential(userAuth, credential)
+
+      const querySnapshot = await getDocs(collection(db, `users/${userAuth.uid}/orders`))
+
+      querySnapshot.forEach(async (document) => {
+        await deleteDoc(doc(db, `users/${userAuth.uid}/orders/${document.id}`))
+      })
+
+      clearUserData()
+
+      await deleteUser(userAuth)
+
+      storeActiveBlock.onActiveNotification('Ваш аккаунт удалён', 'checked.svg')
+    } catch (err) {
+      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      console.log(err)
+    }
+  }
+
   return {
     formData,
     user,
+    listOrders,
+    formUpdateName,
+    formUpdateEmail,
+    placeAnOrder,
+    getListOrders,
     registerUser,
     loginUser,
-    authenticationUser,
     updateAccount,
+    sendlVerificationEmail,
     signOutUser,
+    deleteProfile,
   }
 })

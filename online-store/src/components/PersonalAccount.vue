@@ -1,9 +1,13 @@
 <script setup lang="ts">
+// Pinia lib
+import { storeToRefs } from 'pinia'
+
+// Pinia store
 import { useUserStore } from '@/stores/userStore'
 
-const { signOutUser, updateAccount } = useUserStore()
-
 const storeUser = useUserStore()
+const { user, formUpdateName, formUpdateEmail } = storeToRefs(storeUser)
+const { signOutUser, deleteProfile, updateAccount, sendlVerificationEmail } = storeUser
 </script>
 
 <template>
@@ -11,14 +15,29 @@ const storeUser = useUserStore()
     <h1 class="/* Typography */ text-2xl font-bold">Личный кабинет</h1>
     <div class="/* Layout */ space-y-4 md:w-[400px]">
       <h2 class="/* Typography */ text-xl font-semibold">Персональная информация</h2>
-      <form class="/* Layout */ flex flex-col" @submit.prevent="() => updateAccount()">
-        <label class="/* Typography */ font-medium">Имя: {{ storeUser.user.displayName }}</label>
+      <form class="/* Layout */ flex flex-col" @submit.prevent="updateAccount">
+        <label class="/* Typography */ font-medium"
+          >Имя: {{ storeUser.user !== null ? storeUser.user.displayName : '' }}</label
+        >
         <input
           type="text"
           placeholder="Введите имя"
           class="/* Layout */ px-4 py-2 rounded-md /* Typography */ focus:outline-none /* Border */ border border-gray-300 focus:border-blue-500 /* Background */ /* Effects */"
-          v-model="storeUser.user.displayName"
-          required
+          v-model="formUpdateName"
+        />
+        <label class="/* Typography */ font-medium"
+          >Почта: {{ storeUser.user !== null ? storeUser.user.email : '' }}
+
+          <span v-if="user?.emailVerified" class="text-green-500 text-xs">Почта подтверждена</span>
+          <span v-else class="text-red-500 text-xs cursor-pointer" @click="sendlVerificationEmail"
+            >Почта не подтверждена</span
+          >
+        </label>
+        <input
+          type="email"
+          placeholder="Введите почту"
+          class="/* Layout */ px-4 py-2 rounded-md /* Typography */ focus:outline-none /* Border */ border border-gray-300 focus:border-blue-500 /* Background */ /* Effects */"
+          v-model="formUpdateEmail"
         />
         <!-- <label class="/* Typography */ font-medium"
           >Телефон: {{ storeUser.user.phoneNumber }}</label
@@ -44,6 +63,12 @@ const storeUser = useUserStore()
           Сохранить изменения
         </button>
       </form>
+      <button
+        @click="deleteProfile"
+        class="/* Layout */ mt-4 w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"
+      >
+        Удалить Профиль
+      </button>
       <button
         @click="signOutUser"
         class="/* Layout */ mt-4 w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"

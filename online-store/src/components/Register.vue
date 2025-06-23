@@ -32,16 +32,16 @@ const { onActiveBlockAboveContent } = storeActiveBlock
           >
           <input
             id="name"
-            v-model="storeUser.formData.name"
+            v-model="storeUser.formUpdateName"
             type="text"
             placeholder="Введите ваше Имя"
             class="/* Layout */ mt-1 block w-full /* Typography */ sm:text-sm /* Border */ border border-gray-300 focus:border-indigo-500 focus:outline-none /* Background */ /* Effects */ focus:ring-indigo-500 shadow-sm rounded-md px-3 py-2"
           />
         </div>
         <div>
-          <label for="email" class="/* Typography */ block text-sm font-medium text-gray-700"
-            >Email</label
-          >
+          <label for="email" class="/* Typography */ block text-sm font-medium text-gray-700">
+            Email
+          </label>
           <input
             id="email"
             v-model="storeUser.formData.email"

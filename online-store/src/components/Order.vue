@@ -1,4 +1,24 @@
-<script setup></script>
+<script setup lang="ts">
+// Vue lib
+import { computed } from 'vue'
+
+// Types
+import type { Order } from '@/types/order.types'
+
+const props = defineProps<{ order: Order }>()
+
+const formattedDate = computed(() => {
+  const d = new Date(props.order.date)
+  return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`
+})
+
+const formattedTime = computed(() => {
+  const d = new Date(props.order.date)
+  const hours = d.getHours().toString().padStart(2, '0')
+  const minutes = d.getMinutes().toString().padStart(2, '0')
+  return `${hours}:${minutes}`
+})
+</script>
 
 <template>
   <li
@@ -13,7 +33,7 @@
     <ul
       class="/* Layout */ flex overflow-x-auto justify-center w-[500px] md:w-[400px] min-[375px]:w-[90px] min-[320px]:w-[50px]"
     >
-      <li v-for="products in order.basketProducts" :key="products.id">
+      <li v-for="products in order.products" :key="products.id">
         <img
           class="/* Layout */ max-w-[80px] h-[67px] min-[320px]:max-w-[50px] min-[320px]:h-[47px]"
           :src="products.imageUrl"

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 // Pinia Store
 import { useProductStore } from '@/stores/productsStore'
+import { useUserStore } from '@/stores/userStore'
 
 const storeProducts = useProductStore()
+const storeUser = useUserStore()
 </script>
 
 <template>
@@ -18,7 +20,7 @@ const storeProducts = useProductStore()
       <b>{{ storeProducts.calculateTaxTotalPrice }} ₽</b>
     </div>
     <button
-      @click="placeAnOrder"
+      @click="storeUser.placeAnOrder"
       class="/* Layout */ mt-7 max-w-full w-full inline-block rounded-3xl py-4 /* Typography */ text-white /* Border */ /* Background */ bg-[#A5D364] /* Effects */"
     >
       Оформить заказ

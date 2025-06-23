@@ -4,7 +4,6 @@ import PersonalAccount from './PersonalAccount.vue'
 import PersonalOrders from './PersonalOrders.vue'
 
 // Pinia  store
-import { useUserStore } from '@/stores/userStore'
 import { useActiveBlockStore } from '@/stores/activeBlockStore'
 
 const storeActiveBlock = useActiveBlockStore()

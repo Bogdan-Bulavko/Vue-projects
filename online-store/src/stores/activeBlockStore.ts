@@ -19,8 +19,7 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
   const activeBlockInProfile: Ref<string> = ref('personalAccount')
   const activeNotification: Ref<boolean> = ref(false)
 
-  const textNotification: Ref<string> = ref('')
-  const imageNotification: Ref<string | undefined> = ref('')
+  const listNotification: Ref<{ text: string; image: string; id: number }[]> = ref([])
 
   const onActiveBlock = (e: Event): void => {
     const target = e.currentTarget as HTMLElement
@@ -35,6 +34,9 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
         break
       case 'profile':
         activeBlock.value = dataAtribute
+        if (activeBlockInProfile.value === 'personalOrders' && dataAtribute === 'profile') {
+          activeBlockInProfile.value = 'personalAccount'
+        }
         break
       case 'personalAccount':
         activeBlockInProfile.value = dataAtribute
@@ -80,14 +82,16 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
     }
   }
 
-  const onActiveNotification = (text?: string, image?: string): void => {
-    if (text) {
-      textNotification.value = text
-      imageNotification.value = image
-      setTimeout(() => onActiveNotification(), 3000)
-      console.log(textNotification.value, imageNotification.value)
-    }
-    activeNotification.value = !activeNotification.value
+  const onActiveNotification = (text: string, image: string): void => {
+    listNotification.value.push({
+      text: text,
+      image: image,
+      id: listNotification.value.length,
+    })
+
+    setTimeout(() => {
+      listNotification.value.shift()
+    }, 5000)
   }
 
   return {
@@ -97,8 +101,7 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
     activeBlockAboveContent,
     onActiveBlockAboveContent,
     activeNotification,
-    textNotification,
-    imageNotification,
+    listNotification,
     onActiveNotification,
   }
 })
