@@ -15,7 +15,7 @@ defineProps<{
 <template>
   <li>
     <article
-      class="/* Layout */ relative z-10 flex flex-col justify-between min-h-[220px] rounded-3xl border p-2 w-[150px] /* Typography */ /* Border */ border-gray-100 /* Background */ /* Effects */ hover:shadow-xl hover:-translate-y-2 transition"
+      class="/* Layout */ mb-2 min-[375px]:mb-4 relative z-10 flex flex-col justify-between min-h-[220px] rounded-3xl border p-2 w-[150px] /* Typography */ /* Border */ border-gray-100 /* Background */ /* Effects */ hover:shadow-xl hover:-translate-y-2 transition"
       :id="String(id)"
       data-id="cardProduct"
       @click="onActiveBlockAboveContent"

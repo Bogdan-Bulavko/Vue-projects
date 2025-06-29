@@ -13,11 +13,11 @@ const storeUser = useUserStore()
 </script>
 <template>
   <header
-    class="/* Layout */ min-[320px]:block border-b pb-4 /* Typography */ /* Border */ border-slate-300 /* Background */ /* Effects */"
+    class="/* Layout */ min-sm:flex min-sm:justify-between min-sm: border-b pb-4 /* Typography */ /* Border */ border-slate-300 /* Background */ /* Effects */"
   >
     <div
       data-id="allProducts"
-      class="/* Layout */ flex items-center justify-center mb-4 cursor-pointer /* Typography */"
+      class="/* Layout */ flex items-center justify-center max-sm:mb-4 cursor-pointer /* Typography */"
       @click="onActiveBlock"
     >
       <div class="mr-4">

@@ -3,7 +3,7 @@
 <template>
   <section class="/* Layout */ my-4">
     <div
-      class="/* Layout */ max-[425px]:pt-2 pl-6 flex w-full rounded-3xl md:pl-2 md:justify-between md:flex-row lg:min-h-[300px] md:min-h-[190px] min-[425px]:items-center min-[320px]:flex-col items-end /* Typography */ /* Border */ /* Background */ bg-[#F4EFE9] /* Effects */"
+      class="/* Layout */ pt-2 pl-6 flex w-full rounded-3xl md:pl-2 md:justify-between md:flex-row lg:min-h-[300px] md:min-h-[190px] min-[425px]:items-center min-[320px]:flex-col items-end /* Typography */ /* Border */ /* Background */ bg-[#F4EFE9] /* Effects */"
     >
       <div
         class="/* Layout */ flex md:flex-col md:justify-between min-[320px]:flex-row-reverse min-[320px]:mb-5 min-[320px]:items-start md:mb-0 /* Typography */ /* Border */ /* Background */ /* Effects */"
@@ -27,7 +27,7 @@
         </div>
       </div>
       <img
-        class="/* Layout */ block lg:w-[65%] md:w-[55%] min-[320px]:w-full min-[320px]:h-full"
+        class="/* Layout */ block min-[540px]:hidden md:block lg:w-[65%] md:w-[55%] min-[320px]:w-full min-[320px]:h-full"
         src="/image 6.png"
         alt="Slider Image"
       />
