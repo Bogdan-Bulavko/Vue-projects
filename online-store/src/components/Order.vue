@@ -3,9 +3,9 @@
 import { computed } from 'vue'
 
 // Types
-import type { Order } from '@/types/order.types'
+import type { DocumentData } from 'firebase/firestore'
 
-const props = defineProps<{ order: Order }>()
+const props = defineProps<{ order: DocumentData }>()
 
 const formattedDate = computed(() => {
   const d = new Date(props.order.date)
