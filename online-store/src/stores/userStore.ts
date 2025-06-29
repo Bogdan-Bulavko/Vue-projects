@@ -93,6 +93,10 @@ export const useUserStore = defineStore('user', () => {
       if (err instanceof FirebaseError) {
         storeActiveBlock.onActiveNotification(err.message, 'error.png')
       }
+
+      if (user.value === null && typeof err === 'string') {
+        storeActiveBlock.onActiveNotification(err, 'error.png')
+      }
     }
   }
 

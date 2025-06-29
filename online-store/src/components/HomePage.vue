@@ -39,7 +39,7 @@ onMounted(async () => {
 })
 </script>
 
-<template>
+<template class="">
   <TransitionGroup name="notification">
     <Transition v-for="notification in listNotification" :key="notification.id">
       <Notification :text="notification.text" :image="notification.image" />
@@ -66,7 +66,7 @@ onMounted(async () => {
   />
 
   <div
-    class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-12 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
+    class="/* Layout */ max-w-[1080px] h-[100vh] overflow-y-auto py-5 px-2 m-auto rounded-3xl md:px-16 min-[375px]:px-3 /* Typography */ /* Border */ /* Background */ bg-white /* Effects */ shadow-xl"
   >
     <HeaderOnlineStore />
     <Bookmarks v-if="activeBlock === 'bookmarks'" />

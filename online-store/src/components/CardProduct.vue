@@ -15,23 +15,26 @@ defineProps<{
 <template>
   <li>
     <article
-      class="/* Layout */ min-h-[276px] rounded-3xl border hover:-translate-y-2 transition min-[320px]:p-2 min-[450px]:w-[210px] min-[320px]:w-[168px] /* Typography */ /* Border */ border-gray-100 /* Background */ /* Effects */ hover:shadow-xl"
+      class="/* Layout */ relative z-10 flex flex-col justify-between min-h-[220px] rounded-3xl border p-2 w-[150px] /* Typography */ /* Border */ border-gray-100 /* Background */ /* Effects */ hover:shadow-xl hover:-translate-y-2 transition"
       :id="String(id)"
       data-id="cardProduct"
       @click="onActiveBlockAboveContent"
     >
       <img
-        class="/* Layout */ z-10"
+        class="/* Layout */ absolute"
         :src="isFavorite ? 'like-2.svg' : 'like-1.svg'"
         alt="button like"
         @click.stop="onFavoriteProducts"
       />
-      <img
-        class="/* Layout */ block w-[133px] h-[112px] mb-4"
-        :src="`${imageUrl}`"
-        alt="image sneakers"
-      />
-      <p class="/* Typography */ leading-[17px] mb-4">{{ title }}</p>
+      <div>
+        <img
+          class="/* Layout */ w-[100px] h-[85px] mb-4 m-auto"
+          :src="`${imageUrl}`"
+          alt="image sneakers"
+        />
+        <p class="/* Typography */ leading-[17px] mb-4">{{ title }}</p>
+      </div>
+
       <div class="/* Layout */ flex justify-between">
         <div>
           <p class="/* Typography */ text-[0.8rem] text-[#BDBDBD]">ЦЕНА:</p>

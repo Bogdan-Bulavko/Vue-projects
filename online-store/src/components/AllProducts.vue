@@ -25,7 +25,7 @@ watch(
 <template>
   <section data-id="allProducts">
     <div
-      class="/* Layout */ flex gap-4 mb-11 p-2 md:justify-between md:flex-row min-[320px]:flex-col /* Border */ /* Background */ /* Effects */"
+      class="/* Layout */ flex gap-4 mb-4 p-2 md:justify-between md:flex-row min-[320px]:flex-col /* Border */ /* Background */ /* Effects */"
     >
       <h2 class="/* Typography */ text-4xl font-bold /* Layout */ md:mb-0 min-[320px]:mb-3">
         Все кроссовки

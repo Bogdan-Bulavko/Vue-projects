@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <section class="/* Layout */ my-12">
+  <section class="/* Layout */ my-4">
     <div
       class="/* Layout */ max-[425px]:pt-2 pl-6 flex w-full rounded-3xl md:pl-2 md:justify-between md:flex-row lg:min-h-[300px] md:min-h-[190px] min-[425px]:items-center min-[320px]:flex-col items-end /* Typography */ /* Border */ /* Background */ bg-[#F4EFE9] /* Effects */"
     >

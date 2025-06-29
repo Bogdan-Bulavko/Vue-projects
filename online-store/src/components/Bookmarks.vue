@@ -13,7 +13,7 @@ const storeProduct = useProductStore()
 </script>
 
 <template>
-  <section class="/* Layout */ mt-5 h-full" id="bookmarks">
+  <section class="/* Layout */ mt-4 h-full" id="bookmarks">
     <div
       v-if="storeProduct.localFavorite.length === 0"
       class="/* Layout */ h-full flex flex-col items-center justify-center text-center"
@@ -30,9 +30,7 @@ const storeProduct = useProductStore()
       </button>
     </div>
     <template v-else>
-      <h2 class="/* Typography */ text-4xl font-bold /* Layout */ md:mb-0 min-[375px]:mb-5">
-        Закладки
-      </h2>
+      <h2 class="/* Typography */ text-4xl font-bold /* Layout */ mb-4">Закладки</h2>
       <CardList />
     </template>
   </section>
