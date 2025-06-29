@@ -8,6 +8,7 @@ import { ref } from 'vue'
 import type { Ref } from 'vue'
 import type { User } from 'firebase/auth'
 import type { ListOrders } from '@/types/order.types'
+import { FirebaseError } from '@firebase/util'
 
 // Firebase lib
 import {
@@ -89,7 +90,9 @@ export const useUserStore = defineStore('user', () => {
 
       clearProductInBasket()
     } catch (err) {
-      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      if (err instanceof FirebaseError) {
+        storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      }
     }
   }
 
@@ -103,7 +106,6 @@ export const useUserStore = defineStore('user', () => {
       })
 
       list.sort((a, b) => {
-        console.log
         return b.date - a.date
       })
 
@@ -116,7 +118,6 @@ export const useUserStore = defineStore('user', () => {
       const userAuth = auth.currentUser as User
 
       if (formUpdateName.value.length > 0) {
-        // const credential = promptForCredentials()
         await updateProfile(userAuth, {
           displayName: formUpdateName.value,
         })
@@ -135,7 +136,9 @@ export const useUserStore = defineStore('user', () => {
         signOutUser()
       }
     } catch (err) {
-      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      if (err instanceof FirebaseError) {
+        storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      }
     } finally {
       formUpdateName.value = ''
       formUpdateEmail.value = ''
@@ -187,7 +190,9 @@ export const useUserStore = defineStore('user', () => {
         }
       }, 5000)
     } catch (err) {
-      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      if (err instanceof FirebaseError) {
+        storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      }
     }
   }
 
@@ -207,7 +212,9 @@ export const useUserStore = defineStore('user', () => {
         }
       }, 5000)
     } catch (err) {
-      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      if (err instanceof FirebaseError) {
+        storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      }
     }
   }
 
@@ -217,7 +224,9 @@ export const useUserStore = defineStore('user', () => {
       clearUserData()
       await signOut(auth)
     } catch (err) {
-      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      if (err instanceof FirebaseError) {
+        storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      }
     }
   }
 
@@ -243,7 +252,9 @@ export const useUserStore = defineStore('user', () => {
 
       storeActiveBlock.onActiveNotification('Ваш аккаунт удалён', 'checked.svg')
     } catch (err) {
-      storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      if (err instanceof FirebaseError) {
+        storeActiveBlock.onActiveNotification(err.message, 'error.png')
+      }
       console.log(err)
     }
   }
