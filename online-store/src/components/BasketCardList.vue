@@ -2,9 +2,6 @@
 // Components
 import BasketCardProduct from './BasketCardProduct.vue'
 
-// Types
-import type { Product } from '@/types/product.types'
-
 // Pinia store
 import { useActiveBlockStore } from '@/stores/activeBlockStore'
 import { useProductStore } from '@/stores/productsStore'
