@@ -12,7 +12,7 @@ defineProps<{
 <template>
   <li>
     <article
-      class="/* Layout */ w-full h-32 mb-4 m-auto p-3 rounded-3xl border flex justify-between min-[375px]:w-[90%] items-center cursor-pointer /* Typography */ /* Border */ border-[#F2F2F2] /* Background */ /* Effects */"
+      class="/* Layout */ w-full h-32 mb-4 m-auto p-3 rounded-3xl border flex justify-between min-[375px]:w-[90%] min-[425px]:max-w-[365px] items-center cursor-pointer /* Typography */ /* Border */ border-[#F2F2F2] /* Background */ /* Effects */"
       :id="String(id)"
       data-id="cardProduct"
       @click="onActiveBlockAboveContent"

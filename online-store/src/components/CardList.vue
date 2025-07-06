@@ -21,7 +21,7 @@ const { onFavoriteProducts, onBasketProducts } = storeProducts
 <template>
   <ul
     v-if="storeActiveBlock.activeBlock === 'allProducts'"
-    class="/* Layout */ flex flex-wrap justify-between min-[340px]:justify-around"
+    class="/* Layout */ m-auto grid grid-cols-1 min-[425px]:grid-cols-2 min-[425px]:max-w-[425px] min-[600px]:grid-cols-3 min-[600px]:max-w-[600px] min-[900px]:grid-cols-4 min-[900px]:max-w-[850px] justify-items-center"
   >
     <TransitionGroup name="list">
       <CardProduct
@@ -41,7 +41,7 @@ const { onFavoriteProducts, onBasketProducts } = storeProducts
   </ul>
   <ul
     v-if="storeActiveBlock.activeBlock === 'bookmarks'"
-    class="/* Layout */ flex flex-wrap justify-between min-[340px]:justify-around"
+    class="/* Layout */ m-auto grid grid-cols-1 min-[425px]:grid-cols-2 min-[425px]:max-w-[425px] min-[600px]:grid-cols-3 min-[600px]:max-w-[600px] min-[900px]:grid-cols-4 min-[900px]:max-w-[850px] justify-items-center"
   >
     <TransitionGroup name="list">
       <template v-for="product in storeProducts.products">

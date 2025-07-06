@@ -17,11 +17,11 @@ const { onActiveBlockAboveContent } = storeActiveBlock
   <div class="/* Layout */ z-20 fixed flex w-[100vw] h-[100vh]">
     <div
       data-id="basket"
-      class="/* Layout */ h-full w-[80%] lg:w-[60%] md:w-[50%] min-[320px]:w-[0%] /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
+      class="/* Layout */ h-full w-[80%] lg:w-[65%] md:w-[50%] sm:w-[20%] min-[320px]:w-[0%] /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
       @click="onActiveBlockAboveContent"
     ></div>
     <div
-      class="/* Layout */ h-full py-4 px-3 w-[20%] lg:w-[40%] md:w-[50%] min-[320px]:w-[100%] /* Typography */ /* Border */ /* Background */ bg-white /* Effects */"
+      class="/* Layout */ h-full py-4 px-3 w-[20%] lg:w-[35%] md:w-[50%] sm:w-[80%] min-[320px]:w-[100%] /* Typography */ /* Border */ /* Background */ bg-white /* Effects */"
     >
       <div
         v-if="storeProducts.localBasket.length === 0"

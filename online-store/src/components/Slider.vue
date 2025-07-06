@@ -27,7 +27,7 @@
         </div>
       </div>
       <img
-        class="/* Layout */ block min-[540px]:hidden md:block lg:w-[65%] md:w-[55%] min-[320px]:w-full min-[320px]:h-full"
+        class="/* Layout */ block min-[540px]:hidden min-[640px]:block lg:w-[65%] md:w-[55%] min-[320px]:w-full min-[320px]:h-full"
         src="/image 6.png"
         alt="Slider Image"
       />
