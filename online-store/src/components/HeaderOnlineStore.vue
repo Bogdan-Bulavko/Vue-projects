@@ -13,11 +13,11 @@ const storeUser = useUserStore()
 </script>
 <template>
   <header
-    class="/* Layout */ min-[320px]:block md:flex justify-between border-b pb-6 /* Typography */ /* Border */ border-slate-300 /* Background */ /* Effects */"
+    class="/* Layout */ min-sm:flex min-sm:justify-between min-sm: border-b pb-4 /* Typography */ /* Border */ border-slate-300 /* Background */ /* Effects */"
   >
     <div
       data-id="allProducts"
-      class="/* Layout */ flex items-center min-[320px]:justify-center min-[320px]:mb-6 cursor-pointer /* Typography */"
+      class="/* Layout */ flex items-center justify-center max-sm:mb-4 cursor-pointer /* Typography */"
       @click="onActiveBlock"
     >
       <div class="mr-4">
@@ -28,12 +28,10 @@ const storeUser = useUserStore()
         <p class="/* Typography */ text-gray-500">Магазин лучших кроссовок</p>
       </div>
     </div>
-    <ul
-      class="/* Layout */ flex gap-2.5 min-[320px]:justify-center min-[320px]:items-start md:items-center /* Typography */"
-    >
+    <ul class="/* Layout */ flex gap-5 justify-center items-center /* Typography */">
       <li
         data-id="basket"
-        class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
+        class="/* Layout */ flex items-center gap-2.5 cursor-pointer flex-col /* Typography */"
         @click="onActiveBlockAboveContent"
       >
         <img src="/cart.svg" alt="Cart" />
@@ -43,15 +41,13 @@ const storeUser = useUserStore()
       </li>
       <li
         data-id="bookmarks"
-        class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
+        class="/* Layout */ flex items-center gap-2.5 cursor-pointer flex-col /* Typography */"
         @click="onActiveBlock"
       >
-        <img src="/heart.svg" alt="Heart" />
+        <img src="/heart.svg" alt="Heart" class="h-[20px]" />
         <b class="/* Typography */ text-gray-500 hover:text-black">Закладки</b>
       </li>
-      <li
-        class="/* Layout */ flex items-center gap-2.5 cursor-pointer min-[320px]:flex-col md:flex-row /* Typography */"
-      >
+      <li class="/* Layout */ flex items-center gap-2.5 cursor-pointer flex-col /* Typography */">
         <img src="/profile.svg" alt="Profile" />
         <b
           v-if="storeUser.user"

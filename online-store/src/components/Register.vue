@@ -14,7 +14,7 @@ const { onActiveBlockAboveContent } = storeActiveBlock
 <template>
   <section>
     <div
-      class="/* Layout */ fixed top-0 left-0 z-10 w-full h-full /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
+      class="/* Layout */ fixed top-0 left-0 z-20 w-full h-full /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
       data-id="formRegistration"
       @click="onActiveBlockAboveContent"
     ></div>

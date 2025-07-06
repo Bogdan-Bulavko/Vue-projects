@@ -14,14 +14,14 @@ const { onActiveBlockAboveContent } = storeActiveBlock
 </script>
 
 <template>
-  <div class="/* Layout */ fixed flex w-[100vw] h-[100vh]">
+  <div class="/* Layout */ z-20 fixed flex w-[100vw] h-[100vh]">
     <div
       data-id="basket"
-      class="/* Layout */ h-full w-[80%] z-10 lg:w-[60%] md:w-[50%] min-[320px]:w-[0%] /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
+      class="/* Layout */ h-full w-[80%] lg:w-[65%] md:w-[50%] sm:w-[20%] min-[320px]:w-[0%] /* Typography */ /* Border */ /* Background */ bg-black opacity-50 /* Effects */"
       @click="onActiveBlockAboveContent"
     ></div>
     <div
-      class="/* Layout */ h-full p-9 w-[20%] z-20 lg:w-[40%] md:w-[50%] min-[320px]:w-[100%] /* Typography */ /* Border */ /* Background */ bg-white /* Effects */"
+      class="/* Layout */ h-full py-4 px-3 w-[20%] lg:w-[35%] md:w-[50%] sm:w-[80%] min-[320px]:w-[100%] /* Typography */ /* Border */ /* Background */ bg-white /* Effects */"
     >
       <div
         v-if="storeProducts.localBasket.length === 0"
@@ -42,7 +42,7 @@ const { onActiveBlockAboveContent } = storeActiveBlock
       </div>
       <template v-if="storeProducts.localBasket.length > 0">
         <div class="/* Layout */ flex items-start justify-between">
-          <h3 class="/* Typography */ text-3xl font-bold mb-9">Корзина</h3>
+          <h3 class="/* Typography */ text-3xl font-bold mb-4">Корзина</h3>
           <img
             class="/* Layout */ w-8"
             src="/close.png"
@@ -51,7 +51,7 @@ const { onActiveBlockAboveContent } = storeActiveBlock
           />
         </div>
 
-        <div class="/* Layout */ h-full flex flex-col justify-between pb-9">
+        <div class="/* Layout */ h-full flex flex-col justify-between">
           <BasketCardList />
           <BasketResult />
         </div>

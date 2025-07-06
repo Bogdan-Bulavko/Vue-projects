@@ -36,7 +36,7 @@ const { signOutUser, deleteProfile, updateAccount, sendlVerificationEmail } = st
         <input
           type="email"
           placeholder="Введите почту"
-          class="/* Layout */ px-4 py-2 rounded-md /* Typography */ focus:outline-none /* Border */ border border-gray-300 focus:border-blue-500 /* Background */ /* Effects */"
+          class="/* Layout */ px-4 py-2 mb-4 rounded-md /* Typography */ focus:outline-none /* Border */ border border-gray-300 focus:border-blue-500 /* Background */ /* Effects */"
           v-model="formUpdateEmail"
         />
         <!-- <label class="/* Typography */ font-medium"
@@ -58,20 +58,20 @@ const { signOutUser, deleteProfile, updateAccount, sendlVerificationEmail } = st
         /> -->
         <button
           type="submit"
-          class="/* Layout */ mt-4 w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"
+          class="/* Layout */ w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"
         >
           Сохранить изменения
         </button>
       </form>
       <button
         @click="deleteProfile"
-        class="/* Layout */ mt-4 w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"
+        class="/* Layout */ w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"
       >
         Удалить Профиль
       </button>
       <button
         @click="signOutUser"
-        class="/* Layout */ mt-4 w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"
+        class="/* Layout */ w-full py-2 px-4 rounded-md /* Typography */ text-white /* Border */ /* Background */ bg-red-600 /* Effects */ hover:bg-red-700"
       >
         Выйти
       </button>
