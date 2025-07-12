@@ -39,10 +39,10 @@ onMounted(async () => {
 })
 </script>
 
-<template class="">
+<template>
   <TransitionGroup name="notification">
     <Transition v-for="notification in listNotification" :key="notification.id">
-      <Notification :text="notification.text" :image="notification.image" />
+      <Notification :text="notification.text" :image="notification.image" :id="notification.id" />
     </Transition>
   </TransitionGroup>
 

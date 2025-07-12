@@ -88,10 +88,10 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
       image: image,
       id: listNotification.value.length,
     })
+  }
 
-    setTimeout(() => {
-      listNotification.value.shift()
-    }, 5000)
+  const onDeactivateNotification = (id: number): void => {
+    listNotification.value = listNotification.value.filter((notification) => id !== notification.id)
   }
 
   return {
@@ -103,5 +103,6 @@ export const useActiveBlockStore = defineStore('activeBlock', () => {
     activeNotification,
     listNotification,
     onActiveNotification,
+    onDeactivateNotification,
   }
 })
